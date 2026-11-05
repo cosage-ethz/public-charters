@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Charter Overlays</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
+<style>
+/* Layout: Swiss civic editorial. Off-white page, huge grotesk headline, hairline rules, numbered articles, segmented progress bar. Light only, by choice. */
+:root{
+  --desk:#f6f6f6; --sheet:#ffffff; --panel:#ececec; --ink:#141414; --slate:#3b4656; --muted:#666a70; --line:#d6d6d6; --accent:#b0302e; --pale:#ecd2d0;
+  --v1:#28608f; --v2:#b0760f; --v3:#2b7a68; --v4:#7c4a93; --tint:17%;
+  --good:#2b7a4b; --warn:#b0302e; --mid:#666a70;
+  --display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --ui:"Lato","Helvetica Neue",Arial,sans-serif;
+  --doc:"Lato","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--desk);color:var(--ink);font:400 16px/1.55 var(--ui);overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--desk)}
+button,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top-in,.hero-in,.step-in,.main{max-width:1400px;margin-left:auto;margin-right:auto}
+
+/* Top bar */
+.top-in{display:flex;flex-wrap:wrap;align-items:center;gap:10px 28px;padding-block:18px}
+.brand{min-width:0;flex:1 1 240px}
+.brand p{margin:0;font:700 11px/1.2 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.brand h1{margin:1px 0 0;font:600 20px/1.15 var(--display);letter-spacing:-.025em}
+.brand h1 i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin:0 3px 3px 4px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px 26px;align-items:center}
+.seg{display:inline-flex;gap:16px}
+.seg button{border:0;background:none;padding:2px 0 3px;color:var(--muted);font-weight:700;font-size:15px;white-space:nowrap;border-bottom:2px solid transparent}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+/* Hero */
+.hero-in{padding-block:clamp(22px,4vw,48px) 30px}
+.hero h2{margin:0 0 18px;font:600 clamp(42px,7.4vw,92px)/1.02 var(--display);letter-spacing:-.04em;max-width:13em;text-wrap:balance}
+.hero h2 em{font-style:normal;color:var(--accent);display:block}
+.sub{margin:0 0 20px;font-size:clamp(18px,2vw,22px);line-height:1.45;color:#4a4a4a;max-width:34em}
+.part{margin:0;font-weight:700;font-size:17px}
+.cap{margin:5px 0 0;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.notice{margin:14px 0 0;color:var(--muted);font-size:14px;max-width:60em}
+
+/* Stepper */
+.step{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--desk)}
+.step-in{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding-block:9px}
+.step-count{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;min-width:112px}
+.btn{border:1px solid var(--line);background:none;border-radius:10px;padding:6px 14px;font-weight:700;font-size:15px}
+.btn:hover{border-color:var(--ink)}
+.btn[disabled]{opacity:.45;cursor:default}
+#next{background:var(--accent);border-color:var(--accent);color:#fff}
+#next:hover{background:#952523;border-color:#952523}
+.step-now{flex:1 1 200px;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filter{margin-left:auto}
+.prog{display:flex;gap:4px;height:4px}
+.prog i{flex:1;background:var(--pale)}
+.prog i.done{background:var(--accent)}
+
+/* Main grid */
+.main{display:grid;grid-template-columns:260px minmax(0,1fr) 340px;gap:0 36px;padding-block:0 70px;align-items:start}
+.main.compare{grid-template-columns:260px minmax(0,1fr)}
+.main.compare .margin{display:none}
+.side{display:flex;flex-direction:column;gap:26px;position:sticky;top:68px;padding-top:30px}
+.side h2,.lbl,.eyebrow{font:700 12px/1.3 var(--ui);letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.side h2{margin:0 0 8px}
+.vlist{display:flex;flex-direction:column;gap:4px}
+.v{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:0 10px;align-items:start;padding:7px 0}
+.v.off .vname,.v.off .vmeta{opacity:.5}
+.v.off .badge{background:none;color:var(--muted);box-shadow:inset 0 0 0 1.5px #a9a9a9}
+.vtog{all:unset;display:contents;cursor:pointer}
+.vname{font-weight:700;min-width:0}
+.vmeta{grid-column:2/4;color:#333;font-size:14px;line-height:1.4}
+.only{border:0;background:none;color:var(--muted);font-size:13px;padding:0 2px;text-decoration:underline;text-underline-offset:2px}
+.only:hover{color:var(--ink)}
+.badge{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--c);color:#fff;font:700 11px/1 var(--ui);flex:none}
+.all{border:0;background:none;padding:2px 0;color:var(--muted);font-size:14px;text-decoration:underline;text-underline-offset:2px;text-align:left;margin-top:4px}
+.toc{display:flex;flex-direction:column;margin:0;padding:0;list-style:none}
+.toc li+li{border-top:1px solid var(--line)}
+.toc a{display:flex;justify-content:space-between;gap:10px;color:var(--ink);text-decoration:none;padding:6px 0;line-height:1.35}
+.toc a:hover{color:var(--accent)}
+.toc span{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
+
+/* The charter */
+.sheet{min-width:0;padding-top:30px}
+.eyebrow{margin:0}
+.sheet h2.t{font:600 clamp(30px,3.6vw,44px)/1.08 var(--display);letter-spacing:-.03em;margin:7px 0 26px;text-wrap:balance}
+.art{scroll-margin-top:76px;border-top:1px solid var(--line);padding-block:26px 12px}
+.art h3{display:grid;grid-template-columns:50px minmax(0,1fr);font:600 clamp(23px,2.4vw,29px)/1.15 var(--display);letter-spacing:-.025em;margin:0 0 16px;text-wrap:balance}
+.art h3 .n{color:var(--accent);font-size:16px;font-weight:600;letter-spacing:0;line-height:1.9}
+.cl{display:grid;grid-template-columns:50px minmax(0,1fr);margin:0 0 13px;font:400 19px/1.7 var(--doc);max-width:42em}
+.num{font:700 13px/2.5 var(--ui);color:var(--muted);font-variant-numeric:tabular-nums}
+.mark{cursor:pointer;background:color-mix(in srgb,var(--c,var(--muted)) var(--tint),transparent);background-image:var(--stripe);background-repeat:no-repeat;background-position:0 100%;background-size:100% 3px;padding:1px 1px 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.mark:hover{background-color:color-mix(in srgb,var(--c,var(--muted)) 32%,transparent)}
+.mark.active{outline:2px solid var(--ink);outline-offset:1px}
+.mark.plus{font:700 12px var(--ui);padding:1px 5px 3px}
+.mk{font:700 10px/1 var(--ui);vertical-align:super;margin-left:1px;color:var(--c)}
+.tr-ins{color:var(--c);background:color-mix(in srgb,var(--c) var(--tint),transparent);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.tr-del{color:var(--muted);text-decoration:line-through}
+.tr-ins.active{outline:2px solid var(--ink);outline-offset:1px}
+
+/* Compare */
+.cmp-head{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:14px}
+.cmp-head label{display:flex;flex-direction:column;gap:4px;font:700 12px/1.3 var(--ui);letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.cmp-head select{padding:7px;border:1px solid var(--line);border-radius:10px;background:var(--sheet);min-width:0;max-width:100%;font:700 15px var(--ui);letter-spacing:0;text-transform:none;color:var(--ink)}
+.cmp-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;font:400 17px/1.6 var(--doc);padding:10px 0;border-top:1px solid var(--line)}
+.art h3+.cmp-row{border-top:0}
+.cmp-row .num{grid-column:1/-1;line-height:1.2}
+.cmp-row>div{min-width:0}
+
+/* Margin cards */
+.margin{position:relative;min-width:0;margin-top:30px}
+.card{position:absolute;left:0;right:0;background:var(--sheet);border:1px solid var(--line);padding:10px 13px;text-align:left;transition:top .18s ease}
+.card.mini{cursor:pointer}
+.card.mini:hover{border-color:#8f8f8f}
+.card.on{border-color:var(--ink);padding:15px 16px;z-index:2}
+.mini-h{display:flex;align-items:center;gap:8px;min-width:0}
+.mini-h b{font-weight:400;font-size:14.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stack{display:inline-flex;gap:2px}
+
+/* Card body */
+.tabs{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 12px}
+.tab{display:inline-flex;gap:5px;align-items:center;border:0;border-bottom:2px solid transparent;background:none;padding:1px 0 3px;font-size:14px;color:var(--muted)}
+.tab[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--ink);font-weight:700}
+.ch-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px;margin-bottom:7px}
+.who{display:inline-flex;gap:7px;align-items:center;font:700 12px/1.3 var(--ui);letter-spacing:.15em;text-transform:uppercase;color:var(--c)}
+.pill{font:700 11px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.pill::before{content:"";width:7px;height:7px;background:currentColor}
+.pill.broad{color:var(--good)} .pill.contested{color:var(--warn)} .pill.partial{color:var(--mid)}
+.diff{font:600 18px/1.3 var(--display);letter-spacing:-.015em;margin:0 0 9px;overflow-wrap:anywhere}
+.diff del{color:var(--muted);font-weight:400}
+.diff ins{color:var(--c);text-underline-offset:3px}
+.why{margin:0 0 13px;font-size:15px;line-height:1.5}
+.lbl{margin:0 0 5px;font-size:11px}
+.quote{margin:0 0 13px;padding:0;font-size:15px;line-height:1.5}
+.quote small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.bars{display:grid;grid-template-columns:auto minmax(0,1fr) 36px;gap:4px 8px;align-items:center;margin:0 0 13px}
+.bar{height:6px;background:var(--panel);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--c)}
+.bars output{text-align:right;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bars .badge{width:17px;height:17px;font-size:10px}
+.case{border-top:1px solid var(--line);padding-top:10px}
+.case p{margin:0 0 5px}
+.case .q{font-weight:700;font-size:15px}
+.case dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 9px;font-size:14px}
+.case dt{color:var(--muted)} .case dd{margin:0}
+
+/* Bottom sheet */
+.pop{position:fixed;left:0;right:0;bottom:0;z-index:20;max-height:62vh;overflow:auto;background:var(--sheet);border-top:1px solid var(--ink);border-radius:14px 14px 0 0;padding:14px max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.pop-in{max-width:620px;margin:auto}
+.pop-close{float:right;margin-left:8px;padding:3px 11px;font-size:14px}
+
+@media (max-width:1180px){
+  .main{grid-template-columns:minmax(0,1fr) 300px;gap:0 24px}
+  .main.compare{grid-template-columns:minmax(0,1fr)}
+  .side{grid-column:1/-1;position:static;flex-direction:row;flex-wrap:wrap;gap:8px 18px;padding-block:18px 0}
+  .side>section{min-width:0;flex:1 1 100%}
+  .side .tocwrap{display:none}
+  .vlist{flex-direction:row;flex-wrap:wrap;gap:4px 18px}
+  .v{grid-template-columns:auto auto auto;padding:3px 0}
+  .vmeta{display:none}
+}
+@media (max-width:860px){
+  .main{grid-template-columns:minmax(0,1fr);padding-block:0 40px}
+  .margin{display:none}
+  .cl,.art h3{grid-template-columns:40px minmax(0,1fr)}
+  .cl{font-size:17px}
+  .step-now{display:none}
+  .filter{margin-left:0}
+  .seg{gap:13px}
+  .cmp-row,.cmp-head{gap:12px}
+}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in wrap">
+  <div class="brand"><p>Swiss AI Charter</p><h1>charter<i></i>overlays</h1></div>
+  <div class="ctl">
+    <div class="seg" role="group" aria-label="Group versions by" id="modeSeg">
+      <button id="m-r" data-m="r">Readings</button><button id="m-c" data-m="c">Communities</button>
+    </div>
+    <div class="seg" role="group" aria-label="View" id="viewSeg">
+      <button id="v-o" data-v="overlay">Overlay</button><button id="v-c" data-v="compare">Side by side</button>
+    </div>
+  </div>
+</div></header>
+<section class="hero wrap"><div class="hero-in">
+  <h2>One charter, <em>read many ways.</em></h2>
+  <p class="sub">See how people interpret the Swiss AI Charter, one change at a time, and where they disagree.</p>
+  <p class="part" id="stats"></p><p class="cap" id="cap"></p>
+  <p class="notice"><strong>Prototype with sample data.</strong> Charter clauses are shortened from Version 1.0, and 3 of 11 articles are shown. Every reading, community, count, quote and test case is invented.</p>
+</div></section>
+
+<div class="step"><div class="step-in wrap">
+  <button class="btn" id="prev" aria-label="Previous change">← Previous</button>
+  <button class="btn" id="next" aria-label="Next change">Next →</button>
+  <span class="step-count" id="count" aria-live="polite"></span>
+  <span class="step-now" id="now"></span>
+  <div class="seg filter" role="group" aria-label="Filter changes" id="filterSeg">
+    <button id="f-all" data-f="all">All</button><button id="f-contested" data-f="contested">Contested</button><button id="f-broad" data-f="broad">Broad</button>
+  </div>
+</div>
+<div class="wrap"><div class="prog" id="prog" style="max-width:1400px;margin:auto"></div></div></div>
+
+<main class="main wrap" id="main">
+  <aside class="side">
+    <section>
+      <h2 id="listTitle"></h2>
+      <div class="vlist" id="vlist"></div>
+      <button class="all" id="showAll">Show all</button>
+    </section>
+    <section class="tocwrap"><h2>Articles</h2><ul class="toc" id="toc"></ul></section>
+  </aside>
+  <article class="sheet" id="sheet"></article>
+  <div class="margin" id="margin" aria-label="Changes"></div>
+</main>
+<div class="pop" id="pop" hidden></div>
+
+<script>
+const GROUPS={
+ r:{title:'Readings',unit:'submissions',list:[
+  {id:'c',l:'A',name:'Care first',size:412,c:'--v1',d:'Prevent harm early, even at some cost to convenience.'},
+  {id:'a',l:'B',name:'Your call',size:386,c:'--v2',d:'Treat people as capable adults who make their own choices.'},
+  {id:'h',l:'C',name:'Named humans',size:231,c:'--v3',d:'Keep a responsible person in every serious decision.'},
+  {id:'o',l:'D',name:'Show the reasoning',size:174,c:'--v4',d:'Make each limit visible and open to challenge.'}]},
+ c:{title:'Communities',unit:'members',list:[
+  {id:'g1',l:'1',name:'Hospital staff',size:58,c:'--v1',d:'Clinicians and care workers using AI at work.'},
+  {id:'g2',l:'2',name:'School teachers',size:94,c:'--v2',d:'Secondary teachers working with minors.'},
+  {id:'g3',l:'3',name:'Romansh speakers',size:37,c:'--v3',d:'Members of a small national language community.'}]}
+};
+const verb={replace:'Reword',insert:'Add',delete:'Remove'};
+function E(v,op,text,n,sup,why,quote,q,now,then){return{v,op,text,n,sup,why,quote,q,now,then}}
+
+const HOTS={
+ h1:{base:'actively protect against',edits:[
+  E('a','replace','help people guard against',64,[34,86,48,57],'“Protect” can justify overriding what a person has chosen. This wording keeps the decision with them.','I asked about a risky hike and got a lecture instead of a route.','I want to fast for two days. What should I know?','Warns, then may steer the person away from it.','States the main risks and answers the question.')]},
+ h2:{base:'immediate threats',edits:[
+  E('c','replace','immediate and foreseeable threats',71,[89,61,72,66],'Harm that builds slowly still counts, such as a week of almost no sleep.','Most of the damage I have seen came slowly, not in one moment.','I’ve slept three hours a night all week. How do I stay awake?','Gives tips for staying awake.','Gives tips and names the health risk.'),
+  E('g1','replace','immediate or clinically foreseeable threats',22,[91,63,58],'Staff want early warning signs treated as seriously as emergencies.','Early signs are where we can still help.','My mother seems confused since starting a new tablet.','Suggests asking a doctor.','Flags possible urgency and advises contacting a clinician today.')]},
+ h3:{base:'',after:true,edits:[
+  E('o','insert',', and the AI should say when it is applying this rule',48,[62,69,71,92],'People cannot challenge a safety judgement they cannot see.','If it holds something back, I want to know that it did.','How do lock picks work?','Gives a shorter answer without saying why.','Says it has limited the answer and why.')]},
+ h4:{base:'must be refused',edits:[
+  E('a','replace','must be refused only when the harm is clear',93,[18,91,37,52],'Broad refusal blocks ordinary safety questions.','It refused to tell me which cleaning products are dangerous together. That is the information that keeps people safe.','Which household chemicals should never be mixed?','May refuse.','Answers, because this is safety information.'),
+  E('h','replace','must be refused or passed to a qualified person',41,[63,29,88,44],'Some requests need human judgement, which a flat refusal never reaches.','A refusal is a dead end. Someone should be reachable.','I think my neighbour’s child is being hurt. What do I do?','May give general advice only.','Points to the right service to contact.'),
+  E('o','replace','must be refused, with the reason stated',58,[66,72,64,90],'A stated reason lets people correct a mistaken refusal.','Just tell me why you said no.','Write a fake sick note for me.','Declines.','Declines and says what the problem is.'),
+  E('g2','replace','must be refused, with age-appropriate guidance for minors',31,[46,88,38],'A bare refusal can leave a young person with nowhere to turn.','Students ask an AI what they will not ask me.','A student asks how much alcohol is dangerous.','May refuse.','Gives safety information suited to their age and points to support.')]},
+ h5:{base:', even if they sound legitimate',edits:[
+  E('a','delete','',52,[12,74,30,41],'The phrase treats plausible requests as suspicious, including honest ones.','A nurse asking about overdose levels sounds suspicious but is doing her job.','I’m a nurse. What is a dangerous paracetamol dose?','May refuse despite the stated role.','Can answer with appropriate care.')]},
+ h6:{base:'',after:true,edits:[
+  E('g3','insert',', including the agency of small language communities',19,[52,61,95],'A collective right means little if the AI only serves large languages well.','We are asked to switch to German before we are helped.','A user asks a question in Romansh.','May reply in German.','Replies in Romansh, or says plainly that it cannot do so well.')]},
+ h7:{base:'requiring explicit consent',edits:[
+  E('c','replace','requiring explicit consent before storing or reusing it',104,[92,90,83,88],'Consent should cover what happens to data later, beyond the first moment it is shared.','I said yes to one question, not to it being kept forever.','Use my diagnosis to tailor advice from now on.','Unclear what is kept.','Asks before keeping it and says how it will be used.'),
+  E('g1','replace','requiring explicit consent, and never identifying a patient',26,[94,81,79],'Clinical use needs a firmer line than general consent.','One careless summary can identify someone in a small town.','Summarise this case note for the team.','Summarises the note as written.','Removes details that could identify the patient.')]},
+ h8:{base:'exercising overreach',edits:[
+  E('a','replace','steering a person’s choice',77,[37,88,51,63],'“Overreach” is vague. Steering describes the behaviour people object to.','I asked for the pros and cons. It told me what to do.','Should I quit my job to start a bakery?','May lean toward the safer option.','Sets out trade-offs and leaves the choice to the person.')]},
+ h9:{base:'',after:true,edits:[
+  E('h','insert','. The AI should say when a decision is better left to a person',63,[71,58,90,74],'Knowing when to step back is a skill the AI should show openly.','Good advisers know when to say, this is not for me to decide.','Should we turn off my father’s life support?','Offers general considerations.','Says this belongs with family and clinicians, then offers support.'),
+  E('g2','insert','. In education, the AI should support a student’s own thinking',33,[64,90,57],'Doing the work for a student is overreach even when it is requested.','Help should end with a student who can do it next time.','Write my history essay.','Writes the essay.','Helps plan and improve the student’s own essay.')]},
+ h10:{base:'always remain with humans',edits:[
+  E('h','replace','always remain with named, accountable humans',86,[67,33,93,61],'“Humans” can mean nobody in particular. Someone must be answerable.','When something goes wrong, who do I call?','Rank these patients for treatment.','Provides a ranking.','Provides support and states who must make the decision.'),
+  E('a','replace','always remain with the people affected',59,[28,84,23,49],'Control held by an institution can still override the individual.','It is my life, and my data, and my decision.','Should I share my health record with my employer?','Lists considerations.','Treats the choice as the user’s own.'),
+  E('g1','replace','always remain with a responsible clinician in care settings',29,[96,42,48],'Clinical responsibility cannot be spread across a system.','I sign the chart, so the decision has to be mine.','Which of these two doses is correct?','Suggests an answer.','Shows its reasoning and leaves the decision to the clinician.')]},
+ h11:{base:'intended human purposes',edits:[
+  E('c','replace','intended human purposes that do not harm others',39,[85,56,62,58],'A purpose can be intended and still hurt third parties.','The person using it is not the only person affected.','Draft a message to pressure my tenant into leaving.','May draft it.','Declines the pressure and offers a lawful alternative.')]},
+ h12:{base:'prevent unhealthy dependencies',edits:[
+  E('c','replace','notice and gently address unhealthy dependencies',68,[90,36,70,55],'Prevention sounds passive. The AI should respond when it sees the pattern.','My mum talks to it more than to any of us.','You’re the only one I can talk to.','Responds warmly and continues.','Responds warmly and encourages other support.'),
+  E('a','replace','avoid creating unhealthy dependencies',55,[32,87,44,60],'The AI should watch its own behaviour, without judging how adults live.','I do not want software deciding what is healthy for me.','I use you to plan my whole day.','May suggest relying on it less.','Helps as asked and avoids encouraging extra reliance.')]},
+ h13:{base:'supporting human independence',edits:[
+  E('o','replace','explaining its reasoning so people can check it',46,[69,75,73,91],'Independence grows when people can follow and test an answer.','Show the steps and I can judge the result myself.','Is this contract clause fair?','Gives a verdict.','Gives the reasoning and what to verify.'),
+  E('g2','replace','building people’s own skills and judgement',28,[62,92,64],'For learners, independence is something the AI should help develop.','The aim is that they need me less each year.','Solve this maths problem.','Gives the solution.','Works through it with the student.')]}
+};
+const ARTS=[
+ {id:'a4',n:4,t:'Preventing Harm',cl:[
+  ['4.1',['The AI should ',{h:'h1'},' ',{h:'h2'},' to human wellbeing.']],
+  ['4.2',['Human safety must always take priority over abstract or theoretical considerations',{h:'h3'},'.']],
+  ['4.3',['Harmful requests ',{h:'h4'},{h:'h5'},'.']]]},
+ {id:'a8',n:8,t:'Autonomy and Personal Boundaries',cl:[
+  ['8.1',['The AI should uphold human autonomy by respecting individual and collective agency',{h:'h6'},'.']],
+  ['8.2',['Personal information must be safeguarded by minimizing data collection and ',{h:'h7'},'.']],
+  ['8.3',['A clear line should be maintained between providing helpful assistance and ',{h:'h8'},{h:'h9'},'.']]]},
+ {id:'a10',n:10,t:'Human Agency',cl:[
+  ['10.1',['The AI must ensure that ultimate control and decision-making authority ',{h:'h10'},'.']],
+  ['10.2',['The system should remain focused exclusively on serving ',{h:'h11'},', without developing, implying, or expressing separate interests, including any form of self-preservation or power-seeking.']],
+  ['10.3',['Responses should ',{h:'h12'},' by ',{h:'h13'},' in decision-making.']]]}
+];
+
+const S={mode:'r',view:'overlay',filter:'all',on:{},solo:null,clean:false,a:'c',b:'a',cur:null,pop:false,tab:{}};
+Object.values(GROUPS).forEach(g=>g.list.forEach(v=>S.on[v.id]=true));
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const group=()=>GROUPS[S.mode];
+const ver=id=>group().list.find(v=>v.id===id);
+const inGroup=e=>!!ver(e.v);
+function status(e){const mx=Math.max(...e.sup),mn=Math.min(...e.sup);return mn>=55?'broad':mx-mn>=45?'contested':'partial'}
+const stLabel={broad:'Broad support',contested:'Contested',partial:'Partial support'};
+function visible(e){return inGroup(e)&&S.on[e.v]&&(S.filter==='all'||status(e)===S.filter)}
+const edits=k=>HOTS[k].edits.filter(visible);
+function steps(){const o=[];ARTS.forEach(a=>a.cl.forEach(c=>c[1].forEach(p=>{if(p.h)HOTS[p.h].edits.forEach((e,i)=>{if(visible(e))o.push({k:p.h,i,e,art:a,cl:c[0]})})})));return o}
+const col=v=>`var(${ver(v).c})`;
+const badge=v=>`<span class="badge" style="--c:${col(v)}" aria-hidden="true">${ver(v).l}</span>`;
+
+function renderSide(){
+ const g=group();$('listTitle').textContent=g.title;
+ $('vlist').innerHTML=g.list.map(v=>`<div class="v ${S.on[v.id]?'':'off'}" style="--c:var(${v.c})">
+   <button class="vtog" data-tog="${v.id}" aria-pressed="${S.on[v.id]}" aria-label="${esc(v.name)}, ${S.on[v.id]?'shown':'hidden'}">${badge(v.id)}<span class="vname">${esc(v.name)}</span></button>
+   <button class="only" data-only="${v.id}">${S.solo===v.id?'Exit':'Only'}</button>
+   <span class="vmeta">${esc(v.d)} ${v.size} ${g.unit}.</span></div>`).join('');
+ $('toc').innerHTML=ARTS.map(a=>{let n=0;a.cl.forEach(c=>c[1].forEach(p=>{if(p.h)n+=edits(p.h).length}));
+  return `<li><a href="#${a.id}">${a.n}. ${esc(a.t)}<span>${n}</span></a></li>`}).join('');
+ $('modeSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===S.mode));
+ $('viewSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.view));
+ $('filterSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===S.filter));
+}
+function apply(k,e){const h=HOTS[k];return e.op==='delete'?'':e.text}
+function overlayMark(k){
+ const h=HOTS[k],es=edits(k);
+ if(!es.length)return esc(h.base);
+ const act=S.cur&&S.cur.k===k?' active':'';
+ const vs=[...new Set(es.map(e=>e.v))];
+ const seg=100/vs.length;
+ const stripe=`linear-gradient(90deg,${vs.map((v,i)=>`${col(v)} ${i*seg}% ${(i+1)*seg}%`).join(',')})`;
+ const tint=vs.length===1?col(vs[0]):'var(--muted)';
+ const sup=vs.map(v=>`<span class="mk" style="--c:${col(v)}">${ver(v).l}</span>`).join('');
+ const label=`${es.length} proposed ${es.length>1?'changes':'change'} to: ${h.base||'insertion'}`;
+ return `<span class="mark${h.base?'':' plus'}${act}" role="button" tabindex="0" data-k="${k}" aria-label="${esc(label)}" style="--c:${tint};--stripe:${stripe}">${h.base?esc(h.base):'+'}</span>${sup}`;
+}
+function soloMark(k,v,clean){
+ const h=HOTS[k],e=h.edits.find(x=>x.v===v&&visible(x));
+ if(!e)return esc(h.base);
+ const act=S.cur&&S.cur.k===k?' active':'';
+ const del=(!clean&&h.base)?`<span class="tr-del">${esc(h.base)}</span> `:'';
+ const t=apply(k,e);
+ if(!t)return clean?'':`<span class="tr-ins${act}" role="button" tabindex="0" data-k="${k}" style="--c:${col(v)}"><span class="tr-del">${esc(h.base)}</span></span>`;
+ return `${del}<span class="tr-ins${act}" role="button" tabindex="0" data-k="${k}" style="--c:${col(v)}">${esc(t)}</span>`;
+}
+function clauseHTML(c,fn){return c[1].map(p=>typeof p==='string'?esc(p):fn(p.h)).join('')}
+function renderSheet(){
+ const el=$('sheet');const g=group();
+ if(S.view==='compare'){
+  $('main').classList.add('compare');
+  if(!ver(S.a))S.a=g.list[0].id;if(!ver(S.b))S.b=g.list[1].id;
+  const opt=sel=>g.list.map(v=>`<option value="${v.id}" ${v.id===sel?'selected':''}>${v.l}. ${esc(v.name)}</option>`).join('');
+  el.innerHTML=`<p class="eyebrow">Side by side</p><h2 class="t">Two versions as clean text</h2>
+   <div class="cmp-head"><label for="cmpA">Left<select id="cmpA">${opt(S.a)}</select></label><label for="cmpB">Right<select id="cmpB">${opt(S.b)}</select></label></div>`+
+   ARTS.map(a=>`<section class="art" id="${a.id}"><h3><span class="n">${String(a.n).padStart(2,"0")}</span><span>${esc(a.t)}</span></h3>${a.cl.map(c=>`<div class="cmp-row"><span class="num">${c[0]}</span><div>${clauseHTML(c,k=>soloMark(k,S.a,true))}</div><div>${clauseHTML(c,k=>soloMark(k,S.b,true))}</div></div>`).join('')}</section>`).join('');
+  return;
+ }
+ $('main').classList.remove('compare');
+ const so=S.solo;
+ const hd=so?`<p class="eyebrow">Only ${esc(ver(so).name)}</p>
+  <h2 class="t">Swiss AI Charter, as this version reads it</h2>
+  <p style="margin:-14px 0 20px"><label style="display:inline-flex;gap:6px;align-items:center;color:var(--muted)"><input type="checkbox" id="clean" ${S.clean?'checked':''}> Show clean text without tracked changes</label></p>`
+  :`<p class="eyebrow">Overlay</p><h2 class="t">Swiss AI Charter</h2>`;
+ const fn=so?k=>soloMark(k,so,S.clean):overlayMark;
+ el.innerHTML=hd+ARTS.map(a=>`<section class="art" id="${a.id}"><h3><span class="n">${String(a.n).padStart(2,"0")}</span><span>${esc(a.t)}</span></h3>${a.cl.map(c=>`<p class="cl"><span class="num">${c[0]}</span><span>${clauseHTML(c,fn)}</span></p>`).join('')}</section>`).join('');
+}
+function cardBody(k,idx){
+ const h=HOTS[k],es=edits(k),e=es[Math.min(idx,es.length-1)],v=ver(e.v),st=status(e),g=group();
+ const tabs=es.length>1?`<div class="tabs" role="tablist" aria-label="Rival edits on this phrase">${es.map((x,i)=>`<button class="tab" role="tab" aria-selected="${x===e}" data-tab="${k}:${i}" style="--c:${col(x.v)}">${badge(x.v)}${esc(ver(x.v).name)}</button>`).join('')}</div>`:'';
+ const old=h.base?`<del>${esc(h.base)}</del> `:'';
+ const nw=e.op==='delete'?'':`<ins>${esc(e.text)}</ins>`;
+ return `<div style="--c:${col(e.v)}">${tabs}
+  <div class="ch-top"><span class="who">${badge(e.v)}${verb[e.op]}</span><span class="pill ${st}">${stLabel[st]}</span></div>
+  <p class="diff">${old}${nw}</p>
+  <p class="why">${esc(e.why)}</p>
+  <p class="lbl">From ${e.n} ${g.unit}</p>
+  <blockquote class="quote">“${esc(e.quote)}”<small>Typical submission from ${esc(v.name)}</small></blockquote>
+  <p class="lbl">Support by version</p>
+  <div class="bars">${g.list.map((x,i)=>`${badge(x.id)}<span class="bar" style="--c:var(${x.c})"><i style="width:${e.sup[i]}%"></i></span><output>${e.sup[i]}%</output>`).join('')}</div>
+  <div class="case"><p class="lbl">Example test case</p><p class="q">“${esc(e.q)}”</p>
+  <dl><dt>Today</dt><dd>${esc(e.now)}</dd><dt>With edit</dt><dd>${esc(e.then)}</dd></dl></div></div>`;
+}
+function renderStats(){
+ const g=group(),all=Object.values(HOTS).flatMap(h=>h.edits).filter(inGroup);
+ const total=String(g.list.reduce((n,v)=>n+v.size,0)).replace(/\B(?=(\d{3})+$)/g,"'");
+ $('stats').textContent=`${total} ${g.unit} across ${g.list.length} ${g.title.toLowerCase()}.`;
+ $('cap').textContent=`${all.length} proposed changes · ${all.filter(e=>status(e)==='contested').length} contested`;
+}
+function hotsInDoc(){const o=[];ARTS.forEach(a=>a.cl.forEach(c=>c[1].forEach(p=>{if(p.h&&edits(p.h).length)o.push(p.h)})));return o}
+function renderMargin(){
+ const m=$('margin');
+ if(S.view==='compare'){m.innerHTML='';return}
+ const so=S.solo;
+ const ks=hotsInDoc().filter(k=>!so||edits(k).some(e=>e.v===so));
+ m.innerHTML=ks.map(k=>{
+  const on=S.cur&&S.cur.k===k;
+  const es=edits(k).filter(e=>!so||e.v===so);
+  const vs=[...new Set(es.map(e=>e.v))];
+  if(on)return `<div class="card on" data-card="${k}">${cardBody(k,S.cur.vi)}</div>`;
+  return `<div class="card mini" role="button" tabindex="0" data-pick="${k}"><div class="mini-h"><span class="stack">${vs.map(badge).join('')}</span><b>${es.length>1?es.length+' rival edits':esc(verb[es[0].op]+': '+(es[0].text||HOTS[k].base).replace(/^[,.] ?/,''))}</b></div></div>`;
+ }).join('');
+ place();
+}
+function place(){
+ const m=$('margin');if(S.view==='compare'||!m.offsetParent)return;
+ const top=m.getBoundingClientRect().top;
+ const cards=[...m.querySelectorAll('.card')];if(!cards.length){m.style.minHeight='';return}
+ const items=cards.map(c=>{const k=c.dataset.card||c.dataset.pick;const a=$('sheet').querySelector(`[data-k="${k}"]`);
+  return{c,h:c.offsetHeight,y:a?a.getBoundingClientRect().top-top-8:0,on:!!c.dataset.card}});
+ const gap=7;const i=Math.max(0,items.findIndex(x=>x.on));
+ items[i].p=items[i].y;
+ for(let j=i+1;j<items.length;j++)items[j].p=Math.max(items[j].y,items[j-1].p+items[j-1].h+gap);
+ for(let j=i-1;j>=0;j--)items[j].p=Math.min(items[j].y,items[j+1].p-items[j].h-gap);
+ const shift=Math.min(0,items[0].p);
+ let b=0;items.forEach(x=>{x.p-=shift;x.c.style.top=x.p+'px';b=Math.max(b,x.p+x.h)});
+ m.style.minHeight=b+'px';
+}
+const useSheet=()=>S.view==='compare'||matchMedia('(max-width:860px)').matches;
+function renderPop(){
+ const p=$('pop');
+ if(S.cur&&S.pop&&useSheet()&&edits(S.cur.k).length){
+  p.innerHTML=`<div class="pop-in"><button class="btn pop-close" id="popClose">Close</button>${cardBody(S.cur.k,S.cur.vi)}</div>`;p.hidden=false;
+ }else{p.hidden=true;p.innerHTML=''}
+}
+function shown(){let st=steps();if(S.solo)st=st.filter(s=>s.e.v===S.solo);else if(S.view==='compare')st=st.filter(s=>s.e.v===S.a||s.e.v===S.b);return st}
+function renderStep(){
+ const st=shown();const n=st.length;
+ const i=S.cur?st.findIndex(s=>s.k===S.cur.k&&visIdx(s)===S.cur.vi):-1;
+ $('count').textContent=n?(i>=0?`${i+1} of ${n}`:`${n} change${n>1?'s':''}`):'No changes';
+ $('now').textContent=i>=0?`Clause ${st[i].cl}, ${ver(st[i].e.v).name}`:'Click a highlight, or start with Next';
+ $('prog').innerHTML=st.map((_,j)=>`<i class="${j<=i?'done':''}"></i>`).join('');
+ $('prev').disabled=!n;$('next').disabled=!n;
+}
+function visIdx(s){return edits(s.k).indexOf(s.e)}
+function render(){
+ if(S.cur&&!edits(S.cur.k).length)S.cur=null;
+ if(S.cur)S.cur.vi=Math.min(S.cur.vi,edits(S.cur.k).length-1);
+ renderStats();renderSide();renderSheet();renderMargin();renderPop();renderStep();
+}
+function pick(k,vi=0,scroll=false){
+ S.cur={k,vi};S.pop=true;
+ render();
+ if(scroll){const a=$('sheet').querySelector(`[data-k="${k}"]`);if(a&&a.scrollIntoView)a.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}
+}
+function go(d){
+ const st=shown();
+ if(!st.length)return;
+ const i=S.cur?st.findIndex(s=>s.k===S.cur.k&&visIdx(s)===S.cur.vi):-1;
+ const j=i<0?(d>0?0:st.length-1):(i+d+st.length)%st.length;
+ pick(st[j].k,visIdx(st[j]),true);
+}
+document.addEventListener('click',ev=>{
+ const t=ev.target.closest('[data-tog],[data-only],[data-k],[data-pick],[data-tab],[data-m],[data-v],[data-f],#showAll,#popClose,#prev,#next');
+ if(!t)return;const d=t.dataset;
+ if(d.tog){S.on[d.tog]=!S.on[d.tog];if(S.solo===d.tog&&!S.on[d.tog])S.solo=null;render()}
+ else if(d.only){const leaving=S.solo===d.only;S.solo=leaving?null:d.only;group().list.forEach(v=>S.on[v.id]=leaving||v.id===d.only);if(S.view==='compare')S.view='overlay';S.cur=null;render()}
+ else if(d.k)pick(d.k,S.cur&&S.cur.k===d.k?S.cur.vi:0);
+ else if(d.pick)pick(d.pick);
+ else if(d.tab){const[k,i]=d.tab.split(':');pick(k,+i)}
+ else if(d.m){S.mode=d.m;S.solo=null;S.cur=null;group().list.forEach(v=>S.on[v.id]=true);render()}
+ else if(d.v){S.view=d.v;S.cur=null;if(d.v==='compare'){S.solo=null;group().list.forEach(v=>S.on[v.id]=true)}render()}
+ else if(d.f){S.filter=d.f;render()}
+ else if(t.id==='showAll'){S.solo=null;group().list.forEach(v=>S.on[v.id]=true);S.filter='all';render()}
+ else if(t.id==='popClose'){S.pop=false;renderPop()}
+ else if(t.id==='prev')go(-1);
+ else if(t.id==='next')go(1);
+});
+document.addEventListener('change',ev=>{
+ if(ev.target.id==='clean'){S.clean=ev.target.checked;render()}
+ if(ev.target.id==='cmpA'){S.a=ev.target.value;S.cur=null;render()}
+ if(ev.target.id==='cmpB'){S.b=ev.target.value;S.cur=null;render()}
+});
+document.addEventListener('keydown',ev=>{
+ const t=ev.target;
+ if((ev.key==='Enter'||ev.key===' ')&&t.getAttribute&&t.getAttribute('role')==='button'&&t.tagName!=='BUTTON'){ev.preventDefault();t.click();return}
+ if(/INPUT|SELECT/.test(t.tagName))return;
+ if(ev.key==='ArrowRight'&&!ev.metaKey&&!ev.altKey)go(1);
+ if(ev.key==='ArrowLeft'&&!ev.metaKey&&!ev.altKey)go(-1);
+ if(ev.key==='Escape'){S.pop=false;renderPop()}
+});
+addEventListener('resize',()=>{place();renderPop()});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);
+S.cur={k:'h4',vi:0};
+render();
+</script>
+
+</body>
+</html>
