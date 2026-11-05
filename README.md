@@ -17,11 +17,14 @@ currently deployed at http://public-charters.coraliesage.com (DNS check in progr
 
 ### Repo contents
 
-index.html -> website deployed at public-charters.coraliesage.com
-Democratic fine-tuning a ... -> initial brainstorming document
-README.md -> self-explanatory
-DATA_MODEL.md -> initial Claude brainstorm of the backend datamodel. Needs to be reviewed and edited!
-CNAME -> record for the website
+```
+.
+├── index.html                                                   # website deployed at public-charters.coraliesage.com
+├── Democratic fine-tuning a charter wiki for open models-2.pdf  # initial brainstorming document
+├── DATA_MODEL.md                                                # initial Claude brainstorm of the backend datamodel. Needs to be reviewed and edited!
+├── README.md                                                    # self-explanatory
+└── CNAME                                                        # record for the website
+```
 
 ### Documents & Deadlines
 6. November: 1-pager: https://docs.google.com/document/d 1uiNv3wiHFuFnpSBEH5XlCaNscwk9bIWvY1uUpk8HSD8/edit?usp=sharing
