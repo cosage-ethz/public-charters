@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Charter Overlays</title>
+<title>Public Charters</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
@@ -45,6 +45,7 @@ button{cursor:pointer}
 .hero-in{padding-block:clamp(22px,4vw,48px) 30px}
 .hero h2{margin:0 0 18px;font:600 clamp(42px,7.4vw,92px)/1.02 var(--display);letter-spacing:-.04em;max-width:13em;text-wrap:balance}
 .hero h2 em{font-style:normal;color:var(--accent);display:block}
+.sub a,.notice a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .sub{margin:0 0 20px;font-size:clamp(18px,2vw,22px);line-height:1.45;color:#4a4a4a;max-width:34em}
 .part{margin:0;font-weight:700;font-size:17px}
 .cap{margin:5px 0 0;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
@@ -183,7 +184,7 @@ button{cursor:pointer}
 </head>
 <body>
 <header class="top"><div class="top-in wrap">
-  <div class="brand"><p>Swiss AI Charter</p><h1>charter<i></i>overlays</h1></div>
+  <div class="brand"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></div>
   <div class="ctl">
     <div class="seg" role="group" aria-label="Group versions by" id="modeSeg">
       <button id="m-r" data-m="r">Readings</button><button id="m-c" data-m="c">Communities</button>
@@ -195,9 +196,9 @@ button{cursor:pointer}
 </div></header>
 <section class="hero wrap"><div class="hero-in">
   <h2>One charter, <em>read many ways.</em></h2>
-  <p class="sub">See how people interpret the Swiss AI Charter, one change at a time, and where they disagree.</p>
+  <p class="sub">See how people interpret the <a href="https://www.apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus Charter</a>, created by the Swiss AI Initiative, one change at a time, and where they disagree.</p>
   <p class="part" id="stats"></p><p class="cap" id="cap"></p>
-  <p class="notice"><strong>Prototype with sample data.</strong> Charter clauses are shortened from Version 1.0, and 3 of 11 articles are shown. Every reading, community, count, quote and test case is invented.</p>
+  <p class="notice"><strong>Prototype with sample data.</strong> Charter clauses are shortened from Version 1.0 of the <a href="https://www.apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus Charter</a>, and 3 of 11 articles are shown. Every reading, community, count, quote and test case is invented.</p>
 </div></section>
 
 <div class="step"><div class="step-in wrap">
@@ -357,9 +358,9 @@ function renderSheet(){
  $('main').classList.remove('compare');
  const so=S.solo;
  const hd=so?`<p class="eyebrow">Only ${esc(ver(so).name)}</p>
-  <h2 class="t">Swiss AI Charter, as this version reads it</h2>
+  <h2 class="t">Apertus Charter, as this version reads it</h2>
   <p style="margin:-14px 0 20px"><label style="display:inline-flex;gap:6px;align-items:center;color:var(--muted)"><input type="checkbox" id="clean" ${S.clean?'checked':''}> Show clean text without tracked changes</label></p>`
-  :`<p class="eyebrow">Overlay</p><h2 class="t">Swiss AI Charter</h2>`;
+  :`<p class="eyebrow">Overlay</p><h2 class="t">Apertus Charter</h2>`;
  const fn=so?k=>soloMark(k,so,S.clean):overlayMark;
  el.innerHTML=hd+ARTS.map(a=>`<section class="art" id="${a.id}"><h3><span class="n">${String(a.n).padStart(2,"0")}</span><span>${esc(a.t)}</span></h3>${a.cl.map(c=>`<p class="cl"><span class="num">${c[0]}</span><span>${clauseHTML(c,fn)}</span></p>`).join('')}</section>`).join('');
 }
