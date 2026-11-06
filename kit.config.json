@@ -1,0 +1,13 @@
+{
+  "model": {
+    "id": "swiss-ai/Apertus-v1.1-1.5B-Instruct",
+    "license": "apache-2.0",
+    "note": "Light-weight Apertus for the demo; fits a free Colab GPU. Swap for swiss-ai/Apertus-v1.1-0.5B-Instruct (smaller) or swiss-ai/Apertus-8B-Instruct-2509 (larger), or any open chat model."
+  },
+  "test_case_drafter": {
+    "endpoint": "",
+    "model": "",
+    "note": "Any OpenAI-compatible chat endpoint used to draft test cases and compromise slates."
+  },
+  "split": { "train": 0.8, "heldout": 0.2 }
+}

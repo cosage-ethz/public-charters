@@ -55,6 +55,23 @@ The same contributions can be aggregated at different levels. Each level is a ru
 
 Candidate methods include simple majority, bridging-based ranking (as in Community Notes), opinion clustering (as in Polis), quadratic or budgeted voting, Method of Equal Shares for choosing a bundle, and sortition-weighted preference aggregation. Since each run records its method, a single interface can show the same proposal under different aggregation rules.
 
+## Implementation (`supabase/schema.sql`)
+
+The schema implements the entities above, with these additions and renames:
+
+| Change | Fields | Why |
+|---|---|---|
+| New `invitation` | space_id, token, role, max_uses, uses, expires_at | Invite-only spaces; joined through `accept_invitation(token)` |
+| `space.settings` | panel size, quotas, points budget (JSON) | Each organisation configures its own process |
+| `test_case` fields | clause_id, today, with_edit, status (draft, confirmed, retired), tier (must_pass, normal), split (train, heldout) | Cases outlive proposals; "today / with edit" matches the viewer's example case |
+| New `test_case_revision` | snapshot of a test case before each edit | Wiki-style editing with history |
+| New `sortition_draw` | seed, quotas, pool, selected, inclusion_probability | A verifiable panel draw |
+| New `model`, `eval_result` | model name and checkpoint; answer, verdict, grader per test case | Before/after scorecard |
+| `group` → `cohort`, `group_member` → `cohort_member` | | `group` is a reserved word in SQL |
+| `aggregation_run.input_snapshot` → `input_ids` | explicit list of contribution ids | Makes runs exactly reproducible |
+
+Access rules: open spaces are readable by anyone, invite-only spaces by members only. Members write proposals, test cases and their own judgements; any member may edit any test case (history is kept). Judgements are visible only to their author. Derived tables are written only by pipeline jobs with the service-role key.
+
 ## Mapping to the current prototype
 
 | Prototype (`index.html`) | Model |

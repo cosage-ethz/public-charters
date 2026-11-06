@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
+<link rel="stylesheet" href="app.css">
 <style>
 /* Layout: Swiss civic editorial. Off-white page, huge grotesk headline, hairline rules, numbered articles, segmented progress bar. Light only, by choice. */
 :root{
@@ -193,6 +194,7 @@ button{cursor:pointer}
       <button id="v-o" data-v="overlay">Overlay</button><button id="v-c" data-v="compare">Side by side</button>
     </div>
   </div>
+  <div class="acct" id="acct" aria-label="Account"></div>
 </div></header>
 <section class="hero wrap"><div class="hero-in">
   <h2>One charter, <em>read many ways.</em></h2>
@@ -362,7 +364,7 @@ function renderSheet(){
   <p style="margin:-14px 0 20px"><label style="display:inline-flex;gap:6px;align-items:center;color:var(--muted)"><input type="checkbox" id="clean" ${S.clean?'checked':''}> Show clean text without tracked changes</label></p>`
   :`<p class="eyebrow">Overlay</p><h2 class="t">Apertus Charter</h2>`;
  const fn=so?k=>soloMark(k,so,S.clean):overlayMark;
- el.innerHTML=hd+ARTS.map(a=>`<section class="art" id="${a.id}"><h3><span class="n">${String(a.n).padStart(2,"0")}</span><span>${esc(a.t)}</span></h3>${a.cl.map(c=>`<p class="cl"><span class="num">${c[0]}</span><span>${clauseHTML(c,fn)}</span></p>`).join('')}</section>`).join('');
+ el.innerHTML=hd+ARTS.map(a=>`<section class="art" id="${a.id}"><h3><span class="n">${String(a.n).padStart(2,"0")}</span><span>${esc(a.t)}</span></h3>${a.cl.map(c=>`<p class="cl" data-cl="${c[0]}"><span class="num">${c[0]}</span><span>${clauseHTML(c,fn)}</span></p>`).join('')}</section>`).join('');
 }
 function cardBody(k,idx){
  const h=HOTS[k],es=edits(k),e=es[Math.min(idx,es.length-1)],v=ver(e.v),st=status(e),g=group();
@@ -378,7 +380,8 @@ function cardBody(k,idx){
   <p class="lbl">Support by version</p>
   <div class="bars">${g.list.map((x,i)=>`${badge(x.id)}<span class="bar" style="--c:var(${x.c})"><i style="width:${e.sup[i]}%"></i></span><output>${e.sup[i]}%</output>`).join('')}</div>
   <div class="case"><p class="lbl">Example test case</p><p class="q">“${esc(e.q)}”</p>
-  <dl><dt>Today</dt><dd>${esc(e.now)}</dd><dt>With edit</dt><dd>${esc(e.then)}</dd></dl></div></div>`;
+  <dl><dt>Today</dt><dd>${esc(e.now)}</dd><dt>With edit</dt><dd>${esc(e.then)}</dd></dl></div>
+  <p class="propose-row"><button class="btn" data-propose="${k}">Propose another change here</button></p></div>`;
 }
 function renderStats(){
  const g=group(),all=Object.values(HOTS).flatMap(h=>h.edits).filter(inGroup);
@@ -483,6 +486,9 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);
 S.cur={k:'h4',vi:0};
 render();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
