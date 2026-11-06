@@ -156,7 +156,7 @@ const VIEWS = {
         <div class="opts">${opts.join('')}</div></div>`;
     }).join('');
     return `<p class="eyebrow">Step 3 of 6</p><h3>The main options, side by side</h3>
-      <p class="intro">These are the clauses where members disagree most. Each option is shown with the strongest reason its supporters give, in their own words. Read them before you contribute; the full charter, with every proposal, is on the <a href="index.html">Charter</a> page.</p>
+      <p class="intro">These are the clauses where members disagree most. Each option is shown with the strongest reason its supporters give, in their own words. Read them before you contribute; the full charter, with every proposal, is on the <a href="./">Charter</a> page.</p>
       ${topics}
       <label class="consent"><input type="checkbox" id="read" ${J.read ? 'checked' : ''}> I have read the options.</label>
       ${navHTML('Continue', J.read)}`;
@@ -199,7 +199,7 @@ const VIEWS = {
         <li><span class="d">New version</span><p><b>The new charter is published</b> on the Charter page as tracked changes, with its test cases.</p></li>
         <li><span class="d">Scorecard</span><p><b>The model is retrained</b> and checked on test cases it never saw. The before/after scorecard shows whether it now follows the new charter.</p></li>
       </ol>
-      <div class="nav"><button class="btn" data-go="prev">← Back</button><span style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="about.html">How it works</a><a class="btn primary" href="index.html">Explore the charter</a></span></div>`;
+      <div class="nav"><button class="btn" data-go="prev">← Back</button><span style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="about.html">How it works</a><a class="btn primary" href="./">Explore the charter</a></span></div>`;
   }
 };
 
@@ -230,7 +230,7 @@ async function renderAct() {
         <li>Open the charter and select the words you want to change.</li>
         <li>Click <i>Propose a change</i>, choose reword, remove or add, and write the new text and why.</li>
         <li>Add a test case: a question someone might ask, what the AI tends to do today, and what it should do instead.</li>
-      </ol><a class="btn primary" href="index.html">Open the charter</a></div>
+      </ol><a class="btn primary" href="./">Open the charter</a></div>
       <p class="small muted" style="max-width:40em">Concrete, everyday test cases help most. They are what the model is trained and checked on, so they matter as much as the wording.</p>`;
   }
 }
