@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Organise a Charter Round</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="app.css">
+<style>
+.banner{background:var(--sheet);border:1px solid var(--line);border-left:3px solid var(--accent);padding:12px 16px;font-size:15px;max-width:52em;margin-top:18px}
+.phases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--sheet)}
+.phases li{padding:14px 16px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
+.phases li:first-child{border-left:0}
+.phases .k{font:700 12px/1.3 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.phases b{font:600 19px/1.2 var(--display)}
+.phases span.d{font-size:14px;color:#333}
+.phases li.on{background:var(--ink);color:#fff}
+.phases li.on .k,.phases li.on span.d{color:#e6e6e6}
+.phases li.past .k::after{content:" · done";color:var(--good)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{background:var(--sheet);border:1px solid var(--line);padding:14px 16px}
+.stat output{display:block;font:600 34px/1 var(--display);font-variant-numeric:tabular-nums;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.card{background:var(--sheet);border:1px solid var(--line);padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h4{margin:0}
+.card p{margin:0}
+.inv{width:100%;border-collapse:collapse;font-size:14.5px}
+.inv th,.inv td{text-align:left;padding:8px 6px;border-top:1px solid var(--line)}
+.inv th{font:700 11.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.inv td.n{font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.check li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+.check li::before{content:"";width:14px;height:14px;border:1.5px solid var(--line);margin-top:4px}
+.check li.ok::before{background:var(--good);border-color:var(--good)}
+.check .when{font-size:13px;color:var(--muted);white-space:nowrap}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fields label{display:flex;flex-direction:column;gap:5px;font:700 12px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fields input{font:400 16px var(--ui);letter-spacing:0;text-transform:none;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--sheet);min-width:0}
+.ex{font:700 10.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid var(--pale);border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:2px}
+@media (max-width:800px){.phases{grid-template-columns:repeat(2,minmax(0,1fr))}.phases li:nth-child(3){border-left:0}.phases li:nth-child(n+3){border-top:1px solid var(--line)}.grid2,.stats{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:480px){.fields{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body class="tp">
+<header class="top wrap"><div class="in">
+  <a class="brand" href="index.html"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></a>
+  <nav class="sn" aria-label="Site">
+    <a href="about.html">How it works</a><a href="index.html">Charter</a><a href="participate.html">Participate</a><a href="organise.html" aria-current="page">Organise</a>
+  </nav>
+  <div class="acct" id="acct" aria-label="Account"></div>
+</div></header>
+
+<section class="hero wrap"><div class="in">
+  <h2>Run a round <em>for your community.</em></h2>
+  <p class="lede" id="lede">Move the round from phase to phase, invite members, and see how participation is going. You set up the process; the members and the panel decide the content.</p>
+  <div class="banner" id="banner" hidden></div>
+</div></section>
+
+<main class="wrap"><div class="in">
+
+<section class="block">
+  <p class="eyebrow">Current phase</p>
+  <h3 class="sec" id="spaceName">Apertus Charter (demo)</h3>
+  <ol class="phases" id="phases"></ol>
+  <div class="row" id="phaseCtl"></div>
+</section>
+
+<section class="block">
+  <p class="eyebrow">Participation</p>
+  <h3 class="sec">Who is taking part</h3>
+  <div class="stats" id="stats"></div>
+  <p class="small muted" style="margin-top:10px">Individual ratings and survey answers are private, so they are not shown here; the pipeline uses them to compute combined results.</p>
+</section>
+
+<section class="block">
+  <div class="grid2">
+    <div class="card">
+      <p class="eyebrow">Members</p>
+      <h4>Invitations</h4>
+      <p class="small">Create a link and send it through your usual channels (email, intranet, a letter with a QR code). A link can be for one person or for a group, and expires after the days you choose.</p>
+      <div><button class="btn primary" id="newInvite">Create invitation link</button></div>
+      <div class="tbl" id="invites"></div>
+    </div>
+    <div class="card">
+      <p class="eyebrow">Selected track</p>
+      <h4>Panel draw</h4>
+      <p class="small">The panel is drawn by lot from all members, balanced by the quotas below, with a published random seed so anyone can rerun the draw (LEXIMIN, Flanigan et al., Nature 2021).</p>
+      <div class="fields">
+        <label for="panelSize">Panel size<input id="panelSize" type="number" min="4" max="200" value="12"></label>
+        <label for="quotaBy">Balance by<input id="quotaBy" type="text" value="role, language"></label>
+      </div>
+      <div><button class="btn" id="draw" disabled>Draw the panel</button></div>
+      <p class="small muted">The draw runs as a pipeline script with the service key; the button is enabled once that script is in place.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <p class="eyebrow">After the panel</p>
+  <h3 class="sec">Publish, train and report</h3>
+  <ul class="check">
+    <li><span><b>Publish the new charter version</b><br><span class="small muted">Ratified changes become a fixed version, shown on the Charter page as tracked changes.</span></span><span class="when">With the panel round</span></li>
+    <li><span><b>Split the test cases 80/20</b><br><span class="small muted">Fixed by each case's ID, so nobody can move a case between training and testing.</span></span><span class="when">Pipeline</span></li>
+    <li><span><b>Fine-tune the model</b><br><span class="small muted">Model set in kit.config.json; the default is Apertus v1.1 1.5B, which fits a free cloud GPU.</span></span><span class="when">Pipeline</span></li>
+    <li><span><b>Publish the scorecard</b><br><span class="small muted">Before and after, on held-out cases and the safety floor.</span></span><span class="when">Pipeline</span></li>
+  </ul>
+</section>
+
+<section class="block">
+  <p class="eyebrow">First time here</p>
+  <h3 class="sec">Setting up your own instance</h3>
+  <ul class="check" id="setup">
+    <li><span><b>Download the kit</b> from GitHub (fork or clone the repository).</span><span class="when">5 min</span></li>
+    <li><span><b>Create a free Supabase project</b> and run <code>supabase/schema.sql</code>, then your own version of <code>seed.sql</code>.</span><span class="when">10 min</span></li>
+    <li id="cfg"><span><b>Connect the site</b>: put the project URL and public key in <code>config.js</code>.</span><span class="when">2 min</span></li>
+    <li><span><b>Put the site online</b> on your own server or web host.</span><span class="when">5 min</span></li>
+    <li id="adm"><span><b>Make yourself an admin</b> (one SQL statement, see the README).</span><span class="when">1 min</span></li>
+  </ul>
+</section>
+
+</div></main>
+
+<footer class="foot wrap"><div class="in">Full instructions are in the README of the repository, under “Guide for organisers”.</div></footer>
+
+<script src="sample-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+const PHASES = [
+  { id: 'setup', k: 'Phase 1', t: 'Setting up', d: 'Load the charter, invite members.', go: 'Back to setup' },
+  { id: 'open', k: 'Phase 2', t: 'Open track', d: 'Everyone learns, proposes, rates.', go: 'Open contributions' },
+  { id: 'panel', k: 'Phase 3', t: 'Panel', d: 'The drawn panel deliberates and decides.', go: 'Close contributions and start the panel' },
+  { id: 'published', k: 'Phase 4', t: 'Published', d: 'New version, training, scorecard.', go: 'Publish the new version' }
+];
+const EX = '<span class="ex">Example</span>';
+
+function render() {
+  const S = window.PC ? PC.state : null, live = window.PC && PC.live;
+  const admin = live && S.user && S.roles.has('admin');
+  const sp = S && S.space, st = (sp && sp.settings) || {};
+  const phase = live ? (st.phase || 'setup') : 'open';
+  const at = PHASES.findIndex(p => p.id === phase);
+  $('spaceName').innerHTML = sp ? esc(sp.name) + ` <span class="pill ${sp.access === 'open' ? 'good' : 'mid'}" style="font-size:12px;vertical-align:6px">${sp.access === 'open' ? 'Open to anyone' : 'Invitation only'}</span>` : `Apertus Charter (demo)${EX}`;
+  $('phases').innerHTML = PHASES.map((p, i) => `<li class="${i === at ? 'on' : i < at ? 'past' : ''}"><span class="k">${p.k}</span><b>${p.t}</b><span class="d">${p.d}</span></li>`).join('');
+
+  const b = $('banner');
+  if (!live) { b.hidden = false; b.innerHTML = '<b>Demo mode.</b> No database is connected, so this page shows example values and its buttons are inactive. Follow “Setting up your own instance” below to run a real round.'; }
+  else if (!S.user) { b.hidden = false; b.innerHTML = 'Sign in with an admin account to manage this space. <button class="btn" data-act="signin" style="margin-left:6px">Sign in</button>'; }
+  else if (!admin) { b.hidden = false; b.innerHTML = `You are signed in as ${esc(S.user.email)}, who is not an admin of this space. Ask an existing admin to add you.`; }
+  else b.hidden = true;
+
+  $('phaseCtl').innerHTML = admin
+    ? (at > 0 ? `<button class="btn" data-phase="${PHASES[at - 1].id}">← Back to ${PHASES[at - 1].t}</button>` : '') +
+      (at < PHASES.length - 1 ? `<button class="btn primary" data-phase="${PHASES[at + 1].id}">${PHASES[at + 1].go} →</button>` : '') +
+      `<span class="small muted">Members see the current phase on the Participate page.</span>`
+    : '';
+  $('newInvite').disabled = !admin;
+
+  const stat = (l, v) => `<div class="stat"><span class="lbl">${l}</span><output>${v}</output></div>`;
+  if (!live) {
+    $('stats').innerHTML = stat('Members' + EX, 58) + stat('Proposals' + EX, 16) + stat('Test cases' + EX, 16);
+    $('invites').innerHTML = '';
+  }
+  // Setup checklist reflects what this page can see.
+  $('cfg').classList.toggle('ok', !!live);
+  $('adm').classList.toggle('ok', !!admin);
+  if (live && sp) loadLive(sp, admin);
+}
+
+async function loadLive(sp, admin) {
+  const db = PC.state.db;
+  const count = async (t) => { const { count } = await db.from(t).select('*', { count: 'exact', head: true }).eq('space_id', sp.id); return count ?? '–'; };
+  const [m, p, t] = await Promise.all([
+    (async () => { const { count } = await db.from('membership').select('*', { count: 'exact', head: true }).eq('space_id', sp.id).eq('role', 'member'); return count ?? '–'; })(),
+    count('proposal'), count('test_case')]);
+  const stat = (l, v) => `<div class="stat"><span class="lbl">${l}</span><output>${v}</output></div>`;
+  $('stats').innerHTML = stat('Members', m) + stat('Proposals', p) + stat('Test cases', t);
+  if (!admin) return;
+  const { data } = await db.from('invitation').select('note, uses, max_uses, expires_at, created_at').eq('space_id', sp.id).order('created_at', { ascending: false }).limit(20);
+  $('invites').innerHTML = data && data.length ? `<table class="inv"><thead><tr><th>Note</th><th>Used</th><th>Expires</th></tr></thead><tbody>${data.map(i =>
+    `<tr><td>${esc(i.note || '–')}</td><td class="n">${i.uses} of ${i.max_uses}</td><td>${new Date(i.expires_at).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>`
+    : '<p class="small muted">No invitations yet.</p>';
+}
+
+document.addEventListener('click', async ev => {
+  if (ev.target.id === 'newInvite' && window.PC && PC.state.space) { PC.inviteDialog(); return; }
+  const ph = ev.target.closest('[data-phase]');
+  if (ph) {
+    const sp = PC.state.space, settings = Object.assign({}, sp.settings, { phase: ph.dataset.phase });
+    const { error } = await PC.state.db.from('space').update({ settings }).eq('id', sp.id);
+    if (error) return PC.toast(error.message);
+    sp.settings = settings; PC.toast('Phase changed.'); render();
+  }
+});
+document.addEventListener('pc:ready', render);
+render();
+})();
+</script>
+</body>
+</html>

@@ -19,8 +19,14 @@ currently deployed at http://public-charters.coraliesage.com (DNS check in progr
 
 ```
 .
-├── index.html            # the charter viewer, deployed at public-charters.coraliesage.com
-├── app.js / app.css      # participation layer: sign-in, invitations, proposals with test cases
+├── index.html            # Charter: the viewer, deployed at public-charters.coraliesage.com
+├── about.html            # How it works: the concept, the process, and the research behind it
+├── participate.html      # Participate: the guided journey for members (Deliberative Polling style)
+├── organise.html         # Organise: phases, invitations and participation for admins
+├── sample-data.js        # sample charter, proposals and groups used by the prototype pages
+├── journey.js            # logic of the guided journey
+├── site.css              # shared navigation and page styles
+├── app.js / app.css      # accounts, invitations and the proposal form, shared by all pages
 ├── config.js             # per-organisation settings (Supabase URL and public key, default space)
 ├── kit.config.json       # model and pipeline settings (default: swiss-ai/Apertus-v1.1-1.5B-Instruct)
 ├── supabase/
@@ -34,7 +40,9 @@ currently deployed at http://public-charters.coraliesage.com (DNS check in progr
 
 ## How the process works
 
-Public Charters is a kit that lets a community, such as a hospital, a school or a whole country, write and keep amending the charter its AI model follows, and then train the model on it. It works with Apertus by default and with any other open model.
+Public Charters is a kit that lets a community, such as a hospital, a school or a canton, write and keep amending the charter its AI model follows, and then train its own copy of the model on it. It works with Apertus by default and with any other open model.
+
+**Each community runs its own instance.** There is no central platform: an organisation forks this repository, connects its own database, hosts the site on its own server, and invites its own members. Its charter, contributions and fine-tuned model stay with it. Instances can adapt the charter and test cases to their own use cases, and can start from another community's published charter.
 
 Each round has six steps:
 
@@ -73,7 +81,8 @@ You run the process for your community. You need a free [Supabase](https://supab
 
 **Running a round**
 
-- **Invite people:** click *Invite people* (top right) to create a link. Choose how many people may use it and for how many days. Send it through your usual channels. For an open space, set `access` to `open` and anyone can join with *Join this space*.
+- **The Organise page** shows the current phase (setting up, open track, panel, published), lets you move to the next one, and shows how many people take part.
+- **Invite people:** click *Invite people* (top right) or use the Organise page to create a link. Choose how many people may use it and for how many days. Send it through your usual channels. For an open space, set `access` to `open` and anyone can join with *Join this space*.
 - **Open track:** give people one to three weeks to propose changes and write test cases. Remind them that one good test case is worth more than a long argument.
 - **Panel and publication:** draw the panel, hold the panel session, then publish the new charter version. (These steps are being built; until then they are done by hand in the database.)
 - **Model:** set the model in `kit.config.json`. The default, `swiss-ai/Apertus-v1.1-1.5B-Instruct`, is small enough to fine-tune on a free Colab GPU.
@@ -82,15 +91,18 @@ You run the process for your community. You need a free [Supabase](https://supab
 
 ## Guide for participants
 
-You have been invited to help decide how an AI model should behave in your community.
+You have been invited to help decide how an AI model should behave in your community. The **Participate** page walks you through the steps below one at a time, in about 20 minutes.
 
 1. **Join.** Open your invitation link and enter your email. You get a sign-in link by email, no password needed. Opening it adds you to the space.
-2. **Read.** Each coloured highlight in the charter is a place where people have proposed a change. Click it to see the proposed wording, the reasons, and an example question showing what would change.
-3. **Propose a change.** Select any words in a clause and click *Propose a change*, or use *Propose another change here* on a highlight. Choose reword, remove or add, write the new text and say why.
-4. **Add a test case.** Write a question someone might ask the AI where your change makes a difference, what the AI tends to do today, and what it should do instead. Concrete, everyday examples work best. Test cases are what the model is trained and checked on, so they matter as much as the wording.
-5. **See all proposals** under *Proposals* (top right).
+2. **Say what you think now.** Six quick questions. You answer the same ones at the end, so we can see how learning and discussing changes views (the Deliberative Polling method).
+3. **Learn.** The Participate page shows the most debated clauses with every option side by side and the reasons for each.
+4. **Read the charter.** Each coloured highlight in the charter is a place where people have proposed a change. Click it to see the proposed wording, the reasons, and an example question showing what would change.
+5. **Propose a change.** Select any words in a clause and click *Propose a change*, or use *Propose another change here* on a highlight. Choose reword, remove or add, write the new text and say why.
+6. **Add a test case.** Write a question someone might ask the AI where your change makes a difference, what the AI tends to do today, and what it should do instead. Concrete, everyday examples work best. Test cases are what the model is trained and checked on, so they matter as much as the wording.
+7. **Rate and prioritise.** Rate other people's proposals (helpful, somewhat, not helpful) and spend your priority credits.
+8. **Say what you think again**, and see what happens next.
 
-Later in the round you may be asked to rate other proposals, spend priority points, or, if you are drawn by lot, sit on the panel that makes the final edits. Your ratings are private; only the combined results are shown.
+If you are drawn by lot, you will be invited to sit on the panel that makes the final edits. Your ratings and answers are private; only the combined results are shown.
 
 ### Documents & Deadlines
 6. November: 1-pager: https://docs.google.com/document/d 1uiNv3wiHFuFnpSBEH5XlCaNscwk9bIWvY1uUpk8HSD8/edit?usp=sharing

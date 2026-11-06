@@ -122,9 +122,11 @@ create table public.judgement (
   id          uuid primary key default gen_random_uuid(),
   space_id    uuid not null references public.space(id) on delete cascade,
   user_id     uuid not null references auth.users(id) default auth.uid(),
-  target_type text not null check (target_type in ('proposal', 'test_case', 'slate', 'clause')),
+  target_type text not null check (target_type in ('proposal', 'test_case', 'slate', 'clause', 'space')),
   target_id   uuid not null,
-  kind        text not null,               -- 'rating' | 'vote' | 'points' | 'pairwise' | ...
+  -- 'rating' | 'vote' | 'points' | 'pairwise' | 'survey_pre' | 'survey_post' | 'consent' | ...
+  -- Space-wide answers (surveys, priority points) use target_type 'space' and target_id = space id.
+  kind        text not null,
   value       jsonb not null,
   created_at  timestamptz not null default now(),
   unique (user_id, target_type, target_id, kind)

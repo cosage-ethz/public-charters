@@ -1,0 +1,61 @@
+/* Shared by every page: site navigation, and the layout of the text pages
+   (How it works, Participate, Organise). Same tokens as index.html.
+   Swiss civic editorial: off-white desk, grotesk headlines, hairline rules. Light only, by choice. */
+:root{
+  --desk:#f6f6f6; --sheet:#ffffff; --panel:#ececec; --ink:#141414; --slate:#3b4656; --muted:#666a70; --line:#d6d6d6; --accent:#b0302e; --pale:#ecd2d0;
+  --v1:#28608f; --v2:#b0760f; --v3:#2b7a68; --v4:#7c4a93;
+  --good:#2b7a4b; --warn:#b0302e; --mid:#666a70;
+  --display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --ui:"Lato","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+
+/* Site navigation (also used in the viewer's top bar) */
+/* Pages are pills, so they read differently from the viewer's underlined view switches. */
+.sn{display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:var(--panel);border-radius:999px;padding:3px}
+.sn a{color:var(--slate);text-decoration:none;font:700 14.5px/1.2 var(--ui);padding:6px 13px;border-radius:999px;white-space:nowrap}
+.sn a:hover{color:var(--ink);background:var(--sheet)}
+.sn a[aria-current="page"]{color:#fff;background:var(--ink)}
+@media (max-width:560px){.sn{width:100%;justify-content:space-between}.sn a{padding:6px 9px;font-size:14px}}
+
+/* Text pages */
+.tp *{box-sizing:border-box}
+body.tp{margin:0;background:var(--desk);color:var(--ink);font:400 17px/1.6 var(--ui);overflow-x:hidden}
+body.tp::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--desk)}
+.tp .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tp .in{max-width:1180px;margin:0 auto}
+.tp a{color:inherit;text-underline-offset:2px}
+.tp :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tp button,.tp input,.tp select,.tp textarea{font:inherit;color:inherit}
+.tp .top .in{display:flex;flex-wrap:wrap;align-items:center;gap:10px 28px;padding-block:18px}
+.tp .brand{flex:1 1 220px;min-width:0;text-decoration:none;color:var(--ink)}
+.tp .brand p{margin:0;font:700 11px/1.2 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.tp .brand h1{margin:1px 0 0;font:600 20px/1.15 var(--display);letter-spacing:-.025em}
+.tp .brand h1 i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin:0 3px 3px 4px}
+
+.tp .hero .in{padding-block:clamp(22px,4vw,48px) 26px}
+.tp .hero h2{margin:0 0 18px;font:600 clamp(40px,6.6vw,84px)/1.02 var(--display);letter-spacing:-.04em;max-width:13em;text-wrap:balance}
+.tp .hero h2 em{font-style:normal;color:var(--accent);display:block}
+.tp .lede{margin:0;font-size:clamp(18px,2vw,22px);line-height:1.45;color:#3c3c3c;max-width:36em}
+
+.tp .eyebrow,.tp .lbl{font:700 12px/1.3 var(--ui);letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:0}
+.tp h3.sec{font:600 clamp(28px,3.4vw,40px)/1.08 var(--display);letter-spacing:-.03em;margin:6px 0 14px;text-wrap:balance}
+.tp h4{font:600 21px/1.25 var(--display);letter-spacing:-.015em;margin:0 0 6px;text-wrap:balance}
+.tp section.block{border-top:1px solid var(--line);padding-block:34px 30px;scroll-margin-top:20px}
+.tp .prose{max-width:40em}
+.tp .prose p{margin:0 0 14px}
+.tp .muted{color:var(--muted)}
+.tp .small{font-size:14.5px;line-height:1.5}
+
+.tp .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--sheet);border-radius:10px;padding:7px 15px;font-weight:700;font-size:15px;text-decoration:none;color:var(--ink);cursor:pointer}
+.tp .btn:hover{border-color:var(--ink)}
+.tp .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.tp .btn.primary:hover{background:#952523;border-color:#952523}
+.tp .btn[disabled]{opacity:.45;cursor:default}
+.tp .pill{display:inline-flex;align-items:center;gap:5px;font:700 11px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.tp .pill::before{content:"";width:7px;height:7px;background:currentColor}
+.tp .pill.good{color:var(--good)} .tp .pill.warn{color:var(--warn)} .tp .pill.mid{color:var(--mid)}
+.tp .foot .in{padding-block:30px 50px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.tp .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:15px;max-width:calc(100vw - 32px)}
+@media (prefers-reduced-motion:no-preference){.tp .fade{animation:tpfade .25s ease both}}
+@keyframes tpfade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}

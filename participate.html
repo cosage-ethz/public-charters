@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Participate in Public Charters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="app.css">
+<style>
+/* Journey layout: a step rail on the left, one step at a time on the right. */
+.phase{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin-top:18px;font-size:15px}
+.phase b{font-weight:700}
+.journey{display:grid;grid-template-columns:270px minmax(0,1fr);gap:0 44px;padding-block:6px 70px;align-items:start}
+.railwrap{position:sticky;top:20px}
+.rail{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.rail li{border-bottom:1px solid var(--line)}
+.rail button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:28px minmax(0,1fr);gap:0 10px;width:100%;padding:11px 4px;align-items:start}
+.rail button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.rail .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:700 12px/1 var(--ui);border:1.5px solid var(--line);color:var(--muted);background:var(--sheet);font-variant-numeric:tabular-nums}
+.rail .t{font-weight:700;line-height:1.3}
+.rail .s{grid-column:2;color:var(--muted);font-size:13.5px;line-height:1.35}
+.rail li.done .dot{background:var(--good);border-color:var(--good);color:#fff}
+.rail li.cur .dot{background:var(--accent);border-color:var(--accent);color:#fff}
+.rail li.cur .t{color:var(--accent)}
+.rail-foot{margin-top:14px;font-size:13.5px;color:var(--muted)}
+
+.pane{background:var(--sheet);border:1px solid var(--line);padding:clamp(18px,3vw,34px);min-width:0}
+.pane h3{font:600 clamp(28px,3.2vw,38px)/1.08 var(--display);letter-spacing:-.03em;margin:4px 0 12px;text-wrap:balance}
+.pane .intro{max-width:40em;margin:0 0 22px;color:#333}
+.pane .nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:28px;padding-top:18px}
+.note{background:var(--desk);padding:12px 14px;font-size:14.5px;line-height:1.5;color:#333;max-width:44em}
+
+/* Survey */
+.q{padding:16px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0}
+.q p{margin:0 0 10px;font-weight:700;max-width:40em}
+.scale{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:560px}
+.scale label{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12.5px;color:var(--muted);cursor:pointer}
+.scale input{appearance:none;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:var(--sheet);margin:0;cursor:pointer;display:grid;place-items:center;font:700 12px var(--ui)}
+.scale input::after{content:attr(data-n);color:var(--muted)}
+.scale input:checked{background:var(--ink);border-color:var(--ink)}
+.scale input:checked::after{color:#fff}
+.ends{display:flex;justify-content:space-between;max-width:560px;font-size:13px;color:var(--muted);margin-top:4px}
+
+/* Briefing */
+.topic{border-top:1px solid var(--line);padding:22px 0}
+.topic:first-of-type{border-top:0;padding-top:4px}
+.clause{font:400 19px/1.6 var(--ui);margin:6px 0 14px;max-width:40em}
+.clause mark{background:var(--pale);color:inherit;padding:0 2px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.opt{border:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.opt .w{font:600 16.5px/1.35 var(--display);overflow-wrap:anywhere}
+.opt .w ins{color:var(--accent);text-underline-offset:3px}
+.opt .r{font-size:14.5px;line-height:1.45}
+.opt .by{font-size:12.5px;color:var(--muted)}
+.opt.keep{background:var(--desk)}
+
+/* Rating */
+.rate{border-top:1px solid var(--line);padding:16px 0;display:flex;flex-direction:column;gap:8px}
+.rate .diff{font:600 17px/1.35 var(--display);margin:0;overflow-wrap:anywhere}
+.rate .diff del{color:var(--muted);font-weight:400}
+.rate .diff ins{color:var(--accent);text-underline-offset:3px}
+.rate .meta{font-size:13px;color:var(--muted)}
+.choices{display:flex;flex-wrap:wrap;gap:6px}
+.choices button{border:1px solid var(--line);background:var(--sheet);border-radius:999px;padding:5px 13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--slate)}
+.choices button:hover{border-color:var(--ink)}
+.choices button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* Priority points */
+.budget{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;font-weight:700}
+.budget output{font:600 30px/1 var(--display);color:var(--accent);font-variant-numeric:tabular-nums}
+.pts{display:flex;flex-direction:column}
+.pt{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.pt .name{font-weight:700}
+.pt .sub{display:block;font-weight:400;font-size:13.5px;color:var(--muted)}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--sheet);font-weight:700;cursor:pointer}
+.stepper button:hover{border-color:var(--ink)}
+.stepper output{min-width:76px;text-align:center;font-variant-numeric:tabular-nums;font-size:14px}
+.stepper output b{font-size:17px}
+
+/* Activities and results */
+.acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:8px}
+.act{border:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:6px;background:var(--sheet);text-align:left;cursor:pointer;font:inherit;color:inherit}
+.act:hover{border-color:var(--ink)}
+.act[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent)}
+.act b{font:600 18px/1.2 var(--display)}
+.act span{font-size:13.5px;color:var(--muted)}
+.cmp{width:100%;border-collapse:collapse;font-size:15px}
+.cmp th,.cmp td{text-align:left;padding:9px 8px;border-top:1px solid var(--line);vertical-align:top}
+.cmp th{font:700 11.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cmp td.n{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;width:70px}
+.cmp .chg{color:var(--accent)}
+.tbl{overflow-x:auto}
+.timeline{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.timeline li{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 16px;padding:12px 0;border-top:1px solid var(--line)}
+.timeline .d{font-weight:700;color:var(--accent);font-size:14.5px}
+.timeline p{margin:0}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:560px}
+.form-grid label,.consent{display:flex;flex-direction:column;gap:5px;font:700 12px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.form-grid select,.form-grid input{font:400 16px var(--ui);letter-spacing:0;text-transform:none;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--sheet);min-width:0}
+.consent{flex-direction:row;align-items:flex-start;gap:10px;font:400 15.5px/1.45 var(--ui);letter-spacing:0;text-transform:none;color:var(--ink);max-width:40em;margin:16px 0 0}
+.consent input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent)}
+
+@media (max-width:900px){
+  .journey{grid-template-columns:minmax(0,1fr)}
+  .railwrap{position:static}
+  .rail{flex-direction:row;overflow-x:auto;border-top:0;margin-bottom:14px;gap:4px}
+  .rail li{border-bottom:0;flex:none}
+  .rail button{grid-template-columns:24px auto;padding:6px 8px;border:1px solid var(--line);border-radius:999px;background:var(--sheet)}
+  .rail .s{display:none}
+  .rail-foot{display:none}
+  .acts{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){.form-grid{grid-template-columns:minmax(0,1fr)}.scale input{width:26px;height:26px}.timeline li{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body class="tp">
+<header class="top wrap"><div class="in">
+  <a class="brand" href="index.html"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></a>
+  <nav class="sn" aria-label="Site">
+    <a href="about.html">How it works</a><a href="index.html">Charter</a><a href="participate.html" aria-current="page">Participate</a><a href="organise.html">Organise</a>
+  </nav>
+  <div class="acct" id="acct" aria-label="Account"></div>
+</div></header>
+
+<section class="hero wrap"><div class="in">
+  <h2>Your part in <em>this round.</em></h2>
+  <p class="lede">Six short steps, about 20 minutes in total. You can stop at any point and pick up where you left off. The steps follow Deliberative Polling: we ask what you think, give you balanced information, ask you to contribute, and then ask again.</p>
+  <div class="phase" id="phase"></div>
+</div></section>
+
+<main class="wrap"><div class="in journey">
+  <div class="railwrap">
+    <ol class="rail" id="rail" aria-label="Steps"></ol>
+    <p class="rail-foot" id="railFoot"></p>
+  </div>
+  <section class="pane fade" id="pane" aria-live="polite"></section>
+</div></main>
+
+<footer class="foot wrap"><div class="in">Your answers are private. Only combined results are shown, and your optional profile is used only to keep the panel balanced. <a href="about.html#safeguards">How we protect your input</a>.</div></footer>
+
+<script src="sample-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="journey.js"></script>
+</body>
+</html>

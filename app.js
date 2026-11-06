@@ -1,5 +1,5 @@
 // Participation layer for Public Charters: accounts, invitations and proposals.
-// Loaded after the viewer script in index.html and reuses its globals (ARTS, HOTS, esc).
+// Loaded on every page after sample-data.js; the proposal form uses the charter data (ARTS, HOTS).
 // With Supabase configured in config.js it reads and writes the database;
 // without it, it runs in demo mode and keeps proposals in this browser only.
 (() => {
@@ -19,6 +19,7 @@ const A = {
   invite: params.get('invite')
 };
 const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
 
 // ---------- charter helpers (from the viewer's data) ----------
 const clauseText = c => c[1].map(p => typeof p === 'string' ? p : HOTS[p.h].base).join('');
@@ -346,18 +347,23 @@ async function acceptInvite() {
   if (!error && A.space) toast(`Welcome. You joined ${A.space.name}.`);
 }
 
+// Shared with the other pages (participate.html, organise.html).
+window.PC = { state: A, live: LIVE, toast, dialog, signInDialog, inviteDialog, esc };
+const ready = () => document.dispatchEvent(new CustomEvent('pc:ready'));
+
 async function init() {
   renderAcct();
-  if (!LIVE) return;
+  if (!LIVE) return ready();
   const { data: { session } } = await A.db.auth.getSession();
   A.user = session ? session.user : null;
   await loadSpace();
   await acceptInvite();
   if (A.invite && !A.user) signInDialog('You have been invited to take part. Sign in with your email to accept.');
+  ready();
   A.db.auth.onAuthStateChange(async (_e, s) => {
     const was = A.user && A.user.id; A.user = s ? s.user : null;
     if ((A.user && A.user.id) === was) return;
-    await loadSpace(); await acceptInvite();
+    await loadSpace(); await acceptInvite(); ready();
   });
 }
 init();
