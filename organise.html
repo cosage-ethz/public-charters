@@ -42,6 +42,10 @@
 .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .fields label{display:flex;flex-direction:column;gap:5px;font:700 12px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .fields input{font:400 16px var(--ui);letter-spacing:0;text-transform:none;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--sheet);min-width:0}
+.opts{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.opts legend{margin-bottom:6px;padding:0}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-size:15px;line-height:1.4}
+.opts input{margin-top:3px;accent-color:var(--accent)}
 .ex{font:700 10.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid var(--pale);border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:2px}
 @media (max-width:800px){.phases{grid-template-columns:repeat(2,minmax(0,1fr))}.phases li:nth-child(3){border-left:0}.phases li:nth-child(n+3){border-top:1px solid var(--line)}.grid2,.stats{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:480px){.fields{grid-template-columns:minmax(0,1fr)}}
@@ -51,14 +55,14 @@
 <header class="top wrap"><div class="in">
   <a class="brand" href="./"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></a>
   <nav class="sn" aria-label="Site">
-    <a href="about.html">How it works</a><a href="./">Charter</a><a href="participate.html">Participate</a><a href="organise.html" aria-current="page">Organise</a>
+    <a href="about.html">How it works</a><a href="./">Charter</a><a href="participate.html">Participate</a><a href="results.html">Results</a><a href="organise.html" aria-current="page">Organise</a>
   </nav>
   <div class="acct" id="acct" aria-label="Account"></div>
 </div></header>
 
 <section class="hero wrap"><div class="in">
   <h2>Run a round <em>for your community.</em></h2>
-  <p class="lede" id="lede">Move the round from phase to phase, invite members, and see how participation is going. You set up the process; the members and the panel decide the content.</p>
+  <p class="lede" id="lede">Move the round from phase to phase, invite members, and see how participation is going. You set up the process and the groups; the members decide the content.</p>
   <div class="banner" id="banner" hidden></div>
 </div></section>
 
@@ -66,7 +70,7 @@
 
 <section class="block">
   <p class="eyebrow">Current phase</p>
-  <h3 class="sec" id="spaceName">Apertus Charter (demo)</h3>
+  <h3 class="sec" id="spaceName">Lakeside Hospital (demo)</h3>
   <ol class="phases" id="phases"></ol>
   <div class="row" id="phaseCtl"></div>
 </section>
@@ -88,24 +92,30 @@
       <div class="tbl" id="invites"></div>
     </div>
     <div class="card">
-      <p class="eyebrow">Selected track</p>
-      <h4>Panel draw</h4>
-      <p class="small">The panel is drawn by lot from all members, balanced by the quotas below, with a published random seed so anyone can rerun the draw (LEXIMIN, Flanigan et al., Nature 2021).</p>
-      <div class="fields">
-        <label for="panelSize">Panel size<input id="panelSize" type="number" min="4" max="200" value="12"></label>
-        <label for="quotaBy">Balance by<input id="quotaBy" type="text" value="role, language"></label>
-      </div>
-      <div><button class="btn" id="draw" disabled>Draw the panel</button></div>
-      <p class="small muted">The draw runs as a pipeline script with the service key; the button is enabled once that script is in place.</p>
+      <p class="eyebrow">Fairness</p>
+      <h4>Groups and their share</h4>
+      <p class="small">A change is endorsed only when every group finds it helpful. Set the groups and the share of the community each stands for (for example from staff lists and patient numbers). Each group then counts at that share, however many of its members take part.</p>
+      <div class="tbl"><table class="inv" id="groups"></table></div>
+      <p class="small" id="gsum"></p>
+      <fieldset class="opts"><legend class="lbl">How groups are formed</legend>
+        <label><input type="radio" name="gmode" value="roles" checked> By role, as set here <span class="muted">(recommended below about 100 members)</span></label>
+        <label><input type="radio" name="gmode" value="opinion"> By opinion, found from the votes, as in Polis <span class="muted">(needs about 100 active members)</span></label>
+      </fieldset>
+      <fieldset class="opts"><legend class="lbl">AI help</legend>
+        <label><input type="checkbox" id="aiDraft"> Let an AI model draft test cases for proposals. Drafts are labelled, and members edit and confirm them.</label>
+        <span class="small muted">Off by default. Concerns, scores and compromises never use AI.</span>
+      </fieldset>
     </div>
   </div>
 </section>
 
 <section class="block">
-  <p class="eyebrow">After the panel</p>
+  <p class="eyebrow">After the round</p>
   <h3 class="sec">Publish, train and report</h3>
   <ul class="check">
-    <li><span><b>Publish the new charter version</b><br><span class="small muted">Ratified changes become a fixed version, shown on the Charter page as tracked changes.</span></span><span class="when">With the panel round</span></li>
+    <li><span><b>Publish the new charter version</b><br><span class="small muted">Endorsed changes, and bridges endorsed in the bridge phase, become a fixed version with its dissent record. The Charter page shows it as tracked changes.</span></span><span class="when">End of round</span></li>
+    <li><span><b>Confirm the test cases</b><br><span class="small muted">Each test case of an adopted change is confirmed by two members other than its author.</span></span><span class="when">One week</span></li>
+    <li><span><b>Check the safety floor</b><br><span class="small muted">The new version must still pass every floor case. A change that breaks one is held back for review.</span></span><span class="when">Pipeline</span></li>
     <li><span><b>Split the test cases 80/20</b><br><span class="small muted">Fixed by each case's ID, so nobody can move a case between training and testing.</span></span><span class="when">Pipeline</span></li>
     <li><span><b>Fine-tune the model</b><br><span class="small muted">Model set in kit.config.json; the default is Apertus v1.1 1.5B, which fits a free cloud GPU.</span></span><span class="when">Pipeline</span></li>
     <li><span><b>Publish the scorecard</b><br><span class="small muted">Before and after, on held-out cases and the safety floor.</span></span><span class="when">Pipeline</span></li>
@@ -132,14 +142,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script src="bridge.js"></script>
+<script src="community.js"></script>
 <script>
 (() => {
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
 const PHASES = [
   { id: 'setup', k: 'Phase 1', t: 'Setting up', d: 'Load the charter, invite members.', go: 'Back to setup' },
-  { id: 'open', k: 'Phase 2', t: 'Open track', d: 'Everyone learns, proposes, rates.', go: 'Open contributions' },
-  { id: 'panel', k: 'Phase 3', t: 'Panel', d: 'The drawn panel deliberates and decides.', go: 'Close contributions and start the panel' },
+  { id: 'open', k: 'Phase 2', t: 'Open', d: 'Members compare, rate, share concerns and propose.', go: 'Open contributions' },
+  { id: 'bridges', k: 'Phase 3', t: 'Bridges', d: 'Members write and rate bridges for contested changes.', go: 'Close contributions and start bridges' },
   { id: 'published', k: 'Phase 4', t: 'Published', d: 'New version, training, scorecard.', go: 'Publish the new version' }
 ];
 const EX = '<span class="ex">Example</span>';
@@ -150,11 +162,11 @@ function render() {
   const sp = S && S.space, st = (sp && sp.settings) || {};
   const phase = live ? (st.phase || 'setup') : 'open';
   const at = PHASES.findIndex(p => p.id === phase);
-  $('spaceName').innerHTML = sp ? esc(sp.name) + ` <span class="pill ${sp.access === 'open' ? 'good' : 'mid'}" style="font-size:12px;vertical-align:6px">${sp.access === 'open' ? 'Open to anyone' : 'Invitation only'}</span>` : `Apertus Charter (demo)${EX}`;
+  $('spaceName').innerHTML = sp ? esc(sp.name) + ` <span class="pill ${sp.access === 'open' ? 'good' : 'mid'}" style="font-size:12px;vertical-align:6px">${sp.access === 'open' ? 'Open to anyone' : 'Invitation only'}</span>` : `Lakeside Hospital (demo)${EX}`;
   $('phases').innerHTML = PHASES.map((p, i) => `<li class="${i === at ? 'on' : i < at ? 'past' : ''}"><span class="k">${p.k}</span><b>${p.t}</b><span class="d">${p.d}</span></li>`).join('');
 
   const b = $('banner');
-  if (!live) { b.hidden = false; b.innerHTML = '<b>Demo mode.</b> No database is connected, so this page shows example values and its buttons are inactive. Follow “Setting up your own instance” below to run a real round.'; }
+  if (!live) { b.hidden = false; b.innerHTML = '<b>Demo mode.</b> No database is connected, so this page shows example values and most buttons are inactive. You can try out the group shares: they are saved in this browser and change the weights on the Results page. Follow “Setting up your own instance” below to run a real round.'; }
   else if (!S.user) { b.hidden = false; b.innerHTML = 'Sign in with an admin account to manage this space. <button class="btn" data-act="signin" style="margin-left:6px">Sign in</button>'; }
   else if (!admin) { b.hidden = false; b.innerHTML = `You are signed in as ${esc(S.user.email)}, who is not an admin of this space. Ask an existing admin to add you.`; }
   else b.hidden = true;
@@ -168,14 +180,40 @@ function render() {
 
   const stat = (l, v) => `<div class="stat"><span class="lbl">${l}</span><output>${v}</output></div>`;
   if (!live) {
-    $('stats').innerHTML = stat('Members' + EX, 58) + stat('Proposals' + EX, 16) + stat('Test cases' + EX, 16);
+    const sugs = window.Community ? Community.suggestions() : [];
+    $('stats').innerHTML = stat('Active members' + EX, Community.GROUPS.reduce((n, g) => n + g.active, 0)) + stat('Suggestions' + EX, sugs.length) + stat('Endorsed so far' + EX, sugs.filter(x => x.s.status === 'endorsed').length);
     $('invites').innerHTML = '';
   }
+  renderGroups();
   // Setup checklist reflects what this page can see.
   $('cfg').classList.toggle('ok', !!live);
   $('adm').classList.toggle('ok', !!admin);
   if (live && sp) loadLive(sp, admin);
 }
+
+// Groups and shares. In demo mode the shares are saved in this browser and change the
+// weights on the Results page. With a database, they belong in space.settings.groups.
+function renderGroups() {
+  const C = window.Community; if (!C) return;
+  const W = C.weights();
+  $('groups').innerHTML = `<thead><tr><th>Group</th><th>Share</th><th>Active</th><th>Weight</th></tr></thead><tbody>${C.GROUPS.map(g =>
+    `<tr><td>${esc(g.name)}</td><td><input type="number" min="0" max="100" step="5" value="${Math.round(g.target * 100)}" data-share="${g.id}" aria-label="Share of ${esc(g.name)} in percent" style="width:70px;font:inherit;border:1px solid var(--line);border-radius:8px;padding:3px 6px"> %</td><td class="n">${g.active}</td><td class="n">${W[g.id].weight.toFixed(2)}</td></tr>`).join('')}</tbody>`;
+  const sum = C.GROUPS.reduce((n, g) => n + g.target, 0);
+  $('gsum').innerHTML = Math.abs(sum - 1) < 0.001 ? '<span class="muted">Shares add up to 100%.</span>' : `<b style="color:var(--warn)">Shares add up to ${Math.round(sum * 100)}%. Adjust them to 100%.</b>`;
+  const o = C.org;
+  document.querySelectorAll('input[name=gmode]').forEach(r => { r.checked = (o.gmode || 'roles') === r.value; });
+  $('aiDraft').checked = !!o.aiDraft;
+}
+document.addEventListener('change', ev => {
+  const C = window.Community; if (!C) return;
+  const t = ev.target;
+  if (t.dataset.share) {
+    const g = C.GROUPS.find(x => x.id === t.dataset.share); g.target = Math.max(0, Math.min(100, +t.value || 0)) / 100;
+    C.org.targets = Object.fromEntries(C.GROUPS.map(x => [x.id, x.target])); C.saveOrg(C.org); renderGroups();
+  }
+  if (t.name === 'gmode') { C.org.gmode = t.value; C.saveOrg(C.org); if (t.value === 'opinion') PC.toast('Opinion groups need about 100 active members. This demo keeps using roles.'); }
+  if (t.id === 'aiDraft') { C.org.aiDraft = t.checked; C.saveOrg(C.org); }
+});
 
 async function loadLive(sp, admin) {
   const db = PC.state.db;

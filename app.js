@@ -148,21 +148,26 @@ function proposeDialog(t) {
     : `<label><input type="radio" name="op" value="replace" checked> Reword</label>
        <label><input type="radio" name="op" value="delete"> Remove</label>
        <label><input type="radio" name="op" value="insert"> Add text after</label>`;
+  // Starting points for test cases: situations other members already wrote for this clause.
+  // No AI involved; an organiser can switch on an AI drafter in kit.config.json instead.
+  const drafts = [];
+  for (const p of found.cl[1]) if (typeof p !== 'string') for (const e of HOTS[p.h].edits) {
+    if (e.q && drafts.length < 2 && !drafts.some(x => x.prompt === e.q)) drafts.push({ prompt: e.q, today: e.now, with_edit: '', draft: true });
+  }
+  const bridge = t.bridge ? `<div class="bridge-ctx"><p><b>Write a bridge.</b> This clause splits the groups. Try a wording that both sides could accept.</p>
+    <p class="hint">${t.bridge.map(b => `<b>${esc(b.who)}:</b> “${esc(b.text)}”`).join('<br>')}</p></div>` : '';
   const d = dialog(`<form>
     <p class="eyebrow">Clause ${esc(t.number)} · ${esc(found.art.t)}</p>
-    <h2>Propose a change</h2>
+    <h2>${t.bridge ? 'Write a bridge' : 'Propose a change'}</h2>${bridge}
     <p class="clause-quote">${shown}</p>
     <fieldset><legend>Change</legend>${ops}</fieldset>
     <label data-newtext>New text<textarea name="new_text" placeholder="The words you would use instead"></textarea></label>
     <label>Why<textarea name="rationale" required placeholder="What problem does this fix? Who does it affect?"></textarea></label>
     <div class="section">
-      <h3>Test case</h3>
-      <p class="hint">A question someone might ask the AI, where your change would make a difference. Test cases are what the model is trained and checked on.</p>
-      <label>Someone asks the AI<textarea name="prompt" placeholder="Which household chemicals should never be mixed?"></textarea></label>
-      <div class="two">
-        <label>Today it tends to<textarea name="today" placeholder="Refuse to answer"></textarea></label>
-        <label>With the change it should<textarea name="with_edit" placeholder="Name the dangerous pairs and why"></textarea></label>
-      </div>
+      <h3>Test cases</h3>
+      <p class="hint">Situations where your wording should change what the AI does. They are what the model is trained and checked on. ${drafts.length ? 'We filled in situations other members wrote for this clause as a starting point: edit them, remove them or add your own.' : 'Add at least one.'}</p>
+      <div class="tcs" data-tcs></div>
+      <div><button type="button" class="btn" data-addtc>+ Add a test case</button></div>
     </div>
     <p class="err" role="alert"></p>
     <div class="actions"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn primary">Submit proposal</button></div>
@@ -171,15 +176,33 @@ function proposeDialog(t) {
     // Keep leading spaces on an insertion, so ", and ..." or " only when ..." joins the text as typed.
     const newText = op === 'insert' ? raw.replace(/\s+$/, '') : raw.trim();
     if (op !== 'delete' && !newText.trim()) throw new Error('Write the new text, or choose Remove.');
-    const tc = { prompt: (fd.get('prompt') || '').trim(), today: (fd.get('today') || '').trim(), with_edit: (fd.get('with_edit') || '').trim() };
+    const cases = [...d.querySelectorAll('.tc')].map(el => ({
+      prompt: el.querySelector('[data-f=prompt]').value.trim(), today: el.querySelector('[data-f=today]').value.trim(),
+      with_edit: el.querySelector('[data-f=with_edit]').value.trim() })).filter(c => c.prompt || c.with_edit);
+    if (cases.some(c => !c.prompt || !c.with_edit)) throw new Error('Each test case needs a situation and what the AI should do. Fill both in, or remove the case.');
+    if (!cases.length) throw new Error('Add at least one test case, so the change can be trained and checked.');
     const anchor = op === 'insert' && !t.insert
       ? { quote: q, start: t.end, end: t.end } : { quote: q, start: t.start, end: t.end };
-    const rec = { clause: t.number, op, anchor, new_text: op === 'delete' ? '' : newText, rationale, test_case: tc.prompt ? tc : null };
+    const rec = { clause: t.number, op, anchor, new_text: op === 'delete' ? '' : newText, rationale, test_cases: cases, test_case: cases[0] };
     if (LIVE) await saveLive(rec); else saveLocal(rec);
     dlg.close();
-    toast(LIVE ? 'Proposal submitted. Thank you.' : 'Saved in this browser (demo mode).');
+    toast(LIVE ? 'Proposal submitted. Other members can now rate it.' : 'Saved in this browser (demo mode). It now waits for ratings.');
     renderAcct();
+    document.dispatchEvent(new CustomEvent('pc:proposed'));
   });
+  const box = d.querySelector('[data-tcs]');
+  const addCase = (c = {}) => {
+    const el = document.createElement('div'); el.className = 'tc';
+    el.innerHTML = `<div class="tc-h"><span>${c.draft ? 'Starting point from other members' : 'Your test case'}</span><button type="button" class="link" data-rmtc>Remove</button></div>
+      <label>Someone asks the AI<textarea data-f="prompt" placeholder="Which household chemicals should never be mixed?">${esc(c.prompt || '')}</textarea></label>
+      <div class="two"><label>Today it tends to<textarea data-f="today" placeholder="Refuse to answer">${esc(c.today || '')}</textarea></label>
+      <label>With your change it should<textarea data-f="with_edit" placeholder="What should the AI do under your wording?">${esc(c.with_edit || '')}</textarea></label></div>`;
+    el.querySelector('[data-rmtc]').onclick = () => el.remove();
+    box.appendChild(el);
+  };
+  (drafts.length ? drafts : [{}]).forEach(addCase);
+  d.querySelector('[data-addtc]').onclick = () => { if (box.children.length < 5) addCase(); };
+  if (t.prefill) { const r = d.querySelector('[name=rationale]'); r.value = t.prefill; }
   const sync = () => {
     const op = d.querySelector('input[name=op]:checked').value;
     d.querySelector('[data-newtext]').hidden = op === 'delete';
@@ -209,9 +232,9 @@ async function saveLive(rec) {
     space_id: A.space.id, clause_id: cl.id, author_id: A.user.id, op: rec.op, anchor,
     new_text: rec.new_text, rationale: rec.rationale }).select('id').single();
   if (error) throw error;
-  if (rec.test_case) {
-    const { error: e2 } = await A.db.from('test_case').insert({
-      space_id: A.space.id, proposal_id: p.id, clause_id: cl.id, author_id: A.user.id, origin: 'human', ...rec.test_case });
+  if (rec.test_cases && rec.test_cases.length) {
+    const { error: e2 } = await A.db.from('test_case').insert(rec.test_cases.map(tc => ({
+      space_id: A.space.id, proposal_id: p.id, clause_id: cl.id, author_id: A.user.id, origin: 'human', ...tc })));
     if (e2) throw e2;
   }
 }
@@ -348,7 +371,7 @@ async function acceptInvite() {
 }
 
 // Shared with the other pages (participate.html, organise.html).
-window.PC = { state: A, live: LIVE, toast, dialog, signInDialog, inviteDialog, esc };
+window.PC = { state: A, live: LIVE, toast, dialog, signInDialog, inviteDialog, esc, propose: startProposal, clauseOfHot, hotOffset, clauseText };
 const ready = () => document.dispatchEvent(new CustomEvent('pc:ready'));
 
 async function init() {

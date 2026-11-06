@@ -7,7 +7,7 @@
   "test_case_drafter": {
     "endpoint": "",
     "model": "",
-    "note": "Any OpenAI-compatible chat endpoint used to draft test cases and compromise slates."
+    "note": "Optional, off by default. Any OpenAI-compatible chat endpoint used only to draft test cases, which members edit and confirm. Never used for scores, concerns or compromises."
   },
   "split": { "train": 0.8, "heldout": 0.2 }
 }

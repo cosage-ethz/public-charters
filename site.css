@@ -59,3 +59,22 @@ body.tp::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-in
 .tp .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:15px;max-width:calc(100vw - 32px)}
 @media (prefers-reduced-motion:no-preference){.tp .fade{animation:tpfade .25s ease both}}
 @keyframes tpfade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* Shared by Participate and Results: status pills, link buttons, bars by group */
+.tp .pill.need{color:var(--v2)}
+.tp .link{border:0;background:none;padding:0;color:var(--ink);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.tp .link:hover{color:var(--accent)}
+/* Bars by group */
+.tp .bars{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.tp .bar{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr) 112px;gap:10px;align-items:center;font-size:14px}
+.tp .bar .bn{line-height:1.25}
+.tp .bar .bn i{font-style:normal;color:var(--accent);font-size:12.5px}
+.tp .bar.me .bn{font-weight:700}
+.tp .bt{position:relative;height:12px;background:var(--panel);border-radius:3px}
+.tp .bf{position:absolute;inset:0 auto 0 0;background:var(--slate);border-radius:3px}
+.tp .bar.me .bf{background:var(--accent)}
+.tp .bm{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.tp .bv{font-variant-numeric:tabular-nums;font-weight:700}
+.tp .bv small{font-weight:400;color:var(--muted);font-size:12px}
+@media (max-width:560px){.tp .bar{grid-template-columns:minmax(0,1fr) 96px}.tp .bar .bt{grid-column:1/-1;grid-row:2}}
+

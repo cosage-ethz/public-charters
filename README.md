@@ -21,10 +21,13 @@ currently deployed at http://public-charters.coraliesage.com (DNS check in progr
 .
 ├── index.html            # Charter: the viewer, deployed at public-charters.coraliesage.com
 ├── about.html            # How it works: the concept, the process, and the research behind it
-├── participate.html      # Participate: the guided journey for members (Deliberative Polling style)
-├── organise.html         # Organise: phases, invitations and participation for admins
-├── sample-data.js        # sample charter, proposals and groups used by the prototype pages
-├── journey.js            # logic of the guided journey
+├── participate.html      # Participate: compare answers, rate, concerns, propose (optional background)
+├── results.html          # Results: status of every suggestion by group, charter check, concerns, safety floor, feedback
+├── organise.html         # Organise: phases, groups and their shares, invitations, AI settings
+├── sample-data.js        # sample charter, proposals and test cases used by the prototype pages
+├── bridge.js             # the scoring rule: support in every group, group weights, dissent record (browser and Node)
+├── community.js          # the demo hospital community, plus this browser's own input
+├── journey.js            # logic of the Participate page
 ├── site.css              # shared navigation and page styles
 ├── app.js / app.css      # accounts, invitations and the proposal form, shared by all pages
 ├── config.js             # per-organisation settings (Supabase URL and public key, default space)
@@ -44,20 +47,22 @@ Public Charters is a kit that lets a community, such as a hospital, a school or 
 
 **Each community runs its own instance.** There is no central platform: an organisation forks this repository, connects its own database, hosts the site on its own server, and invites its own members. Its charter, contributions and fine-tuned model stay with it. Instances can adapt the charter and test cases to their own use cases, and can start from another community's published charter.
 
-Each round has six steps:
+Each round works like this:
 
-1. **Set up a space.** An organiser creates a space for the community, chooses whether it is open to anyone or invitation-only, and loads a starting charter (for example the Apertus Charter).
-2. **Invite people.** Members join through invitation links and get an account. They can add an optional profile (role, department, language) that is used only to keep later steps representative.
-3. **Open track: everyone edits.** Members select words in a clause and propose a rewording, an addition or a removal, with a short reason. Each proposal comes with **test cases**: questions someone might ask the AI, with what it does today and what it should do after the change. Members rate each other's proposals and improve the test cases, like a wiki.
-4. **Score.** Proposals are scored so that support must come from people who usually disagree (the method behind Community Notes). Each proposal ends up *endorsed*, *contested* or *weak*. For contested clauses, an AI drafts a few compromise wordings that try to cover the different positions.
-5. **Selected track: final edits.** A small panel is drawn by lot from the members, balanced by the space's quotas, using a published random seed so anyone can check the draw. The panel discusses the endorsed proposals and the compromise wordings, makes the final edits and votes. Its votes are weighted so the panel stands in for the whole membership.
-6. **Publish and train.** The ratified changes become a new charter version, shown in the viewer as tracked changes. Its confirmed test cases are split 80/20: 80% become training data for fine-tuning the model, 20% are held back to test it. A before/after scorecard shows whether the new model actually follows the amended charter.
+1. **Set up a space.** An organiser creates a space for the community, chooses whether it is open to anyone or invitation-only, loads a starting charter (for example the Apertus Charter), and sets the **groups**: for example doctors, nurses and carers, patients and relatives, and admin staff, with the share of the community each stands for.
+2. **Invite people.** Members join through invitation links, get an account and say which group they belong to.
+3. **Contribute, in any order.** Background reading and a survey before and after are offered, never required. Members:
+   - **compare answers:** see a situation and two answers, one following the current charter and one following a proposed change, and pick the better one before learning which is which (like Smartvote);
+   - **rate suggestions** as helpful, somewhat or not helpful, with an optional reason;
+   - **share concerns** in their own words and add *me too* to others'; no AI reads or summarises them;
+   - **propose changes** with **test cases**: situations where the new wording should change what the AI does. The form starts from situations other members already wrote for the clause.
+4. **Support in every group.** A suggestion is *endorsed* when at least 60% of raters in every group find it helpful (at least 3 ratings per group), *contested* when some groups are for it and others against, and otherwise does not have enough support. Each group counts at its share of the community, however many of its members turn up (a simplified version of DemPO weighting). When every group prefers the alternative answer in a comparison, the clause is flagged as possibly lacking.
+5. **Bridges.** For contested changes, members see both sides' reasons and write bridge wordings, rated the same way. No AI writes compromises.
+6. **Publish, check and train.** Endorsed changes become a new charter version with a **dissent record** (which groups were partly against, and why). Two members confirm each test case, the version is checked against a **safety floor** no amendment can lower, and the test cases are split 80/20 for training and testing. A before/after scorecard and the members' **process feedback** open the next round.
 
-Then the next round starts from the new version.
+A panel drawn by lot can be added later, as an option, for communities that want one.
 
-Members can also spend a budget of **priority points** on what matters most to them. Spending more on one item costs more and more (quadratic cost), so strong views count without letting a few people dominate. Points set priorities only, such as the agenda order and which test cases must pass; they never decide whether a change is accepted.
-
-**What exists today (charter-kit branch):** the viewer, accounts, invitations, and proposals with test cases. Scoring, the panel draw, AI-drafted test cases and fine-tuning are next.
+**What exists today (charter-kit branch):** the viewer, accounts and invitations, the Participate and Results pages with the scoring rule in `bridge.js`, the proposal form with test cases, and the Organise page with groups and shares. In demo mode (no database connected) the pages use a made-up hospital of 40 members, and your own answers are added to theirs in your browser. With a database connected, consent, surveys, ratings, comparisons and feedback are saved as judgements, and proposals with their test cases are saved to the database; the lists of suggestions, situations and concerns still come from the demo data. Next: reading those lists from the database, the scoring job, test-case confirmation, and fine-tuning.
 
 ## Guide for organisers
 
@@ -81,28 +86,28 @@ You run the process for your community. You need a free [Supabase](https://supab
 
 **Running a round**
 
-- **The Organise page** shows the current phase (setting up, open track, panel, published), lets you move to the next one, and shows how many people take part.
+- **The Organise page** shows the current phase (setting up, open, bridges, published), lets you move to the next one, shows how many people take part, and is where you set the groups and their shares.
 - **Invite people:** click *Invite people* (top right) or use the Organise page to create a link. Choose how many people may use it and for how many days. Send it through your usual channels. For an open space, set `access` to `open` and anyone can join with *Join this space*.
-- **Open track:** give people one to three weeks to propose changes and write test cases. Remind them that one good test case is worth more than a long argument.
-- **Panel and publication:** draw the panel, hold the panel session, then publish the new charter version. (These steps are being built; until then they are done by hand in the database.)
+- **Open phase:** give people one to three weeks. Ask each member for about 15 minutes: 10 comparisons and 10 ratings. Turn the most shared concerns into new situations to compare.
+- **Bridges and publication:** give one week for bridges on contested changes, then publish the new version with its dissent record. (Publication is being built; until then it is done by hand in the database.)
+- **Groups:** with fewer than about 100 active members, use roles you set. Opinion groups found from the votes, as in Polis, need more data.
 - **Model:** set the model in `kit.config.json`. The default, `swiss-ai/Apertus-v1.1-1.5B-Instruct`, is small enough to fine-tune on a free Colab GPU.
 
-**Good practice:** say clearly in your invitation what the charter is for and what happens with the results; collect only the profile fields you need for balancing the panel; and publish each round's random seed and outcome.
+**Good practice:** say clearly in your invitation what the charter is for and what happens with the results; collect only what you need (the group, and optionally language and age to check reach); publish each round's results, dissent record and process feedback.
 
 ## Guide for participants
 
-You have been invited to help decide how an AI model should behave in your community. The **Participate** page walks you through the steps below one at a time, in about 20 minutes.
+You have been invited to help decide how an AI model should behave in your community. On the **Participate** page you can do as much or as little as you like, in any order. About 15 minutes covers your share of a round.
 
-1. **Join.** Open your invitation link and enter your email. You get a sign-in link by email, no password needed. Opening it adds you to the space.
-2. **Say what you think now.** Six quick questions. You answer the same ones at the end, so we can see how learning and discussing changes views (the Deliberative Polling method).
-3. **Learn.** The Participate page shows the most debated clauses with every option side by side and the reasons for each.
-4. **Read the charter.** Each coloured highlight in the charter is a place where people have proposed a change. Click it to see the proposed wording, the reasons, and an example question showing what would change.
-5. **Propose a change.** Select any words in a clause and click *Propose a change*, or use *Propose another change here* on a highlight. Choose reword, remove or add, write the new text and say why.
-6. **Add a test case.** Write a question someone might ask the AI where your change makes a difference, what the AI tends to do today, and what it should do instead. Concrete, everyday examples work best. Test cases are what the model is trained and checked on, so they matter as much as the wording.
-7. **Rate and prioritise.** Rate other people's proposals (helpful, somewhat, not helpful) and spend your priority credits.
-8. **Say what you think again**, and see what happens next.
+1. **Join.** Open your invitation link and enter your email. You get a sign-in link by email, no password needed. Choose your group and agree to how your input is used.
+2. **Background, if you want it.** The most debated clauses with every option side by side, and four optional questions you can answer again at the end to see whether your views moved.
+3. **Compare answers.** You see a situation and two ways the AI could respond. Pick the better one; then you see which follows the current charter, and how each group chose. After five, you see your match with the charter.
+4. **Rate suggestions.** Helpful, somewhat or not helpful, with an optional reason. Suggestions that still need ratings from your group come first.
+5. **Concerns.** Write what worries you, in your own words, and add *me too* to concerns you share.
+6. **Propose a change.** Select words in a clause and click *Propose a change*. Write the new text, why, and at least one test case: a situation where your wording should change what the AI does. For contested changes, try the bridge challenge: a wording both sides could accept.
+7. **Wrap up.** Optional feedback on the process, then see the **Results** page.
 
-If you are drawn by lot, you will be invited to sit on the panel that makes the final edits. Your ratings and answers are private; only the combined results are shown.
+Your ratings and answers are private; only combined results by group are shown.
 
 ### Documents & Deadlines
 6. November: 1-pager: https://docs.google.com/document/d 1uiNv3wiHFuFnpSBEH5XlCaNscwk9bIWvY1uUpk8HSD8/edit?usp=sharing

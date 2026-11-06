@@ -17,7 +17,8 @@ create table public.space (
   access          text not null default 'invite' check (access in ('open', 'invite')),
   parent_space_id uuid references public.space(id),
   -- Process settings per space, for example
-  -- {"panel_size": 12, "quotas": {"role": {"nurse": 0.4}}, "points_budget": 100}
+  -- {"phase": "open", "groups": [{"id": "nur", "name": "Nurses and carers", "share": 0.35}, ...],
+  --  "grouping": "roles" | "opinion", "ai_drafting": false}
   settings        jsonb not null default '{}'::jsonb,
   created_by      uuid references auth.users(id) default auth.uid(),
   created_at      timestamptz not null default now()
@@ -124,7 +125,7 @@ create table public.judgement (
   user_id     uuid not null references auth.users(id) default auth.uid(),
   target_type text not null check (target_type in ('proposal', 'test_case', 'slate', 'clause', 'space')),
   target_id   uuid not null,
-  -- 'rating' | 'vote' | 'points' | 'pairwise' | 'survey_pre' | 'survey_post' | 'consent' | ...
+  -- 'rating:<id>' | 'pair:<id>' | 'feedback' | 'survey_pre' | 'survey_post' | 'consent' | ...
   -- Space-wide answers (surveys, priority points) use target_type 'space' and target_id = space id.
   kind        text not null,
   value       jsonb not null,
