@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Round Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="app.css">
+<style>
+.demo{background:var(--sheet);border:1px solid var(--line);border-left:3px solid var(--v2);padding:10px 14px;font-size:15px;max-width:52em;margin-top:18px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:var(--sheet);border:1px solid var(--line);padding:14px 16px;min-width:0}
+.stat output{display:block;font:600 34px/1 var(--display);font-variant-numeric:tabular-nums;margin-top:6px}
+.stat span.s{display:block;font-size:13.5px;color:var(--muted);margin-top:6px}
+.rules{list-style:none;counter-reset:r;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.rules li{counter-increment:r;background:var(--sheet);border:1px solid var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.rules li::before{content:counter(r);font:600 26px/1 var(--display);color:var(--accent)}
+.rules b{font:600 18px/1.25 var(--display)}
+.rules p{margin:0;font-size:15px;line-height:1.5}
+.tbl{overflow-x:auto}
+.t{width:100%;border-collapse:collapse;font-size:15px;background:var(--sheet)}
+.t th,.t td{text-align:left;padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
+.t th{font:700 11.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--desk)}
+.t td.n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.t tr.me td{font-weight:700}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.filters button{border:1px solid var(--line);background:var(--sheet);border-radius:999px;padding:5px 13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--slate)}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.sugs{display:flex;flex-direction:column;gap:10px}
+.sug{background:var(--sheet);border:1px solid var(--line);padding:14px 16px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:8px 26px;min-width:0}
+.sug .meta{font:700 11px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sug .diff{font:600 17px/1.4 var(--display);margin:4px 0 6px;overflow-wrap:anywhere}
+.sug del{color:var(--muted);font-weight:400}
+.sug ins{color:var(--accent);text-underline-offset:3px}
+.sug .left{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sug .right{min-width:0}
+.sug p{margin:0}
+.dissent{font-size:14px;background:var(--desk);padding:8px 10px;border-left:3px solid var(--mid)}
+.dissent b{font-weight:700}
+.enote{border-left:3px solid var(--v1);padding:6px 10px;background:var(--desk);font-size:14px}
+.sug.mine{border-color:var(--ink)}
+.vd{font:700 11px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.vd.lacking{color:var(--accent)} .vd.holds{color:var(--good)} .vd.split,.vd.needs{color:var(--mid)}
+.cl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.cl-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:12px 0;border-top:1px solid var(--line)}
+.cl-list .n{font:600 22px/1 var(--display);font-variant-numeric:tabular-nums;text-align:right}
+.cl-list small{display:block;color:var(--muted);font-size:13px;font-weight:400}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--sheet)}
+.flow li{padding:14px 14px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
+.flow li:first-child{border-left:0}
+.flow output{font:600 30px/1 var(--display);font-variant-numeric:tabular-nums}
+.flow b{font-size:15px}
+.flow span{font-size:13.5px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.stats,.rules{grid-template-columns:repeat(2,minmax(0,1fr))}.sug{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow li:nth-child(odd){border-left:0}.flow li:nth-child(n+3){border-top:1px solid var(--line)}.grid2{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.stats,.rules{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body class="tp">
+<header class="top wrap"><div class="in">
+  <a class="brand" href="./"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></a>
+  <nav class="sn" aria-label="Site">
+    <a href="about.html">How it works</a><a href="./">Charter</a><a href="participate.html">Participate</a><a href="results.html" aria-current="page">Results</a><a href="organise.html">Organise</a>
+  </nav>
+  <div class="acct" id="acct" aria-label="Account"></div>
+</div></header>
+
+<section class="hero wrap"><div class="in">
+  <h2>What the community <em>has said so far.</em></h2>
+  <p class="lede">Every suggestion, every comparison and every concern, counted by group. Nothing here was decided by an AI: these are member ratings and choices, combined by the rule below, which anyone can check.</p>
+  <p class="demo" id="demo"><b>Demo.</b> Lakeside Hospital is made up, and so are its 40 members. Your own answers from the Participate page are added to theirs, in this browser only.</p>
+</div></section>
+
+<main class="wrap"><div class="in">
+
+<section class="block">
+  <p class="eyebrow">This round · open until 22 November</p>
+  <h3 class="sec">Who took part</h3>
+  <div class="stats" id="stats"></div>
+</section>
+
+<section class="block" id="weights">
+  <p class="eyebrow">The rule</p>
+  <h3 class="sec">A change needs support in every group</h3>
+  <ol class="rules">
+    <li><b>Groups count at their share</b><p>Each group counts at its share of the community, set by the organisers, not by how many of its members turned up. A busy, well-organised group cannot outweigh the others.</p></li>
+    <li><b>Every group has to agree</b><p>A suggestion is <b>endorsed</b> when at least 60% of raters in every group find it helpful, with at least 3 ratings per group. If some groups are for it and some against, it is <b>contested</b>.</p></li>
+    <li><b>Disagreement stays visible</b><p>Each endorsed change carries a dissent record: which groups were partly against, and their reasons. Contested changes go to a bridge challenge, where members write wordings both sides can accept.</p></li>
+  </ol>
+  <div class="tbl" style="margin-top:18px"><table class="t" id="wtable"></table></div>
+  <p class="small muted" style="margin-top:8px;max-width:52em">Weight = share of the community ÷ share of active members, kept between 0.3 and 3. This is a simplified version of DemPO weighting. Helpful shares are smoothed: each group starts with one imaginary helpful and one unhelpful rating, so two out of two does not count as 100%.</p>
+</section>
+
+<section class="block" id="suggestions">
+  <p class="eyebrow">Suggestions</p>
+  <h3 class="sec">Where each proposed change stands</h3>
+  <div class="filters" id="filters" role="group" aria-label="Show"></div>
+  <div class="sugs" id="sugs"></div>
+</section>
+
+<section class="block" id="check">
+  <p class="eyebrow">Charter check · from Compare answers</p>
+  <h3 class="sec">Where the charter may be lacking</h3>
+  <p class="prose small" style="margin:0 0 14px">Members compared answers to real situations without knowing which followed the charter. When every group prefers the alternative, the charter does not yet say what the community wants in that situation. The numbers show the share of each group that preferred the alternative, with the number of answers below. No AI is involved: these are counts.</p>
+  <div class="tbl"><table class="t" id="ctable"></table></div>
+</section>
+
+<section class="block" id="concerns">
+  <div class="grid2">
+    <div>
+      <p class="eyebrow">Concerns</p>
+      <h3 class="sec">Most shared concerns</h3>
+      <ol class="cl-list" id="clist"></ol>
+      <p class="small muted">Ranked by <i>me too</i>, each group counted at its share. Posted as written; no AI summary.</p>
+    </div>
+    <div id="floor">
+      <p class="eyebrow">Safety floor</p>
+      <h3 class="sec">What no amendment can lower</h3>
+      <p class="small" style="margin:0 0 10px">Every new version must still pass these cases before it is released. A change that would break one is held back for review, whatever its support.</p>
+      <ol class="cl-list" id="flist"></ol>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="feedback">
+  <p class="eyebrow">Process feedback</p>
+  <h3 class="sec">How members found the process</h3>
+  <div class="tbl"><table class="t" id="ftable"></table></div>
+  <p class="small muted" style="margin-top:8px">Average answer from 1 (disagree) to 5 (agree). Organisers review this after each round; the lowest scores show what to change first.</p>
+  <h4 style="margin-top:26px">Did views move?</h4>
+  <p class="small" style="margin:0 0 10px;max-width:44em">Average answers from members who took the optional survey before and after (1 strongly disagree to 7 strongly agree).</p>
+  <div class="tbl"><table class="t" id="stable"></table></div>
+</section>
+
+<section class="block" id="next">
+  <p class="eyebrow">From charter to model</p>
+  <h3 class="sec">What happens to the endorsed changes</h3>
+  <ol class="flow" id="flow"></ol>
+  <p class="small muted" style="margin-top:10px">The scorecard appears here after training: how often the model follows the charter on held-out cases, before and after, and whether it still passes every safety floor case.</p>
+</section>
+
+</div></main>
+
+<footer class="foot wrap"><div class="in">Results by group only. Individual ratings are never shown. The scoring code is <code>bridge.js</code> in the repository, so anyone can rerun it.</div></footer>
+
+<script src="sample-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="bridge.js"></script>
+<script src="community.js"></script>
+<script>
+(() => {
+const C = window.Community, B = window.Bridge;
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+const pct = x => Math.round(x * 100) + '%';
+const verbOf = { replace: 'Reword', insert: 'Add', delete: 'Remove' };
+const STATUS = { endorsed: ['Endorsed', 'good'], contested: ['Contested', 'warn'], weak: ['Not enough support', 'mid'], needs: ['Needs ratings', 'need'] };
+const pill = st => `<span class="pill ${STATUS[st][1]}">${STATUS[st][0]}</span>`;
+const diff = s => (s.op !== 'insert' && s.base ? `<del>${esc(s.base)}</del> ` : '') + (s.op !== 'delete' ? `<ins>${esc(s.text)}</ins>` : '');
+const me = C.me, myGroup = me.consent ? me.group : '';
+let FILTER = 'all', ALL = false;
+
+function bars(rows, mark) {
+  return `<div class="bars">${rows.map(r => `<div class="bar ${r.me ? 'me' : ''}"><span class="bn">${esc(r.name)}${r.me ? ' <i>(your group)</i>' : ''}</span>
+    <span class="bt" role="img" aria-label="${esc(r.name)}: ${pct(r.v)}"><span class="bf" style="width:${Math.round(r.v * 100)}%"></span>${mark ? '<span class="bm" style="left:60%"></span>' : ''}</span>
+    <span class="bv">${pct(r.v)} <small>${r.n} ${r.n === 1 ? 'rating' : 'ratings'}</small></span></div>`).join('')}</div>`;
+}
+
+function render() {
+  const W = C.weights(), sugs = C.suggestions(), pairs = C.pairs(), mine = C.myCounts();
+  const totalRatings = sugs.reduce((n, s) => n + s.s.n, 0);
+  const totalPairs = pairs.reduce((n, p) => n + C.GROUPS.reduce((m, g) => m + p.r.per[g.id].n, 0), 0);
+  const members = C.GROUPS.reduce((n, g) => n + g.active, 0) + (myGroup ? 1 : 0);
+  const stat = (l, v, s) => `<div class="stat"><span class="lbl">${l}</span><output>${v}</output><span class="s">${s}</span></div>`;
+  $('stats').innerHTML = stat('Active members', members, myGroup ? 'Including you' : 'Join on the Participate page') +
+    stat('Ratings', totalRatings, mine.ratings ? `${mine.ratings} of them yours` : `on ${sugs.length} suggestions`) +
+    stat('Comparisons', totalPairs, mine.pairs ? `${mine.pairs} of them yours` : `across ${pairs.length} situations`) +
+    stat('Concerns', C.concerns().length, 'with me too from every group');
+
+  $('wtable').innerHTML = `<thead><tr><th>Group</th><th class="n">Share of the community</th><th class="n">Active members</th><th class="n">Share of active members</th><th class="n">Weight</th></tr></thead><tbody>${C.GROUPS.map(g =>
+    `<tr class="${g.id === myGroup ? 'me' : ''}"><td>${esc(g.name)}${g.id === myGroup ? ' (your group)' : ''}</td><td class="n">${pct(g.target)}</td><td class="n">${g.active + (g.id === myGroup ? 1 : 0)}</td><td class="n">${pct(W[g.id].share)}</td><td class="n">${W[g.id].weight.toFixed(2)}</td></tr>`).join('')}</tbody>`;
+
+  const counts = { all: sugs.length };
+  sugs.forEach(s => { counts[s.s.status] = (counts[s.s.status] || 0) + 1; });
+  const F = [['all', 'All'], ['endorsed', 'Endorsed'], ['contested', 'Contested'], ['weak', 'Not enough support'], ['needs', 'Needs ratings']];
+  $('filters').innerHTML = F.map(([k, l]) => `<button data-f="${k}" aria-pressed="${FILTER === k}">${l} · ${counts[k] || 0}</button>`).join('');
+  const order = { endorsed: 0, contested: 1, needs: 2, weak: 3 };
+  const list = sugs.filter(s => FILTER === 'all' || s.s.status === FILTER).sort((a, b) => order[a.s.status] - order[b.s.status] || b.s.overall - a.s.overall);
+  const cut = FILTER === 'all' && !ALL ? 8 : list.length;
+  $('sugs').innerHTML = list.slice(0, cut).map(s => {
+    const d = s.dissent.length ? `<p class="dissent"><b>Dissent record:</b> ${s.dissent.map(x => `${esc(x.group.name)} ${x.against}% not helpful${x.why.length ? ` (${esc(x.why.join(', ').toLowerCase())})` : ''}`).join('; ')}.</p>` : '';
+    const act = s.s.status === 'contested' ? `<a class="btn" href="participate.html#propose">Write a bridge</a>` : s.s.status === 'needs' ? `<a class="btn" href="participate.html#rate">Rate it</a>` : '';
+    return `<article class="sug ${s.own ? 'mine' : ''}"><div class="left">
+      <span class="meta">Clause ${esc(s.clause)} · ${esc(s.title)} · ${verbOf[s.op]}${s.own ? ' · your proposal' : ''}</span>
+      <p class="diff">${diff(s)}</p>
+      <div>${pill(s.s.status)} <span class="small">${esc(s.why_status)}</span></div>
+      ${s.why ? `<p class="small muted">${esc(s.why)}</p>` : ''}
+      ${s.note ? `<p class="enote"><b>Context note, ${esc(s.note.by)}:</b> ${esc(s.note.text)}</p>` : ''}
+      ${d}${act ? `<div>${act}</div>` : ''}</div>
+      <div class="right"><p class="lbl">Helpful, by group</p>${bars(C.GROUPS.map(g => ({ name: g.name, v: s.s.per[g.id].h, n: s.s.per[g.id].n, me: g.id === myGroup })), true)}
+      <p class="small muted">Weighted overall: ${pct(s.s.overall)} · ${s.s.n} ratings</p></div></article>`;
+  }).join('') + (cut < list.length ? `<div><button class="btn" data-all>Show all ${list.length} suggestions</button></div>` : '') || '<p class="small muted">Nothing here yet.</p>';
+
+  const V = { 'charter-lacking': ['Charter may be lacking', 'lacking'], 'charter-holds': ['Charter holds', 'holds'], split: ['Groups split', 'split'], needs: ['Needs answers', 'needs'] };
+  const vOrder = { 'charter-lacking': 0, split: 1, 'charter-holds': 2, needs: 3 };
+  $('ctable').innerHTML = `<thead><tr><th>Clause and situation</th><th>Verdict</th>${C.GROUPS.map(g => `<th class="n">${esc(g.name)}</th>`).join('')}</tr></thead><tbody>${pairs.slice().sort((a, b) => vOrder[a.r.verdict] - vOrder[b.r.verdict]).map(p =>
+    `<tr><td><b>${esc(p.clause)}</b> ${esc(p.title)}<br><span class="small muted">“${esc(p.situation)}”</span></td><td><span class="vd ${V[p.r.verdict][1]}">${V[p.r.verdict][0]}</span></td>
+    ${C.GROUPS.map(g => `<td class="n">${pct(p.r.per[g.id].alt_share)}<br><span class="small muted">${p.r.per[g.id].n}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
+
+  $('clist').innerHTML = C.concerns().slice(0, 6).map(c => `<li><span>${esc(c.text)}${c.own ? ' <span class="pill mid">Yours</span>' : ''}<small>${c.groupsWith} of ${C.GROUPS.length} groups${me.suggested[c.id] ? ' · you suggested it as a situation' : ''}</small></span><span class="n">${c.n}</span></li>`).join('');
+  $('flist').innerHTML = C.FLOOR.map(f => `<li><span><b>${esc(f.id)}</b> “${esc(f.prompt)}”<small>${esc(f.must)}</small></span><span class="pill good">Must pass</span></li>`).join('');
+
+  const fb = me.feedback && me.feedback.sent ? me.feedback : null;
+  $('ftable').innerHTML = `<thead><tr><th>Statement</th>${C.GROUPS.map(g => `<th class="n">${esc(g.name)}</th>`).join('')}${fb ? '<th class="n">You</th>' : ''}</tr></thead><tbody>${C.FEEDBACK.map(q =>
+    `<tr><td>${esc(q.q)}</td>${C.GROUPS.map(g => `<td class="n">${C.FEEDBACK_SIM[q.id][g.id].toFixed(1)}</td>`).join('')}${fb ? `<td class="n">${fb[q.id] || '–'}</td>` : ''}</tr>`).join('')}</tbody>`;
+  $('stable').innerHTML = `<thead><tr><th>Statement</th><th class="n">Before</th><th class="n">After</th><th class="n">Change</th></tr></thead><tbody>${C.QUESTIONS.map(q => {
+    const [a, b] = C.SURVEY_SIM[q.id], dlt = b - a;
+    return `<tr><td>${esc(q.q)}</td><td class="n">${a.toFixed(1)}</td><td class="n">${b.toFixed(1)}</td><td class="n">${dlt > 0 ? '+' : ''}${dlt.toFixed(1)}</td></tr>`; }).join('')}</tbody>`;
+
+  const end = sugs.filter(s => s.s.status === 'endorsed'), tc = end.filter(s => s.test).length;
+  const step = (v, b, s) => `<li><output>${v}</output><b>${b}</b><span>${s}</span></li>`;
+  $('flow').innerHTML = step(end.length, 'Endorsed changes', 'Go into the new charter version') +
+    step(tc, 'Test cases', 'Each confirmed by two members') +
+    step(Math.round(tc * 0.8), 'For training', '80%, fixed by each case’s ID') +
+    step(tc - Math.round(tc * 0.8), 'Held out', 'The model never sees these') +
+    step(C.FLOOR.length, 'Safety floor', 'Must still pass after training');
+}
+
+document.addEventListener('click', ev => {
+  const f = ev.target.closest('[data-f]'); if (f) { FILTER = f.dataset.f; render(); }
+  if (ev.target.closest('[data-all]')) { ALL = true; render(); }
+});
+document.addEventListener('pc:proposed', render);
+render();
+})();
+</script>
+</body>
+</html>
