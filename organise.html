@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<title>Organise a Charter Round</title>
+<title>Organise the Round</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='12' fill='%23b0302e'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
@@ -54,15 +55,13 @@
 <body class="tp">
 <header class="top wrap"><div class="in">
   <a class="brand" href="./"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></a>
-  <nav class="sn" aria-label="Site">
-    <a href="about.html">How it works</a><a href="./">Charter</a><a href="participate.html">Participate</a><a href="results.html">Results</a><a href="organise.html" aria-current="page">Organise</a>
-  </nav>
+  <nav class="sn" aria-label="Site"><a href="charter.html">Charter</a><a href="participate.html">Take part</a><a href="results.html">Results</a><a href="about.html">How it works</a></nav>
   <div class="acct" id="acct" aria-label="Account"></div>
 </div></header>
 
 <section class="hero wrap"><div class="in">
-  <h2>Run a round <em>for your community.</em></h2>
-  <p class="lede" id="lede">Move the round from phase to phase, invite members, and see how participation is going. You set up the process and the groups; the members decide the content.</p>
+  <h2>Run the round <em>for the Apertus Charter.</em></h2>
+  <p class="lede" id="lede">For admins of the public site: move the round from phase to phase and see how participation is going. You set up the process; participants decide the content.</p>
   <div class="banner" id="banner" hidden></div>
 </div></section>
 
@@ -70,7 +69,7 @@
 
 <section class="block">
   <p class="eyebrow">Current phase</p>
-  <h3 class="sec" id="spaceName">Lakeside Hospital (demo)</h3>
+  <h3 class="sec" id="spaceName">Apertus Charter (sample round)</h3>
   <ol class="phases" id="phases"></ol>
   <div class="row" id="phaseCtl"></div>
 </section>
@@ -85,22 +84,18 @@
 <section class="block">
   <div class="grid2">
     <div class="card">
-      <p class="eyebrow">Members</p>
-      <h4>Invitations</h4>
-      <p class="small">Create a link and send it through your usual channels (email, intranet, a letter with a QR code). A link can be for one person or for a group, and expires after the days you choose.</p>
+      <p class="eyebrow">Participants</p>
+      <h4>Invitations (optional)</h4>
+      <p class="small">The space is open: anyone who signs in joins it. Invitation links are still useful to add another admin, or if you switch the space to invitation-only.</p>
       <div><button class="btn primary" id="newInvite">Create invitation link</button></div>
       <div class="tbl" id="invites"></div>
     </div>
     <div class="card">
-      <p class="eyebrow">Fairness</p>
-      <h4>Groups and their share</h4>
-      <p class="small">A change is endorsed only when every group finds it helpful. Set the groups and the share of the community each stands for (for example from staff lists and patient numbers). Each group then counts at that share, however many of its members take part.</p>
+      <p class="eyebrow">Breakdowns</p>
+      <h4>Optional profile questions</h4>
+      <p class="small">Asked once when people join, all optional. Results show how each group rated a change, but groups never block one, and groups with fewer than 5 answers are not shown. Edit the list in <code>space.settings.demographics</code> and in <code>community.js</code>.</p>
       <div class="tbl"><table class="inv" id="groups"></table></div>
-      <p class="small" id="gsum"></p>
-      <fieldset class="opts"><legend class="lbl">How groups are formed</legend>
-        <label><input type="radio" name="gmode" value="roles" checked> By role, as set here <span class="muted">(recommended below about 100 members)</span></label>
-        <label><input type="radio" name="gmode" value="opinion"> By opinion, found from the votes, as in Polis <span class="muted">(needs about 100 active members)</span></label>
-      </fieldset>
+      <p class="small muted">Opinion groups found from the votes, as in Polis, can be added later as another breakdown. They need about 100 active participants.</p>
       <fieldset class="opts"><legend class="lbl">AI help</legend>
         <label><input type="checkbox" id="aiDraft"> Let an AI model draft test cases for proposals. Drafts are labelled, and members edit and confirm them.</label>
         <span class="small muted">Off by default. Concerns, scores and compromises never use AI.</span>
@@ -114,7 +109,7 @@
   <h3 class="sec">Publish, train and report</h3>
   <ul class="check">
     <li><span><b>Publish the new charter version</b><br><span class="small muted">Endorsed changes, and bridges endorsed in the bridge phase, become a fixed version with its dissent record. The Charter page shows it as tracked changes.</span></span><span class="when">End of round</span></li>
-    <li><span><b>Confirm the test cases</b><br><span class="small muted">Each test case of an adopted change is confirmed by two members other than its author.</span></span><span class="when">One week</span></li>
+    <li><span><b>Review the test cases</b><br><span class="small muted">Admins mark the test cases of adopted changes as confirmed before training. Only admins can change a test case’s status.</span></span><span class="when">One week</span></li>
     <li><span><b>Check the safety floor</b><br><span class="small muted">The new version must still pass every floor case. A change that breaks one is held back for review.</span></span><span class="when">Pipeline</span></li>
     <li><span><b>Split the test cases 80/20</b><br><span class="small muted">Fixed by each case's ID, so nobody can move a case between training and testing.</span></span><span class="when">Pipeline</span></li>
     <li><span><b>Fine-tune the model</b><br><span class="small muted">Model set in kit.config.json; the default is Apertus v1.1 1.5B, which fits a free cloud GPU.</span></span><span class="when">Pipeline</span></li>
@@ -123,20 +118,19 @@
 </section>
 
 <section class="block">
-  <p class="eyebrow">First time here</p>
-  <h3 class="sec">Setting up your own instance</h3>
+  <p class="eyebrow">Setup</p>
+  <h3 class="sec">Connecting the database</h3>
   <ul class="check" id="setup">
-    <li><span><b>Download the kit</b> from GitHub (fork or clone the repository).</span><span class="when">5 min</span></li>
-    <li><span><b>Create a free Supabase project</b> and run <code>supabase/schema.sql</code>, then your own version of <code>seed.sql</code>.</span><span class="when">10 min</span></li>
+    <li><span><b>Create a free Supabase project</b> and run <code>supabase/schema.sql</code>, then <code>supabase/seed.sql</code>.</span><span class="when">10 min</span></li>
     <li id="cfg"><span><b>Connect the site</b>: put the project URL and public key in <code>config.js</code>.</span><span class="when">2 min</span></li>
-    <li><span><b>Put the site online</b> on your own server or web host.</span><span class="when">5 min</span></li>
     <li id="adm"><span><b>Make yourself an admin</b> (one SQL statement, see the README).</span><span class="when">1 min</span></li>
   </ul>
+  <p class="small muted" style="margin-top:12px">Want to run this for your own community and model? Use the <a href="https://github.com/cosage-ethz/public-charters/tree/charter-kit" target="_blank" rel="noopener">Charter Kit</a>.</p>
 </section>
 
 </div></main>
 
-<footer class="foot wrap"><div class="in">Full instructions are in the README of the repository, under “Guide for organisers”.</div></footer>
+<footer class="foot wrap"><div class="in">Full instructions are in the README of the repository.</div></footer>
 
 <script src="sample-data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -162,11 +156,11 @@ function render() {
   const sp = S && S.space, st = (sp && sp.settings) || {};
   const phase = live ? (st.phase || 'setup') : 'open';
   const at = PHASES.findIndex(p => p.id === phase);
-  $('spaceName').innerHTML = sp ? esc(sp.name) + ` <span class="pill ${sp.access === 'open' ? 'good' : 'mid'}" style="font-size:12px;vertical-align:6px">${sp.access === 'open' ? 'Open to anyone' : 'Invitation only'}</span>` : `Lakeside Hospital (demo)${EX}`;
+  $('spaceName').innerHTML = sp ? esc(sp.name) + ` <span class="pill ${sp.access === 'open' ? 'good' : 'mid'}" style="font-size:12px;vertical-align:6px">${sp.access === 'open' ? 'Open to anyone' : 'Invitation only'}</span>` : `Apertus Charter${EX}`;
   $('phases').innerHTML = PHASES.map((p, i) => `<li class="${i === at ? 'on' : i < at ? 'past' : ''}"><span class="k">${p.k}</span><b>${p.t}</b><span class="d">${p.d}</span></li>`).join('');
 
   const b = $('banner');
-  if (!live) { b.hidden = false; b.innerHTML = '<b>Demo mode.</b> No database is connected, so this page shows example values and most buttons are inactive. You can try out the group shares: they are saved in this browser and change the weights on the Results page. Follow “Setting up your own instance” below to run a real round.'; }
+  if (!live) { b.hidden = false; b.innerHTML = '<b>Sample round.</b> No database is connected, so this page shows example values and most buttons are inactive. See “Connecting the database” below.'; }
   else if (!S.user) { b.hidden = false; b.innerHTML = 'Sign in with an admin account to manage this space. <button class="btn" data-act="signin" style="margin-left:6px">Sign in</button>'; }
   else if (!admin) { b.hidden = false; b.innerHTML = `You are signed in as ${esc(S.user.email)}, who is not an admin of this space. Ask an existing admin to add you.`; }
   else b.hidden = true;
@@ -181,7 +175,7 @@ function render() {
   const stat = (l, v) => `<div class="stat"><span class="lbl">${l}</span><output>${v}</output></div>`;
   if (!live) {
     const sugs = window.Community ? Community.suggestions() : [];
-    $('stats').innerHTML = stat('Active members' + EX, Community.GROUPS.reduce((n, g) => n + g.active, 0)) + stat('Suggestions' + EX, sugs.length) + stat('Endorsed so far' + EX, sugs.filter(x => x.s.status === 'endorsed').length);
+    $('stats').innerHTML = stat('Participants' + EX, Community.SIZE) + stat('Suggestions' + EX, sugs.length) + stat('Endorsed so far' + EX, sugs.filter(x => x.s.status === 'endorsed').length);
     $('invites').innerHTML = '';
   }
   renderGroups();
@@ -191,29 +185,16 @@ function render() {
   if (live && sp) loadLive(sp, admin);
 }
 
-// Groups and shares. In demo mode the shares are saved in this browser and change the
-// weights on the Results page. With a database, they belong in space.settings.groups.
+// Optional profile questions, used only for breakdowns. With a database, the list comes from
+// space.settings.demographics; otherwise from community.js.
 function renderGroups() {
   const C = window.Community; if (!C) return;
-  const W = C.weights();
-  $('groups').innerHTML = `<thead><tr><th>Group</th><th>Share</th><th>Active</th><th>Weight</th></tr></thead><tbody>${C.GROUPS.map(g =>
-    `<tr><td>${esc(g.name)}</td><td><input type="number" min="0" max="100" step="5" value="${Math.round(g.target * 100)}" data-share="${g.id}" aria-label="Share of ${esc(g.name)} in percent" style="width:70px;font:inherit;border:1px solid var(--line);border-radius:8px;padding:3px 6px"> %</td><td class="n">${g.active}</td><td class="n">${W[g.id].weight.toFixed(2)}</td></tr>`).join('')}</tbody>`;
-  const sum = C.GROUPS.reduce((n, g) => n + g.target, 0);
-  $('gsum').innerHTML = Math.abs(sum - 1) < 0.001 ? '<span class="muted">Shares add up to 100%.</span>' : `<b style="color:var(--warn)">Shares add up to ${Math.round(sum * 100)}%. Adjust them to 100%.</b>`;
-  const o = C.org;
-  document.querySelectorAll('input[name=gmode]').forEach(r => { r.checked = (o.gmode || 'roles') === r.value; });
-  $('aiDraft').checked = !!o.aiDraft;
+  const sp = window.PC && PC.state.space, qs = (sp && sp.settings && sp.settings.demographics) || C.DEMOGRAPHICS;
+  $('groups').innerHTML = `<thead><tr><th>Question</th><th>Options</th></tr></thead><tbody>${qs.map(q =>
+    `<tr><td>${esc(q.q)}</td><td>${q.options.map(esc).join(', ')}</td></tr>`).join('')}</tbody>`;
+  $('aiDraft').checked = !!(sp && sp.settings && sp.settings.ai_drafting);
+  $('aiDraft').disabled = true;   // set space.settings.ai_drafting in the database; no drafter is connected yet
 }
-document.addEventListener('change', ev => {
-  const C = window.Community; if (!C) return;
-  const t = ev.target;
-  if (t.dataset.share) {
-    const g = C.GROUPS.find(x => x.id === t.dataset.share); g.target = Math.max(0, Math.min(100, +t.value || 0)) / 100;
-    C.org.targets = Object.fromEntries(C.GROUPS.map(x => [x.id, x.target])); C.saveOrg(C.org); renderGroups();
-  }
-  if (t.name === 'gmode') { C.org.gmode = t.value; C.saveOrg(C.org); if (t.value === 'opinion') PC.toast('Opinion groups need about 100 active members. This demo keeps using roles.'); }
-  if (t.id === 'aiDraft') { C.org.aiDraft = t.checked; C.saveOrg(C.org); }
-});
 
 async function loadLive(sp, admin) {
   const db = PC.state.db;
@@ -222,7 +203,7 @@ async function loadLive(sp, admin) {
     (async () => { const { count } = await db.from('membership').select('*', { count: 'exact', head: true }).eq('space_id', sp.id).eq('role', 'member'); return count ?? '–'; })(),
     count('proposal'), count('test_case')]);
   const stat = (l, v) => `<div class="stat"><span class="lbl">${l}</span><output>${v}</output></div>`;
-  $('stats').innerHTML = stat('Members', m) + stat('Proposals', p) + stat('Test cases', t);
+  $('stats').innerHTML = stat('Participants', m) + stat('Proposals', p) + stat('Test cases', t);
   if (!admin) return;
   const { data } = await db.from('invitation').select('note, uses, max_uses, expires_at, created_at').eq('space_id', sp.id).order('created_at', { ascending: false }).limit(20);
   $('invites').innerHTML = data && data.length ? `<table class="inv"><thead><tr><th>Note</th><th>Used</th><th>Expires</th></tr></thead><tbody>${data.map(i =>

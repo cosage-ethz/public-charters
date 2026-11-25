@@ -1,10 +1,10 @@
-// Site configuration. Each organisation that runs the kit edits this file.
-// Leave supabaseUrl empty to run in demo mode: proposals then stay in this browser.
+// Site configuration for the public Apertus Charter site.
+// Leave supabaseUrl empty to run the sample round: input then stays in this browser.
 // Values come from Supabase: Project settings > API. The anon key is meant to be public;
 // row-level security in supabase/schema.sql decides what it can read and write.
 window.PC_CONFIG = {
-  supabaseUrl: '',
-  supabaseAnonKey: '',
-  // Default space (its slug) when the address has no ?space=...
-  space: 'apertus-demo'
+  supabaseUrl: 'https://qphphvzibsrlzidnazzr.supabase.co',
+  supabaseAnonKey: 'sb_publishable_LRejjn8NS1h8NGpS0UZjog_MRvorPz4',
+  // The one public space (its slug), created by supabase/seed.sql
+  space: 'apertus'
 };

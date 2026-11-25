@@ -1,4 +1,4 @@
-// Sample data shown by the viewer (index.html) and the guided journey (participate.html).
+// Sample data shown by the viewer (charter.html) and the guided journey (participate.html).
 // Readings, communities, counts, quotes and test cases are invented for the prototype.
 // Charter clauses are shortened from Version 1.0 of the Apertus Charter.
 // Later, the same structure is filled from the database.

@@ -15,7 +15,7 @@ const A = {
   space: null,         // space row
   roles: new Set(),    // this user's roles in the space
   clauses: {},         // clause number -> clause row of the current charter version
-  slug: params.get('space') || CFG.space || 'apertus-demo',
+  slug: params.get('space') || CFG.space || 'apertus',
   invite: params.get('invite')
 };
 const $ = id => document.getElementById(id);
@@ -80,7 +80,7 @@ function renderAcct() {
   const el = $('acct'); if (!el) return;
   if (!LIVE) {
     const n = loadDemo().length;
-    el.innerHTML = `<span class="chip" title="No database configured. Proposals stay in this browser.">Demo mode</span>
+    el.innerHTML = `<span class="chip" title="No database connected. Your input stays in this browser.">Sample round</span>
       <button class="link" data-act="list">Proposals${n ? ` (${n})` : ''}</button>`;
     return;
   }
@@ -92,7 +92,8 @@ function renderAcct() {
   el.innerHTML = `<span class="who-am-i" title="${esc(A.user.email || '')}">${esc(A.user.email || 'Signed in')}${A.roles.has('panel') ? ' · panel' : ''}</span>
     <button class="link" data-act="list">Proposals</button>
     ${admin ? '<button class="link" data-act="invite">Invite people</button>' : ''}
-    ${!member && A.space && A.space.access === 'open' ? '<button class="btn primary" data-act="join">Join this space</button>' : ''}
+    ${admin ? '<a class="link" href="organise.html">Organise</a>' : ''}
+    ${!member && A.space && A.space.access === 'open' ? '<button class="btn primary" data-act="join">Join the round</button>' : ''}
     <button class="link" data-act="signout">Sign out</button>`;
 }
 
@@ -165,9 +166,9 @@ function proposeDialog(t) {
     <label>Why<textarea name="rationale" required placeholder="What problem does this fix? Who does it affect?"></textarea></label>
     <div class="section">
       <h3>Test cases</h3>
-      <p class="hint">Situations where your wording should change what the AI does. They are what the model is trained and checked on. ${drafts.length ? 'We filled in situations other members wrote for this clause as a starting point: edit them, remove them or add your own.' : 'Add at least one.'}</p>
+      <p class="hint">Optional. A situation where your wording should change what the AI does. Test cases are what a model is trained and checked on, so they make a proposal much more useful.</p>
       <div class="tcs" data-tcs></div>
-      <div><button type="button" class="btn" data-addtc>+ Add a test case</button></div>
+      <div class="actions" style="justify-content:flex-start"><button type="button" class="btn" data-addtc>+ Add a test case</button>${drafts.length ? '<button type="button" class="btn" data-drafttc>+ Start from a situation others wrote</button>' : ''}</div>
     </div>
     <p class="err" role="alert"></p>
     <div class="actions"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn primary">Submit proposal</button></div>
@@ -180,28 +181,29 @@ function proposeDialog(t) {
       prompt: el.querySelector('[data-f=prompt]').value.trim(), today: el.querySelector('[data-f=today]').value.trim(),
       with_edit: el.querySelector('[data-f=with_edit]').value.trim() })).filter(c => c.prompt || c.with_edit);
     if (cases.some(c => !c.prompt || !c.with_edit)) throw new Error('Each test case needs a situation and what the AI should do. Fill both in, or remove the case.');
-    if (!cases.length) throw new Error('Add at least one test case, so the change can be trained and checked.');
     const anchor = op === 'insert' && !t.insert
       ? { quote: q, start: t.end, end: t.end } : { quote: q, start: t.start, end: t.end };
     const rec = { clause: t.number, op, anchor, new_text: op === 'delete' ? '' : newText, rationale, test_cases: cases, test_case: cases[0] };
     if (LIVE) await saveLive(rec); else saveLocal(rec);
     dlg.close();
-    toast(LIVE ? 'Proposal submitted. Other members can now rate it.' : 'Saved in this browser (demo mode). It now waits for ratings.');
+    toast(LIVE ? 'Proposal submitted. Others can now rate it.' : 'Saved in this browser (sample round). It now waits for ratings.');
     renderAcct();
     document.dispatchEvent(new CustomEvent('pc:proposed'));
   });
   const box = d.querySelector('[data-tcs]');
   const addCase = (c = {}) => {
     const el = document.createElement('div'); el.className = 'tc';
-    el.innerHTML = `<div class="tc-h"><span>${c.draft ? 'Starting point from other members' : 'Your test case'}</span><button type="button" class="link" data-rmtc>Remove</button></div>
+    el.innerHTML = `<div class="tc-h"><span>${c.draft ? 'Starting point from other people' : 'Your test case'}</span><button type="button" class="link" data-rmtc>Remove</button></div>
       <label>Someone asks the AI<textarea data-f="prompt" placeholder="Which household chemicals should never be mixed?">${esc(c.prompt || '')}</textarea></label>
       <div class="two"><label>Today it tends to<textarea data-f="today" placeholder="Refuse to answer">${esc(c.today || '')}</textarea></label>
       <label>With your change it should<textarea data-f="with_edit" placeholder="What should the AI do under your wording?">${esc(c.with_edit || '')}</textarea></label></div>`;
     el.querySelector('[data-rmtc]').onclick = () => el.remove();
     box.appendChild(el);
   };
-  (drafts.length ? drafts : [{}]).forEach(addCase);
   d.querySelector('[data-addtc]').onclick = () => { if (box.children.length < 5) addCase(); };
+  let nextDraft = 0;
+  const dt = d.querySelector('[data-drafttc]');
+  if (dt) dt.onclick = () => { if (box.children.length < 5 && nextDraft < drafts.length) addCase(drafts[nextDraft++]); if (nextDraft >= drafts.length) dt.remove(); };
   if (t.prefill) { const r = d.querySelector('[name=rationale]'); r.value = t.prefill; }
   const sync = () => {
     const op = d.querySelector('input[name=op]:checked').value;
@@ -219,7 +221,7 @@ function saveLocal(rec) {
 
 async function saveLive(rec) {
   if (!A.user) throw new Error('Sign in first.');
-  if (!A.roles.has('member')) throw new Error('Join this space first. Ask an organiser for an invitation.');
+  if (!A.roles.has('member')) throw new Error('Join the round first, on the Take part page.');
   const cl = A.clauses[rec.clause];
   if (!cl) throw new Error(`Clause ${rec.clause} is not in this space's charter.`);
   // Re-anchor on the database text, which is the reference.
@@ -263,7 +265,7 @@ async function listDialog() {
     }
   } else {
     items = loadDemo();
-    note = 'Demo mode: these proposals are saved only in this browser.';
+    note = 'Sample round: your proposals are saved only in this browser.';
   }
   const d = dialog(`<div class="body">
     <h2>Proposals</h2><p class="hint">${esc(note)}</p>
@@ -278,7 +280,7 @@ async function listDialog() {
 function startProposal(t) {
   if (LIVE && !A.user) return signInDialog('Sign in to propose a change. We email you a sign-in link.');
   if (LIVE && !A.roles.has('member')) {
-    return toast(A.space && A.space.access === 'open' ? 'Join this space first (top right).' : 'This space is invitation-only. Ask an organiser for a link.');
+    return toast(A.space && A.space.access === 'open' ? 'Join the round first (top right).' : 'This space is invitation-only. Ask an organiser for a link.');
   }
   proposeDialog(t);
 }
@@ -347,6 +349,11 @@ async function loadSpace() {
     if (A.user) {
       const { data: ms } = await A.db.from('membership').select('role').eq('space_id', A.space.id).eq('user_id', A.user.id);
       (ms || []).forEach(m => A.roles.add(m.role));
+      // The public site has one open space: signing in is enough to join it.
+      if (!A.roles.has('member') && A.space.access === 'open') {
+        const { error } = await A.db.rpc('join_open_space', { sp: A.space.id });
+        if (!error) A.roles.add('member');
+      }
     }
     const { data: v } = await A.db.from('charter_version').select('id')
       .eq('space_id', A.space.id).eq('status', 'published').order('published_at', { ascending: false }).limit(1).maybeSingle();

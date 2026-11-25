@@ -1,5 +1,6 @@
--- Public Charters / Charter Kit: database schema for Supabase (Postgres 15+).
+-- Public Charters: database schema for Supabase (Postgres 15+), public Apertus Charter site.
 -- Run once in the Supabase SQL editor of a new project, then run seed.sql.
+-- The public site has a single open space; new spaces are created only in the SQL editor.
 -- Follows DATA_MODEL.md. Raw contributions are written by members through
 -- the browser (guarded by row-level security); derived tables are written
 -- only by pipeline jobs that use the service-role key.
@@ -17,8 +18,8 @@ create table public.space (
   access          text not null default 'invite' check (access in ('open', 'invite')),
   parent_space_id uuid references public.space(id),
   -- Process settings per space, for example
-  -- {"phase": "open", "groups": [{"id": "nur", "name": "Nurses and carers", "share": 0.35}, ...],
-  --  "grouping": "roles" | "opinion", "ai_drafting": false}
+  -- {"phase": "open", "demographics": [{"id": "age", "q": "Age", "options": [...]}, ...],
+  --  "ai_drafting": false}
   settings        jsonb not null default '{}'::jsonb,
   created_by      uuid references auth.users(id) default auth.uid(),
   created_at      timestamptz not null default now()
@@ -329,6 +330,10 @@ begin
   if auth.role() <> 'service_role' then
     new.split = old.split; new.author_id = old.author_id; new.space_id = old.space_id;
     new.origin = old.origin;
+    -- Test cases become training data, so only admins review them (status and tier).
+    if not public.is_admin(old.space_id) then
+      new.status = old.status; new.tier = old.tier;
+    end if;
   end if;
   return new;
 end $$;
@@ -360,7 +365,7 @@ alter table public.eval_result        enable row level security;
 
 -- Spaces: open ones are public; invite-only ones are visible to members.
 create policy space_read   on public.space for select using (access = 'open' or public.is_member(id));
-create policy space_create on public.space for insert to authenticated with check (created_by = auth.uid());
+-- No insert policy: spaces are created only in the SQL editor (the public site has one).
 create policy space_admin  on public.space for update using (public.is_admin(id));
 
 -- Members see who else is in their space; joining goes through the functions above.
@@ -384,12 +389,14 @@ create policy proposal_read   on public.proposal for select using (public.can_vi
 create policy proposal_insert on public.proposal for insert to authenticated
   with check (public.is_member(space_id) and author_id = auth.uid()
               and public.clause_space(clause_id) = space_id);
-create policy proposal_own    on public.proposal for update using (author_id = auth.uid());
+create policy proposal_own    on public.proposal for update using (author_id = auth.uid())
+  with check (author_id = auth.uid() and public.is_member(space_id) and public.clause_space(clause_id) = space_id);
 create policy proposal_delete on public.proposal for delete using (author_id = auth.uid() or public.is_admin(space_id));
 
 create policy test_case_read   on public.test_case for select using (public.can_view(space_id));
 create policy test_case_insert on public.test_case for insert to authenticated
-  with check (public.is_member(space_id) and author_id = auth.uid() and origin = 'human');
+  with check (public.is_member(space_id) and author_id = auth.uid() and origin = 'human'
+              and split is null and (public.is_admin(space_id) or (status = 'draft' and tier = 'normal')));
 -- Like a wiki: any member may improve any test case; history is kept by the trigger.
 create policy test_case_edit   on public.test_case for update using (public.is_member(space_id))
   with check (public.is_member(space_id));
@@ -420,3 +427,15 @@ create policy eval_read     on public.eval_result     for select
 grant execute on function public.accept_invitation(text) to authenticated;
 grant execute on function public.join_open_space(uuid) to authenticated;
 grant execute on function public.create_invitation(uuid, int, int, text, text) to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Table and function privileges
+-- ---------------------------------------------------------------------------
+-- Newer Supabase projects no longer grant these automatically. They only open the door;
+-- the row-level security policies above still decide which rows each visitor can see or
+-- change (tables without a matching policy stay closed).
+grant usage on schema public to anon, authenticated;
+grant select on all tables in schema public to anon;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+grant execute on function public.is_member(uuid), public.is_admin(uuid), public.can_view(uuid),
+  public.version_space(uuid), public.clause_space(uuid) to anon, authenticated;
