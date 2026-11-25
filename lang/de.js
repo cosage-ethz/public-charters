@@ -100,9 +100,9 @@ window.I18N.de = {
     start: 'Los geht’s'
   },
   demo: {
-    age: { q: 'Alter', o: { u25: 'Unter 25', a25: '25 bis 44', a45: '45 bis 64', a65: '65 oder älter' } },
-    lang: { q: 'Hauptsprache', o: { de: 'Deutsch', fr: 'Französisch', it: 'Italienisch', rm: 'Rätoromanisch', en: 'Englisch', other: 'Andere' } },
-    ai: { q: 'Wie oft nutzen Sie KI-Chatbots?', o: { daily: 'Täglich', weekly: 'Wöchentlich', rarely: 'Selten', never: 'Nie' } },
+    age: { q: 'Alter', short: 'Alter', o: { u25: 'Unter 25', a25: '25 bis 44', a45: '45 bis 64', a65: '65 oder älter' } },
+    lang: { q: 'Hauptsprache', short: 'Sprache', o: { de: 'Deutsch', fr: 'Französisch', it: 'Italienisch', rm: 'Rätoromanisch', en: 'Englisch', other: 'Andere' } },
+    ai: { q: 'Wie oft nutzen Sie KI-Chatbots?', short: 'KI-Nutzung', o: { daily: 'Täglich', weekly: 'Wöchentlich', rarely: 'Selten', never: 'Nie' } },
     by: 'Nach Alter, Sprache und KI-Nutzung',
     notEnough: 'Noch nicht genug Antworten, um etwas zu zeigen.',
     hidden: '{n} weitere in Gruppen mit weniger als 5 Personen, nicht gezeigt.'
@@ -221,6 +221,17 @@ window.I18N.de = {
     how2: '<b>Wir stufen eine Änderung als «Die meisten sind dafür» ein, wenn:</b> deutlich mehr Ja als Nein, bei mindestens 10 Antworten.',
     how3: '<b>Wir stufen eine Änderung als umstritten ein, wenn:</b> mindestens 30 % Ja und mindestens 30 % Nein.',
     how4: 'Alter, Sprache und KI-Nutzung verwenden wir nur, um zu analysieren, wie verschiedene Gruppen Änderungen bewerten und vorschlagen. Für die Entscheidung über Änderungen werden sie nie verwendet.',
+    how5: '<b>«Verbindet Gruppen»:</b> eine Auszeichnung für Änderungen, die in jeder Alters-, Sprach- und KI-Nutzungsgruppe eine Mehrheit haben. Sie entscheidet nie allein.',
+    how6: '<b>Konkurrierende Formulierungen:</b> Kommen mehrere Formulierungen für dieselbe Stelle durch, wird die mit der meisten Zustimmung gewählt. Knappe Fälle kommen später eventuell in eine direkte Abstimmung.',
+    bridgeBadge: 'Verbindet Gruppen',
+    bridgeTip: 'In jeder Alters-, Sprach- und KI-Nutzungsgruppe mit genug Antworten sagten die meisten Ja.',
+    chosen: 'Gewählte Formulierung',
+    runner: 'Zweitplatziert',
+    runnerTip: 'Eine andere Formulierung für dieselbe Stelle hat mehr Zustimmung.',
+    close: 'Knapp: kommt eventuell in eine direkte Abstimmung.',
+    bridgeH: 'Zustimmung über Gruppen hinweg',
+    bridgeP: 'Diese Änderungen haben in jeder Gruppe, die wir zeigen können, eine Mehrheit: bei Jüngeren und Älteren, über alle Sprachen hinweg und bei häufigen wie seltenen KI-Nutzenden. Zustimmung von Gruppen, die vieles unterschiedlich sehen, ist ein starkes Zeichen.',
+    bridgeNone: 'Noch hat keine Änderung alle Gruppen verbunden.',
     howNote: 'Hinweis: Dies ist eine erste Version. Wir passen diese Grenzen eventuell an, sobald viele echte Antworten vorliegen.',
     statsLine: '{p} Personen · {a} Antworten · {c} Änderungsvorschläge',
     filterHint: 'Klicken Sie auf eine Farbe, um nur diese Änderungen zu zeigen.',
@@ -252,6 +263,9 @@ window.I18N.de = {
     title: 'Über uns',
     h: 'Über <em>dieses Projekt.</em>',
     lede: 'Wer wir sind, was wir mit Ihren Daten tun, und die Forschung hinter diesem Projekt.',
+    pluralH: 'Warum diese Art der Beteiligung?',
+    plural1: 'Die meiste Forschung zu «pluralistischer» KI schaut darauf, was ein Modell sagt: Zeigt es viele Sichtweisen? Wir schauen darauf, wer die Regeln schreiben darf. Die Forschung nennt das <b>institutionellen Pluralismus</b>: Menschen können die Regeln, denen eine KI folgt, mitgestalten, anfechten und überarbeiten.',
+    plural2: 'Wir sind ehrlich über die Grenzen. Unsere Ergebnisse binden das offizielle Apertus nicht. Auf Arnsteins «Leiter der Bürgerbeteiligung» ist das noch <b>Konsultation</b>, keine echte Entscheidungsmacht. Wir möchten zeigen, wie der nächste Schritt aussehen könnte.',
     official: '<b>Es verändert nicht das offizielle Apertus.</b> Wir testen die Ergebnisse an unserer eigenen kleinen Kopie.',
     sample: '<b>Vorerst Beispieldaten:</b> Bis genug Menschen mitmachen, enthalten die Ergebnisse erfundene Antworten, klar gekennzeichnet.',
     dataH: 'Ihre Daten',
@@ -271,7 +285,9 @@ window.I18N.de = {
       prism: 'Was Menschen von einer KI zu wollen sagen und wie sie echte Antworten bewerten, kann sich unterscheiden; beides zählt.',
       sc: 'Eine KI mit dem Feedback vieler Menschen zu trainieren ist schon eine Art Abstimmung, also soll man sie auch so gestalten.',
       apertus: 'Das Modell und seine Charta.',
-      charter: 'Die Charta, von der dieses Projekt ausgeht.'
+      charter: 'Die Charta, von der dieses Projekt ausgeht.',
+      habib: 'Die meiste Forschung zu «pluralistischer» KI schaut nur auf die Ausgaben von Modellen, nicht darauf, wer Macht über die Regeln hat.',
+      arnstein: 'Eine klassische Skala von symbolischer Anhörung bis zu echter Bürgermacht.'
     }
   },
 

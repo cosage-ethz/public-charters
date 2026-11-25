@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261125j">
-<link rel="stylesheet" href="app.css?v=20261125j">
-<script src="lang/en.js?v=20261125j"></script><script src="lang/de.js?v=20261125j"></script><script src="lang/fr.js?v=20261125j"></script><script src="i18n.js?v=20261125j"></script>
-<script src="motion.js?v=20261125j"></script>
+<link rel="stylesheet" href="site.css?v=20261125l">
+<link rel="stylesheet" href="app.css?v=20261125l">
+<script src="lang/en.js?v=20261125l"></script><script src="lang/de.js?v=20261125l"></script><script src="lang/fr.js?v=20261125l"></script><script src="i18n.js?v=20261125l"></script>
+<script src="motion.js?v=20261125l"></script>
 <style>
 /* One colour per result, used everywhere on the page. */
 .tp{--endorsed:var(--good);--contested:#c2410c;--weak:#8a8e94;--needs:#b0760f}
@@ -57,6 +57,21 @@
 .more-row{display:flex;justify-content:center;margin-top:16px}
 .more-row:empty{display:none}
 
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;font:700 11.5px/1 var(--ui);border-radius:999px;padding:4px 9px;white-space:nowrap}
+.badge.bridge{background:#e7f3ec;color:var(--good)}
+.badge.win{background:var(--ink);color:#fff}
+.badge.run{background:var(--panel);color:var(--slate)}
+.closecall{margin:8px 0 0;font-size:14px;color:var(--needs);font-weight:700}
+
+/* Agreed across groups */
+.bridgelist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:6px}
+.bcard{background:linear-gradient(180deg,#eef7f1,var(--sheet) 60%);border:1px solid var(--line);border-top:4px solid var(--good);border-radius:14px;padding:14px 18px;min-width:0}
+.bcard .cl-text{font-size:17px}
+.bcard .qs{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:0;font-size:13.5px}
+.bcard .ok{color:var(--good);font-weight:700}
+.bcard .pctb{margin-left:auto;font-weight:700;color:var(--good)}
+
 /* Ideas some groups back */
 .lede-s{max-width:44em;font-size:17px;line-height:1.55;margin:-4px 0 18px;color:#333}
 .fringe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -77,7 +92,7 @@
 .flow .n{font:600 24px/1 var(--display);color:var(--accent)}
 .flow b{font:600 17px/1.25 var(--display)}
 .flow span.d{font-size:15px;color:#333}
-@media (max-width:900px){.fringe{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.card .res{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:900px){.fringe,.bridgelist{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.card .res{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:640px){.summary button span{display:none}}
 @media (max-width:520px){.flow{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.div .no,.div .yes,.cmp .bar i{animation:none}.summary button{transition:none}}
@@ -113,6 +128,12 @@
   <div class="more-row" id="more"></div>
 </section>
 
+<section class="block" id="bridging">
+  <h3 class="sec reveal" data-i18n="results.bridgeH"></h3>
+  <p class="lede-s reveal" data-i18n="results.bridgeP"></p>
+  <div class="bridgelist" id="bridgeList"></div>
+</section>
+
 <section class="block" id="fringe">
   <h3 class="sec reveal" data-i18n="results.fringeH"></h3>
   <p class="lede-s reveal" data-i18n="results.fringeP"></p>
@@ -122,7 +143,7 @@
 <section class="block">
   <details class="how reveal">
     <summary data-i18n="results.howH"></summary>
-    <ul><li data-i18n-html="results.how2"></li><li data-i18n-html="results.how3"></li><li data-i18n="results.how4"></li></ul>
+    <ul><li data-i18n-html="results.how2"></li><li data-i18n-html="results.how3"></li><li data-i18n="results.how4"></li><li data-i18n-html="results.how5"></li><li data-i18n-html="results.how6"></li></ul>
     <p class="small muted" data-i18n="results.howNote"></p>
   </details>
 </section>
@@ -141,12 +162,12 @@
 
 <footer class="foot wrap"><div class="in" data-i18n-html="common.footer"></div></footer>
 
-<script src="sample-data.js?v=20261125j"></script>
+<script src="sample-data.js?v=20261125l"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=20261125j"></script>
-<script src="app.js?v=20261125j"></script>
-<script src="bridge.js?v=20261125j"></script>
-<script src="community.js?v=20261125j"></script>
+<script src="config.js?v=20261125l"></script>
+<script src="app.js?v=20261125l"></script>
+<script src="bridge.js?v=20261125l"></script>
+<script src="community.js?v=20261125l"></script>
 <script>
 (() => {
 const C = window.Community;
@@ -156,6 +177,15 @@ const KINDS = ['endorsed', 'contested', 'needs', 'weak'];
 const color = k => `var(--${k})`;
 let FILTER = null, SHOW_ALL = false;
 const TOP = 8;   // cards shown before "Show all"
+
+// Small badges next to the verdict: bridges groups, chosen wording / runner-up.
+function badges(s) {
+  let h = '';
+  if (s.s.status === 'endorsed' && s.bridge && s.bridge.ok) h += `<span class="badge bridge" title="${esc(T('results.bridgeTip'))}">⬡ ${esc(T('results.bridgeBadge'))}</span>`;
+  if (s.pick === 'chosen') h += `<span class="badge win">✓ ${esc(T('results.chosen'))}</span>`;
+  if (s.pick === 'runner') h += `<span class="badge run" title="${esc(T('results.runnerTip'))}">${esc(T('results.runner'))}</span>`;
+  return h;
+}
 
 function render() {
   const me = C.me, sugs = C.suggestions();
@@ -177,18 +207,26 @@ function render() {
   $('cards').innerHTML = shown.map(s => {
     const t = s.s, k = t.status;
     return `<article class="card reveal" style="--c:${color(k)}">
-      <div class="top"><span class="chip">${esc(T('status.' + k))}</span><span class="meta">${esc(T('common.article', { n: s.art ? s.art.n : '' }))} · ${esc(s.title)} · ${esc(s.clause)}</span>${s.own ? `<span class="mine">${esc(T('results.yours'))}</span>` : ''}</div>
+      <div class="top"><span class="chip">${esc(T('status.' + k))}</span>${badges(s)}<span class="meta">${esc(T('common.article', { n: s.art ? s.art.n : '' }))} · ${esc(s.title)} · ${esc(s.clause)}</span>${s.own ? `<span class="mine">${esc(T('results.yours'))}</span>` : ''}</div>
       <p class="cl-text">${C.changedClause(s)}</p>
       ${s.why ? `<p class="why">${esc(s.why)}</p>` : ''}
       ${t.n ? `<div class="res"><div><div class="div"><span class="no" style="width:${(t.notShare * 100).toFixed(1)}%"></span><span class="yes" style="width:${(t.helpShare * 100).toFixed(1)}%"></span></div>
           <div class="pcts"><span>${pct(t.notShare)} ${esc(T('results.axisNo'))}</span><b>${pct(t.helpShare)} ${esc(T('results.axisYes'))}</b></div></div>
         <p class="line">${esc(T('results.line', { yes: pct(t.helpShare), partly: pct(t.someShare), no: pct(t.notShare), n: t.n }))}</p></div>
+        ${s.close ? `<p class="closecall">⚖ ${esc(T('results.close'))}</p>` : ''}
         <details class="more"><summary>${esc(T('demo.by'))}</summary>${C.breakdownHTML(s.ratings)}</details>` : ''}
       ${k === 'needs' && !s.own ? `<p style="margin:10px 0 0"><a class="btn small" href="participate.html#rate">${esc(T('results.rateIt'))} →</a></p>` : ''}
     </article>`;
   }).join('') || `<p class="hint">${esc(T('results.none'))}</p>`;
   $('more').innerHTML = list.length > TOP
     ? `<button class="btn" data-more>${esc(SHOW_ALL ? T('results.showLess') : T('results.showAll', { n: list.length }))}</button>` : '';
+
+  // Agreed across groups: passes overall and has a majority in every group we can show
+  const br = sugs.filter(s => s.s.status === 'endorsed' && s.bridge.ok).sort((a, b) => b.s.net - a.s.net);
+  $('bridgeList').innerHTML = br.slice(0, 6).map(s => `<article class="bcard reveal">
+      <p class="cl-text">${C.changedClause(s)}</p>
+      <p class="qs">${s.bridge.perQ.filter(x => x.counted).map(x => `<span class="ok">✓ ${esc(T('demo.' + x.q.id + '.short'))}</span>`).join('')}<span class="pctb">${pct(s.s.helpShare)} ${esc(T('results.axisYes'))}</span></p>
+    </article>`).join('') || `<p class="hint">${esc(T('results.bridgeNone'))}</p>`;
 
   // Ideas some groups back: not endorsed overall, but at least 60% yes in one group of 5 or more,
   // and at least 20 points above everyone. One card per change, its strongest group.

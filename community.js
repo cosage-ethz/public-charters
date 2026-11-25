@@ -103,11 +103,16 @@ let CACHE = null;
 function suggestions() {
   if (!CACHE) CACHE = sampleSuggestions().map(s => Object.assign(s, { sim: simulatedRatings(s) }));
   const all = CACHE.concat(ownSuggestions().map(s => Object.assign(s, { sim: [] })));
-  return all.map(s => {
+  const out = all.map(s => {
     const mine = ME.ratings[s.id];
     const ratings = mine != null && ME.consent ? s.sim.concat([{ value: mine, reasons: [], profile: ME.profile, me: true }]) : s.sim;
-    return Object.assign({}, s, { ratings, s: B.score(ratings) });
+    // key: the words being changed, so rival wordings of the same phrase can be compared
+    const key = s.hot || `${s.clause}:${(s.anchor && s.anchor.quote) || s.base || ''}`;
+    return Object.assign({}, s, { key, ratings, s: B.score(ratings), bridge: B.bridges(DEMOGRAPHICS, ratings) });
   });
+  const picks = B.pickWinners(out);
+  out.forEach(s => { const p = picks[s.id]; s.pick = p ? p.pick : null; s.close = !!(p && p.close); });
+  return out;
 }
 
 function myCounts() { return { ratings: Object.keys(ME.ratings).length, proposals: ownSuggestions().length }; }

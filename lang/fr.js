@@ -100,9 +100,9 @@ window.I18N.fr = {
     start: 'Commencer'
   },
   demo: {
-    age: { q: 'Âge', o: { u25: 'Moins de 25 ans', a25: '25 à 44 ans', a45: '45 à 64 ans', a65: '65 ans ou plus' } },
-    lang: { q: 'Langue principale', o: { de: 'Allemand', fr: 'Français', it: 'Italien', rm: 'Romanche', en: 'Anglais', other: 'Autre' } },
-    ai: { q: 'À quelle fréquence utilisez-vous des chatbots d’IA ?', o: { daily: 'Chaque jour', weekly: 'Chaque semaine', rarely: 'Rarement', never: 'Jamais' } },
+    age: { q: 'Âge', short: 'Âge', o: { u25: 'Moins de 25 ans', a25: '25 à 44 ans', a45: '45 à 64 ans', a65: '65 ans ou plus' } },
+    lang: { q: 'Langue principale', short: 'Langue', o: { de: 'Allemand', fr: 'Français', it: 'Italien', rm: 'Romanche', en: 'Anglais', other: 'Autre' } },
+    ai: { q: 'À quelle fréquence utilisez-vous des chatbots d’IA ?', short: 'Usage de l’IA', o: { daily: 'Chaque jour', weekly: 'Chaque semaine', rarely: 'Rarement', never: 'Jamais' } },
     by: 'Par âge, langue et utilisation de l’IA',
     notEnough: 'Pas encore assez de réponses pour afficher quelque chose.',
     hidden: '{n} autres dans des groupes de moins de 5 personnes, non affichés.'
@@ -221,6 +221,17 @@ window.I18N.fr = {
     how2: '<b>Nous classons un changement comme « La plupart sont pour » si :</b> nettement plus de oui que de non, sur au moins 10 réponses.',
     how3: '<b>Nous classons un changement comme partageant les avis si :</b> au moins 30 % de oui et au moins 30 % de non.',
     how4: 'L’âge, la langue et l’utilisation de l’IA servent uniquement à analyser comment différents groupes évaluent et proposent des changements ; ils ne servent jamais à décider de leur adoption.',
+    how5: '<b>« Rassemble les groupes » :</b> un badge pour les changements soutenus par la majorité dans chaque groupe d’âge, de langue et d’utilisation de l’IA. Il ne décide jamais seul.',
+    how6: '<b>Formulations concurrentes :</b> si plusieurs formulations pour le même passage passent, celle qui a le plus de soutien est retenue. Les cas serrés pourront passer plus tard par un vote en face à face.',
+    bridgeBadge: 'Rassemble les groupes',
+    bridgeTip: 'Dans chaque groupe d’âge, de langue et d’utilisation de l’IA ayant assez de réponses, la plupart ont dit oui.',
+    chosen: 'Formulation retenue',
+    runner: 'Deuxième',
+    runnerTip: 'Une autre formulation pour le même passage a plus de soutien.',
+    close: 'Résultat serré : pourrait passer par un vote en face à face.',
+    bridgeH: 'Soutenu par tous les groupes',
+    bridgeP: 'Ces changements ont une majorité dans chaque groupe que nous pouvons afficher : jeunes et aînés, toutes langues confondues, utilisateurs fréquents ou rares de l’IA. Un accord entre des groupes qui voient souvent les choses différemment est un signe fort.',
+    bridgeNone: 'Aucun changement n’a encore rassemblé tous les groupes.',
     howNote: 'Remarque : il s’agit d’une première version ; nous ajusterons peut-être ces seuils quand de nombreuses vraies réponses arriveront.',
     statsLine: '{p} personnes · {a} réponses · {c} propositions',
     filterHint: 'Cliquez sur une couleur pour n’afficher que ces changements.',
@@ -252,6 +263,9 @@ window.I18N.fr = {
     title: 'À propos',
     h: 'À propos <em>de ce projet.</em>',
     lede: 'Qui nous sommes, ce que nous faisons de vos données, et la recherche derrière ce projet.',
+    pluralH: 'Pourquoi ce type de participation ?',
+    plural1: 'La plupart des recherches sur l’IA « pluraliste » regardent ce que dit un modèle : présente-t-il plusieurs points de vue ? Nous regardons qui peut écrire les règles. Les chercheurs appellent cela le <b>pluralisme institutionnel</b> : les gens peuvent participer aux règles que suit une IA, les contester et les réviser.',
+    plural2: 'Nous sommes honnêtes sur les limites. Nos résultats n’engagent pas l’Apertus officiel. Sur « l’échelle de la participation citoyenne » d’Arnstein, c’est encore de la <b>consultation</b>, pas un vrai pouvoir de décision. Nous voulons montrer à quoi pourrait ressembler l’étape suivante.',
     official: '<b>Il ne modifie pas l’Apertus officiel.</b> Nous testons les résultats sur notre propre petite copie.',
     sample: '<b>Des données d’exemple pour l’instant :</b> tant qu’il n’y a pas assez de participant·es, les résultats incluent des réponses inventées, clairement signalées.',
     dataH: 'Vos données',
@@ -271,7 +285,9 @@ window.I18N.fr = {
       prism: 'Ce que les gens disent attendre d’une IA et la façon dont ils évaluent de vraies réponses peuvent différer ; les deux comptent.',
       sc: 'Entraîner une IA avec les avis de nombreuses personnes est déjà une sorte de vote ; il faut donc la concevoir comme tel.',
       apertus: 'Le modèle et sa charte.',
-      charter: 'La charte dont part ce projet.'
+      charter: 'La charte dont part ce projet.',
+      habib: 'La plupart des recherches sur l’IA « pluraliste » ne regardent que les réponses des modèles, pas qui détient le pouvoir sur les règles.',
+      arnstein: 'Une échelle classique, de la consultation symbolique au vrai pouvoir citoyen.'
     }
   },
 

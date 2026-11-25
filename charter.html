@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261125j">
-<link rel="stylesheet" href="app.css?v=20261125j">
-<script src="lang/en.js?v=20261125j"></script><script src="lang/de.js?v=20261125j"></script><script src="lang/fr.js?v=20261125j"></script><script src="i18n.js?v=20261125j"></script>
-<script src="motion.js?v=20261125j"></script>
+<link rel="stylesheet" href="site.css?v=20261125l">
+<link rel="stylesheet" href="app.css?v=20261125l">
+<script src="lang/en.js?v=20261125l"></script><script src="lang/de.js?v=20261125l"></script><script src="lang/fr.js?v=20261125l"></script><script src="i18n.js?v=20261125l"></script>
+<script src="motion.js?v=20261125l"></script>
 <style>
 /* An annotated document: the charter on the left, the ideas for the chosen phrase on the right. */
 .tp{--endorsed:var(--good);--contested:#c2410c;--weak:#8a8e94;--needs:#b0760f}
@@ -56,6 +56,9 @@
 .idea .w{font:600 16.5px/1.35 var(--display);margin:0 0 4px;color:var(--ink)}
 .idea .w ins{text-decoration:none;color:var(--accent)}
 .idea .st{font:700 11.5px/1.3 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin:0 0 6px}
+.idea .st .bb{color:var(--good)}
+.idea .st .pk{color:var(--ink)}
+.idea .st .rn{color:var(--muted)}
 .idea .why{margin:6px 0 0;font-size:14px;color:#555;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mini{display:grid;grid-template-columns:1fr 1fr;height:8px;position:relative}
 .mini::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1.5px;background:var(--ink);opacity:.45}
@@ -98,12 +101,12 @@
 
 <footer class="foot wrap"><div class="in" data-i18n-html="common.footer"></div></footer>
 
-<script src="sample-data.js?v=20261125j"></script>
+<script src="sample-data.js?v=20261125l"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=20261125j"></script>
-<script src="app.js?v=20261125j"></script>
-<script src="bridge.js?v=20261125j"></script>
-<script src="community.js?v=20261125j"></script>
+<script src="config.js?v=20261125l"></script>
+<script src="app.js?v=20261125l"></script>
+<script src="bridge.js?v=20261125l"></script>
+<script src="community.js?v=20261125l"></script>
 <script>
 (() => {
 const C = window.Community;
@@ -159,7 +162,7 @@ function renderPanel() {
     <ul class="ideas">${list.map((s, j) => {
       const t = s.s, k = t.status;
       return `<li class="idea" style="--c:${color(k)};animation-delay:${j * 60}ms">
-        <p class="st">${esc(T('status.' + k))}</p>
+        <p class="st">${esc(T('status.' + k))}${s.s.status === 'endorsed' && s.bridge && s.bridge.ok ? ` · <span class="bb" title="${esc(T('results.bridgeTip'))}">⬡ ${esc(T('results.bridgeBadge'))}</span>` : ''}${s.pick === 'chosen' ? ` · <span class="pk">✓ ${esc(T('results.chosen'))}</span>` : s.pick === 'runner' ? ` · <span class="rn" title="${esc(T('results.runnerTip'))}">${esc(T('results.runner'))}</span>` : ''}</p>
         <p class="w">${s.op === 'delete' ? esc(T('viewer.remove')) : `<ins>${esc(C.changeLabel(s))}</ins>`}</p>
         ${t.n ? `<div class="mini"><span class="no" style="width:${(t.notShare * 100).toFixed(1)}%"></span><span class="yes" style="width:${(t.helpShare * 100).toFixed(1)}%"></span></div>
         <div class="pc"><span>${pct(t.notShare)} ${esc(T('results.axisNo'))}</span><b>${pct(t.helpShare)} ${esc(T('results.axisYes'))}</b></div>` : ''}

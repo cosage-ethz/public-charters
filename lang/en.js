@@ -103,9 +103,9 @@ window.I18N.en = {
     start: 'Start'
   },
   demo: {
-    age: { q: 'Age', o: { u25: 'Under 25', a25: '25 to 44', a45: '45 to 64', a65: '65 or older' } },
-    lang: { q: 'Main language', o: { de: 'German', fr: 'French', it: 'Italian', rm: 'Romansh', en: 'English', other: 'Other' } },
-    ai: { q: 'How often do you use AI chatbots?', o: { daily: 'Daily', weekly: 'Weekly', rarely: 'Rarely', never: 'Never' } },
+    age: { q: 'Age', short: 'Age', o: { u25: 'Under 25', a25: '25 to 44', a45: '45 to 64', a65: '65 or older' } },
+    lang: { q: 'Main language', short: 'Language', o: { de: 'German', fr: 'French', it: 'Italian', rm: 'Romansh', en: 'English', other: 'Other' } },
+    ai: { q: 'How often do you use AI chatbots?', short: 'AI use', o: { daily: 'Daily', weekly: 'Weekly', rarely: 'Rarely', never: 'Never' } },
     by: 'By age, language and AI use',
     notEnough: 'Not enough answers yet to show.',
     hidden: '{n} more in groups smaller than 5, not shown.'
@@ -226,6 +226,17 @@ window.I18N.en = {
     how2: '<b>We classify a change as "Most people agree" if:</b> clearly more yes than no, from at least 10 answers.',
     how3: '<b>We classify a change as causing divided opinions if:</b> at least 30% yes and at least 30% no.',
     how4: 'Age, language and AI use is only used to analyse how different groups rate and propose changes, and is never used to decide approvals.',
+    how5: '<b>“Bridges groups”:</b> a badge for changes that most people support in every age, language and AI-use group. It never decides on its own.',
+    how6: '<b>Rival wordings:</b> if several wordings for the same words pass, the one with the most support is chosen. Close calls may go to a head-to-head vote later.',
+    bridgeBadge: 'Bridges groups',
+    bridgeTip: 'Most said yes in every age, language and AI-use group with enough answers.',
+    chosen: 'Chosen wording',
+    runner: 'Runner-up',
+    runnerTip: 'Another wording for the same words has more support.',
+    close: 'Close call: may go to a head-to-head vote.',
+    bridgeH: 'Agreed across groups',
+    bridgeP: 'These changes have a majority in every group we can show: young and old, across languages, and among frequent and rare AI users. Agreement across groups that often see things differently is a strong sign.',
+    bridgeNone: 'No change has bridged all groups yet.',
     howNote: 'Note: this is a first version: we may adjust these classification limits once many real answers come in.',
     statsLine: '{p} people · {a} answers · {c} suggested changes',
     filterHint: 'Click a colour to show only those changes.',
@@ -258,6 +269,9 @@ window.I18N.en = {
     title: 'About',
     h: 'About <em>this project.</em>',
     lede: 'Who we are, what we do with your data, and the research behind this project.',
+    pluralH: 'Why this kind of participation?',
+    plural1: 'Most research on “pluralistic” AI looks at what a model says: does it present many points of view? We look at who gets to write the rules. Researchers call this <b>institutional pluralism</b>: people can take part in, contest and revise the rules an AI follows.',
+    plural2: 'We are honest about the limits. Our results do not bind the official Apertus. On Arnstein’s “ladder of citizen participation”, that is still <b>consultation</b>, not real decision-making power. We want to show what the next step could look like.',
     official: '<b>It doesn’t change the official Apertus.</b> We test the results on our own small copy.',
     sample: '<b>Sample data for now:</b> until enough people take part, the results include made-up answers, clearly marked.',
     dataH: 'Your data',
@@ -277,7 +291,9 @@ window.I18N.en = {
       prism: 'What people say they want from an AI and how they rate real answers can differ, so both matter.',
       sc: 'Training an AI on many people’s feedback is already a kind of vote, so it should be designed as one.',
       apertus: 'The model and its charter.',
-      charter: 'The charter this project starts from.'
+      charter: 'The charter this project starts from.',
+      habib: 'Most research on “pluralistic” AI only looks at model outputs, not at who holds power over the rules.',
+      arnstein: 'A classic scale from token consultation to real citizen power.'
     }
   },
 

@@ -22,6 +22,7 @@ const RULES = {
   contested: 0.3,       // share helpful AND share not helpful both at least this: contested
   minGroup: 5,          // ratings needed before a demographic group is shown in a breakdown
   pairDecide: 0.6,      // share preferring one side in Compare answers for a verdict
+  closeCall: 0.1,       // rival wordings closer than this (net score) are flagged as a close call
   ratingValue: { helpful: 1, somewhat: 0.5, not: 0 }
 };
 
@@ -65,6 +66,32 @@ function breakdown(questions, ratings, fn) {
     }
     return { q, rows, hidden };
   });
+}
+
+// ---------- bridging: support across groups that often disagree ----------
+// A change "bridges" when, in every profile question that has at least two groups with enough
+// answers, every such group has more yes than no. At least one question must qualify. This is a
+// badge shown next to the result, never a rule that decides (no group can block a change).
+function bridges(questions, ratings) {
+  const perQ = breakdown(questions, ratings).map(({ q, rows }) => ({ q, rows, ok: rows.length >= 2 && rows.every(r => r.net > 0), counted: rows.length >= 2 }));
+  const counted = perQ.filter(x => x.counted);
+  return { ok: counted.length > 0 && counted.every(x => x.ok), perQ };
+}
+
+// ---------- choosing among rival wordings ----------
+// items: [{ id, key, s: score }], where key identifies the words being changed. Among endorsed
+// rivals with the same key, the one with the highest net score is chosen and the others become
+// runners-up. A gap smaller than RULES.closeCall is flagged for a head-to-head vote later.
+function pickWinners(items) {
+  const out = {}, groups = {};
+  items.forEach(x => { (groups[x.key] = groups[x.key] || []).push(x); });
+  Object.values(groups).forEach(list => {
+    const passed = list.filter(x => x.s.status === 'endorsed').sort((a, b) => b.s.net - a.s.net);
+    if (!passed.length || list.length < 2) return;
+    const close = passed.length > 1 && passed[0].s.net - passed[1].s.net < RULES.closeCall;
+    passed.forEach((x, i) => { out[x.id] = { pick: i === 0 ? 'chosen' : 'runner', close: close && i < 2 }; });
+  });
+  return out;
 }
 
 // A plain sentence on why a suggestion has its status.
@@ -116,6 +143,6 @@ function seeded(str) {
   };
 }
 
-root.Bridge = { RULES, tally, score, breakdown, explain, dissent, pairTally, pairResult, serveOrder, seeded };
+root.Bridge = { RULES, tally, score, breakdown, bridges, pickWinners, explain, dissent, pairTally, pairResult, serveOrder, seeded };
 if (typeof module !== 'undefined' && module.exports) module.exports = root.Bridge;
 })(typeof window !== 'undefined' ? window : globalThis);
