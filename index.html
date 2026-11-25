@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261125i">
-<script src="lang/en.js?v=20261125i"></script><script src="lang/de.js?v=20261125i"></script><script src="lang/fr.js?v=20261125i"></script><script src="i18n.js?v=20261125i"></script>
-<script src="motion.js?v=20261125i"></script>
+<link rel="stylesheet" href="site.css?v=20261125j">
+<script src="lang/en.js?v=20261125j"></script><script src="lang/de.js?v=20261125j"></script><script src="lang/fr.js?v=20261125j"></script><script src="i18n.js?v=20261125j"></script>
+<script src="motion.js?v=20261125j"></script>
 <style>
 /* Hero: text on the left, a charter sentence that cycles through suggested wordings on the right. */
 .landing .hero .in{padding-block:clamp(26px,5vw,70px) clamp(30px,5vw,60px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center}
@@ -71,6 +71,29 @@
 .org p{margin:0;font-size:15px;line-height:1.45;color:#d9d9d9}
 .org .go{margin-top:auto;padding-top:6px;font-weight:700;font-size:14.5px;color:#f0b4b2}
 .who-note{margin:18px 0 0;font-size:17px;line-height:1.5;max-width:40em}
+
+/* "Learn more" inside the explainer */
+.learn{margin:-14px 0 30px;border:1px solid #3a3a3a;border-radius:14px;background:#1b1b1b}
+.learn summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:14px 18px;font:700 16px/1.35 var(--ui);color:#fff}
+.learn summary::-webkit-details-marker{display:none}
+.learn summary::before{content:"+";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:17px;flex:none;transition:transform .25s ease}
+.learn[open] summary::before{content:"–"}
+.learn summary:hover{color:#f0b4b2}
+.learn-in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 34px;padding:4px 20px 20px;animation:learnin .35s ease both}
+.learn h4{font:600 19px/1.25 var(--display);color:#fff;margin:12px 0 8px}
+.learn p{margin:0 0 8px;color:#e4e4e4;font-size:15.5px;line-height:1.55}
+.covers{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.covers li{position:relative;padding-left:22px;color:#e4e4e4;font-size:15.5px;line-height:1.45}
+.covers li::before{content:"";position:absolute;left:4px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.into{margin:0 0 10px;padding:0;list-style:none;counter-reset:i;display:flex;flex-direction:column;gap:10px}
+.into li{counter-increment:i;position:relative;padding-left:38px;color:#e4e4e4;font-size:15.5px;line-height:1.45}
+.into li::before{content:counter(i);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1.5px solid #f0b4b2;color:#f0b4b2;font:700 13px var(--ui)}
+.into b{display:block;color:#fff}
+.learn .apertus{border-left:3px solid var(--accent);padding-left:12px}
+.learn .fine{font-size:14px;color:#b9bcc0}
+@keyframes learnin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.learn-in{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.learn-in{animation:none}}
 
 .kit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 30px;align-items:center;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
 .kit p{margin:0;max-width:40em;color:#333}
@@ -133,6 +156,27 @@
       <div><b data-i18n="home.e2h"></b><p data-i18n="home.e2"></p></div>
       <div><b data-i18n="home.e3h"></b><p data-i18n="home.e3"></p></div>
     </div>
+    <details class="learn">
+      <summary><span data-i18n="home.moreBtn"></span></summary>
+      <div class="learn-in">
+        <div class="lcol">
+          <h4 data-i18n="home.coversH"></h4>
+          <ul class="covers"><li data-i18n="home.cover1"></li><li data-i18n="home.cover2"></li><li data-i18n="home.cover3"></li><li data-i18n="home.cover4"></li><li data-i18n="home.cover5"></li></ul>
+          <h4 data-i18n="home.mattersH"></h4>
+          <p data-i18n="home.matters"></p>
+        </div>
+        <div class="lcol">
+          <h4 data-i18n="home.intoH"></h4>
+          <ol class="into">
+            <li><b data-i18n="home.into1h"></b><span data-i18n="home.into1"></span></li>
+            <li><b data-i18n="home.into2h"></b><span data-i18n="home.into2"></span></li>
+            <li><b data-i18n="home.into3h"></b><span data-i18n="home.into3"></span></li>
+          </ol>
+          <p class="apertus" data-i18n="home.intoApertus"></p>
+          <p class="fine" data-i18n="home.intoNote"></p>
+        </div>
+      </div>
+    </details>
     <h4 class="who-h" data-i18n="home.whoH"></h4>
     <p class="who-p" data-i18n="home.whoP"></p>
     <div class="orgs">
@@ -165,7 +209,7 @@
 
 <footer class="foot wrap"><div class="in" data-i18n-html="common.footer"></div></footer>
 
-<script src="sample-data.js?v=20261125i"></script>
+<script src="sample-data.js?v=20261125j"></script>
 <script>
 // Hero demo: clause 4.3 of the (translated) sample charter, cycling the phrase people want to change.
 (() => {
