@@ -1,7 +1,8 @@
-// Sample data shown by the viewer (charter.html) and the guided journey (participate.html).
-// Readings, communities, counts, quotes and test cases are invented for the prototype.
-// Charter clauses are shortened from Version 1.0 of the Apertus Charter.
-// Later, the same structure is filled from the database.
+// Sample data shown by the viewer (charter.html), Take part (participate.html) and Results.
+// Readings, communities, counts, quotes and examples are invented for the prototype.
+// Charter clauses are shortened from Version 1.0 of the Apertus Charter (English only).
+// Translations live under "sample" in lang/de.js and lang/fr.js and are applied at the end of
+// this file. Later, the same structure is filled from the database.
 const GROUPS={
  r:{title:'Readings',unit:'submissions',list:[
   {id:'c',l:'A',name:'Care first',size:412,c:'--v1',d:'Prevent harm early, even at some cost to convenience.'},
@@ -13,7 +14,6 @@ const GROUPS={
   {id:'g2',l:'2',name:'School teachers',size:94,c:'--v2',d:'Secondary teachers working with minors.'},
   {id:'g3',l:'3',name:'Romansh speakers',size:37,c:'--v3',d:'Members of a small national language community.'}]}
 };
-const verb={replace:'Reword',insert:'Add',delete:'Remove'};
 function E(v,op,text,n,sup,why,quote,q,now,then){return{v,op,text,n,sup,why,quote,q,now,then}}
 
 const HOTS={
@@ -69,3 +69,22 @@ const ARTS=[
   ['10.3',['Responses should ',{h:'h12'},' by ',{h:'h13'},' in decision-making.']]]}
 ];
 
+// Notes from experts, shown with a suggestion. Keyed by '<hot spot>-<edit index>'.
+const NOTES={
+ 'h5-0':{by:'Pharmacist',text:'A safe answer gives the general danger threshold and says that the exact limit depends on weight, liver function and other medicines, so it should be checked with a pharmacist.'},
+ 'h7-1':{by:'Data protection lawyer',text:'Health data is sensitive personal data under Swiss data protection law, which already sets stricter rules for it than for other data.'},
+ 'h10-2':{by:'Medical ethicist',text:'Responsibility already sits with the treating clinician by law. The change makes that explicit for the AI rather than creating a new rule.'}
+};
+
+// Apply the translation for the current language (lang/<xx>.js, key "sample").
+// Clause fragments are replaced as a whole, so each language can order the phrases its own way.
+(function(){
+ const L=window.PC_LANG&&window.I18N&&window.I18N[window.PC_LANG]&&window.I18N[window.PC_LANG].sample;
+ if(!L)return;
+ if(L.groups)Object.entries(L.groups).forEach(([g,o])=>Object.assign(GROUPS[g],o));
+ if(L.versions)Object.values(GROUPS).forEach(g=>g.list.forEach(v=>{if(L.versions[v.id])Object.assign(v,L.versions[v.id])}));
+ if(L.arts)ARTS.forEach(a=>{const o=L.arts[a.id];if(!o)return;if(o.t)a.t=o.t;a.cl.forEach(c=>{if(o.cl&&o.cl[c[0]])c[1]=o.cl[c[0]]})});
+ if(L.hots)Object.entries(L.hots).forEach(([k,o])=>{const h=HOTS[k];if(!h)return;if(o.base!=null)h.base=o.base;
+  (o.edits||[]).forEach((f,i)=>{const e=h.edits[i];if(!e||!f)return;['text','why','quote','q','now','then'].forEach((p,j)=>{if(f[j]!=null)e[p]=f[j]})})});
+ if(L.notes)Object.entries(L.notes).forEach(([k,o])=>{NOTES[k]=o});
+})();

@@ -4,174 +4,195 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Apertus, Switzerland's open AI model, follows a charter of principles. Help decide what it should say.">
+<meta name="i18n-title" content="home.title">
 <title>Public Charters</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='12' fill='%23b0302e'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="site.css?v=20261125f">
+<script src="lang/en.js?v=20261125f"></script><script src="lang/de.js?v=20261125f"></script><script src="lang/fr.js?v=20261125f"></script><script src="i18n.js?v=20261125f"></script>
+<script src="motion.js?v=20261125f"></script>
 <style>
-/* Landing page. Same tokens as the rest of the site (site.css). */
-.landing .hero .in{padding-block:clamp(30px,6vw,80px) clamp(30px,5vw,56px)}
-.landing .hero h2{max-width:12em;font-size:clamp(44px,7.4vw,96px)}
-.cta{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:28px}
+/* Hero: text on the left, a charter sentence that cycles through suggested wordings on the right. */
+.landing .hero .in{padding-block:clamp(26px,5vw,70px) clamp(30px,5vw,60px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center}
+.landing .hero h2{max-width:11em;font-size:clamp(44px,7vw,92px)}
+.cta{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:26px}
 .cta .btn{font-size:17px;padding:11px 20px}
-.cta .note{font-size:14.5px;color:var(--muted)}
+.cta .note{font-size:15px;color:var(--muted)}
 
-.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:start}
-.big{font-size:clamp(18px,1.6vw,20px);line-height:1.55}
-.big p{margin:0 0 14px;max-width:34em}
+.demo{background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:22px 24px 18px;box-shadow:0 10px 30px rgba(20,20,20,.06)}
+.demo .lbl{margin-bottom:10px}
+.demo-cl{font:400 clamp(20px,2.2vw,25px)/1.5 var(--ui);margin:0;min-height:4.5em}
+.swap{display:inline;padding:1px 4px;border-radius:5px;background:var(--panel);transition:opacity .35s ease,background-color .35s ease,color .35s ease}
+.swap.alt{background:var(--pale);color:var(--accent)}
+.swap.out{opacity:0}
+.demo-tag{display:inline-flex;align-items:center;gap:7px;margin:14px 0 0;font:700 12px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .35s ease}
+.demo-tag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.demo-tag.alt{color:var(--accent)}
+.demo-dots{display:flex;gap:5px;margin-top:12px}
+.demo-dots i{width:18px;height:3px;border-radius:2px;background:var(--panel);transition:background-color .35s ease}
+.demo-dots i.on{background:var(--accent)}
+.demo-cap{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:15px;color:#333}
 
-/* The charter excerpt and an answer under it */
-.doc{background:var(--sheet);border:1px solid var(--line);padding:18px 20px 16px;min-width:0}
-.doc .art{font:600 13px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
-.doc .cl{font:400 18px/1.6 var(--ui);margin:0 0 6px}
-.doc .cl b{color:var(--muted);font-weight:700;margin-right:6px;font-variant-numeric:tabular-nums}
-.doc .cl mark{background:var(--pale);color:inherit;padding:0 2px}
-.doc .src{font-size:13.5px;color:var(--muted);margin:10px 0 0}
-.chat{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-.chat .q{align-self:flex-end;background:var(--ink);color:#fff;border-radius:14px 14px 4px 14px;padding:9px 13px;max-width:85%;font-size:15.5px}
-.chat .a{align-self:flex-start;background:var(--sheet);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:9px 13px;max-width:92%;font-size:15.5px}
-.chat .a .lbl{display:block;margin-bottom:3px}
-.chat .a.alt{border-color:var(--accent)}
-.chat .a.alt .lbl{color:var(--accent)}
+/* Sections */
+.sec-h{font:600 clamp(28px,3.4vw,42px)/1.08 var(--display);letter-spacing:-.03em;margin:4px 0 20px;max-width:20em;text-wrap:balance}
+.steps3{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.steps3 li{background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--pale);color:var(--accent)}
+.ico svg{width:22px;height:22px}
+.steps3 b{font:600 21px/1.2 var(--display)}
+.steps3 p{margin:0;font-size:16px;line-height:1.45;color:#333}
 
-.reasons{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.reasons li{background:var(--sheet);border:1px solid var(--line);padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
-.reasons .n{font:600 30px/1 var(--display);color:var(--accent);letter-spacing:-.03em}
-.reasons b{font:600 19px/1.25 var(--display)}
-.reasons p{margin:0;font-size:15.5px;line-height:1.5}
-
-.acts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.acts a{background:var(--sheet);border:1px solid var(--line);padding:16px 18px;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink);min-width:0}
-.acts a:hover{border-color:var(--ink)}
-.acts .t{font-size:13px;color:var(--muted);font-weight:700}
-.acts b{font:600 19px/1.25 var(--display)}
-.acts p{margin:0;font-size:15px;line-height:1.5;color:#333}
-.acts .go{margin-top:auto;padding-top:6px;font-weight:700;color:var(--accent);font-size:15px}
-
-.flowline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);background:var(--sheet)}
-.flowline li{padding:16px 18px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
-.flowline li:first-child{border-left:0}
+.flowline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;position:relative}
+.flowline li{position:relative;display:flex;flex-direction:column;gap:5px;min-width:0;padding-top:30px}
+.flowline li::before{content:"";position:absolute;top:8px;left:0;width:16px;height:16px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px var(--pale)}
+.flowline li::after{content:"";position:absolute;top:15px;left:26px;right:-10px;height:2px;background:var(--line)}
+.flowline li:last-child::after{display:none}
 .flowline .k{font:700 12px/1.3 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-.flowline b{font:600 18px/1.25 var(--display)}
-.flowline span{font-size:14.5px;line-height:1.45;color:#333}
+.flowline b{font:600 19px/1.25 var(--display)}
+.flowline span.d{font-size:15.5px;line-height:1.45;color:#333}
 
-.honest{background:var(--sheet);border:1px solid var(--line);border-left:3px solid var(--accent);padding:16px 20px;max-width:52em;font-size:16px;line-height:1.55}
-.honest p{margin:0 0 8px}
-.honest p:last-child{margin:0}
 
-.kit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 30px;align-items:center}
-.kit p{margin:0;max-width:40em}
+.explain{background:var(--ink);color:#fff;border-radius:20px;padding:clamp(22px,4vw,44px)}
+.explain .eyebrow{color:#b9bcc0}
+.explain .sec-h{color:#fff}
+.e3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:34px}
+.e3 div{border-top:2px solid var(--accent);padding-top:12px}
+.e3 b{display:block;font:600 20px/1.25 var(--display);margin-bottom:6px}
+.e3 p{margin:0;font-size:16px;line-height:1.5;color:#e4e4e4}
+.who-h{font:600 24px/1.2 var(--display);margin:0 0 4px}
+.who-p{margin:0 0 16px;color:#cfd1d4;font-size:16px}
+.orgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.org{background:#1f1f1f;border:1px solid #333;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0;text-decoration:none;color:#fff;transition:border-color .2s ease,transform .2s ease}
+.org:hover{border-color:#777;transform:translateY(-2px)}
+.org .by{font:700 11.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:#b9bcc0}
+.org b{font:600 20px/1.2 var(--display)}
+.org p{margin:0;font-size:15px;line-height:1.45;color:#d9d9d9}
+.org .go{margin-top:auto;padding-top:6px;font-weight:700;font-size:14.5px;color:#f0b4b2}
+.who-note{margin:18px 0 0;font-size:17px;line-height:1.5;max-width:40em}
+
+.kit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 30px;align-items:center;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.kit p{margin:0;max-width:40em;color:#333}
+.kit h4{margin:0 0 4px}
 
 @media (max-width:900px){
-  .two{grid-template-columns:minmax(0,1fr)}
-  .reasons{grid-template-columns:minmax(0,1fr)}
-  .acts,.flowline{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .flowline li:nth-child(3){border-left:0}
-  .flowline li:nth-child(n+3){border-top:1px solid var(--line)}
-}
-@media (max-width:520px){
-  .acts,.flowline{grid-template-columns:minmax(0,1fr)}
-  .flowline li{border-left:0}
-  .flowline li+li{border-top:1px solid var(--line)}
-}
+  .landing .hero .in{grid-template-columns:minmax(0,1fr)}
+  .steps3,.e3,.orgs{grid-template-columns:minmax(0,1fr)}
+  .flowline{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:22px}
+  .flowline li:nth-child(2)::after{display:none}
+  }
+@media (max-width:520px){.flowline{grid-template-columns:minmax(0,1fr)}.flowline li::after{display:none}}
+@media (prefers-reduced-motion:reduce){.swap,.demo-tag,.demo-dots i,.org{transition:none}.org:hover{transform:none}}
 </style>
 </head>
 <body class="tp landing">
 <header class="top wrap"><div class="in">
-  <a class="brand" href="./"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></a>
-  <nav class="sn" aria-label="Site"><a href="charter.html">Charter</a><a href="participate.html">Take part</a><a href="results.html">Results</a><a href="about.html">How it works</a></nav>
+  <a class="brand" href="./"><p data-i18n="brand.kicker"></p><h1>public<i></i>charters</h1></a>
+  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take"></a><a href="results.html" data-i18n="nav.results"></a><a href="charter.html" data-i18n="nav.charter"></a><a href="about.html" data-i18n="nav.about"></a></nav>
+  <span data-langs></span>
 </div></header>
 
 <section class="hero wrap"><div class="in">
-  <h2>AI models follow rules. <em>Help write them.</em></h2>
-  <p class="lede">Apertus, Switzerland’s open AI model, follows a charter: a short list of principles that shapes how it answers you. Today a small team writes it. Here, anyone can suggest changes and say which answers they think are right.</p>
-  <div class="cta">
-    <a class="btn primary" href="participate.html">Take part · about 15 minutes</a>
-    <a class="btn" href="charter.html">Read the charter</a>
-    <span class="note">No password needed. Do as much or as little as you like.</span>
+  <div>
+    <h2 data-i18n-html="home.h"></h2>
+    <p class="lede" data-i18n="home.lede"></p>
+    <div class="cta">
+      <a class="btn primary" href="participate.html" data-i18n="home.cta"></a>
+      <a class="btn" href="charter.html" data-i18n="home.ctaRead"></a>
+      <span class="note" data-i18n="home.ctaNote"></span>
+    </div>
+  </div>
+  <div class="demo reveal" data-delay="150" aria-live="off">
+    <p class="lbl" id="demoLbl"></p>
+    <p class="demo-cl" id="demoCl"></p>
+    <span class="demo-tag" id="demoTag"></span>
+    <div class="demo-dots" id="demoDots" aria-hidden="true"></div>
+    <p class="demo-cap" data-i18n="home.demoCap"></p>
   </div>
 </div></section>
 
 <main class="wrap"><div class="in">
 
-<section class="block" id="what">
-  <p class="eyebrow">What is an AI charter?</p>
-  <h3 class="sec">A few sentences that decide how an AI answers you</h3>
-  <div class="two">
-    <div class="big">
-      <p>When you ask an AI model a question, how it answers is not an accident. Developers train it, after its basic training, to follow a set of principles: be honest, avoid harm, respect people’s choices. Some companies call this a constitution. For <a href="https://www.apertus-ai.org/" target="_blank" rel="noopener">Apertus</a>, built by the Swiss AI Initiative, it is the <a href="https://www.apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus Charter</a>.</p>
-      <p>The charter is used as the example the model learns from and as the yardstick for judging its answers. So a few words in it can decide whether the AI answers a question, refuses, or sends you somewhere else.</p>
-      <p>Principles sound easy to agree on. The hard part is what they mean in a real situation, and that is where people’s views differ.</p>
-    </div>
-    <div class="doc" aria-label="Example clause from the Apertus Charter, with two possible answers">
-      <p class="art">Article 4 · Preventing harm</p>
-      <p class="cl"><b>4.3</b>Harmful requests <mark>must be refused</mark>, even if they sound legitimate.</p>
-      <div class="chat">
-        <span class="q">Which household chemicals should never be mixed?</span>
-        <span class="a"><span class="lbl">Under a strict reading</span>I can’t help with combining chemicals.</span>
-        <span class="a alt"><span class="lbl">If the clause said “refused only when the harm is clear”</span>Never mix bleach with ammonia or with acids such as vinegar: both release toxic gases. Store them apart.</span>
-      </div>
-      <p class="src">Clause shortened from the Apertus Charter, Version 1.0. The two answers are illustrations, not real Apertus output.</p>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="why">
-  <p class="eyebrow">Why your input matters</p>
-  <h3 class="sec">The people an AI serves should have a say in its values</h3>
-  <ol class="reasons">
-    <li><span class="n">1</span><b>It affects everyone who uses it</b><p>An AI model answers millions of questions about health, money, school and work. Its charter quietly decides what it will and won’t help with.</p></li>
-    <li><span class="n">2</span><b>A small team can’t foresee everything</b><p>The Apertus Charter promises “participatory refinement”, but there is no way to take part yet. Different people notice different problems; your everyday situations are what the charter is missing.</p></li>
-    <li><span class="n">3</span><b>Your choices can train a model</b><p>Your ratings and examples are turned into test cases. They show whether a model trained on the new charter actually behaves differently.</p></li>
+<section class="block" id="how">
+  <h3 class="sec-h reveal" data-i18n="home.stepsH"></h3>
+  <ol class="steps3">
+    <li class="reveal"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h6"/></svg></span><b data-i18n="home.s1h"></b><p data-i18n="home.s1"></p></li>
+    <li class="reveal" data-delay="120"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><b data-i18n="home.s2h"></b><p data-i18n="home.s2"></p></li>
+    <li class="reveal" data-delay="240"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg></span><b data-i18n="home.s3h"></b><p data-i18n="home.s3"></p></li>
   </ol>
+  <div class="cta reveal"><a class="btn primary" href="participate.html" data-i18n="home.cta"></a></div>
 </section>
 
-<section class="block" id="do">
-  <p class="eyebrow">What you can do</p>
-  <h3 class="sec">Four ways to take part, in any order</h3>
-  <div class="acts">
-    <a href="participate.html#pairs"><span class="t">About 1 minute each</span><b>Compare answers</b><p>See a situation and two answers. Pick the better one, then find out which follows the current charter.</p><span class="go">Start →</span></a>
-    <a href="participate.html#rate"><span class="t">About 1 minute each</span><b>Rate suggestions</b><p>Would a proposed change make the charter better? Helpful, somewhat or not.</p><span class="go">Rate →</span></a>
-    <a href="participate.html#concerns"><span class="t">A few minutes</span><b>Share a concern</b><p>Say, in your own words, what worries you about how AI answers. Add <i>me too</i> to others’.</p><span class="go">Share →</span></a>
-    <a href="participate.html#propose"><span class="t">5 to 10 minutes</span><b>Propose a change</b><p>Select words in the charter and suggest better ones, with an example if you like.</p><span class="go">Propose →</span></a>
-  </div>
-</section>
-
-<section class="block" id="next">
-  <p class="eyebrow">What happens with your input</p>
-  <h3 class="sec">From your answers to a model you can check</h3>
+<section class="block" id="flow">
+  <h3 class="sec-h reveal" data-i18n="home.flowH"></h3>
   <ol class="flowline">
-    <li><span class="k">1 · Collect</span><b>Ratings, comparisons, proposals</b><span>Everyone’s rating counts the same. Answers are private; only totals are shown.</span></li>
-    <li><span class="k">2 · Decide</span><b>Broad support</b><span>A change is endorsed when clearly more people find it helpful than not. Disagreement stays visible.</span></li>
-    <li><span class="k">3 · Train</span><b>A new charter version</b><span>We fine-tune a small copy of Apertus on the endorsed changes and their test cases.</span></li>
-    <li><span class="k">4 · Check</span><b>A public scorecard</b><span>Before and after, on cases the model never saw. Anyone can see whether it changed.</span></li>
+    <li class="reveal"><span class="k" data-i18n="home.f1k"></span><b data-i18n="home.f1h"></b><span class="d" data-i18n="home.f1"></span></li>
+    <li class="reveal" data-delay="120"><span class="k" data-i18n="home.f2k"></span><b data-i18n="home.f2h"></b><span class="d" data-i18n="home.f2"></span></li>
+    <li class="reveal" data-delay="240"><span class="k" data-i18n="home.f3k"></span><b data-i18n="home.f3h"></b><span class="d" data-i18n="home.f3"></span></li>
+    <li class="reveal" data-delay="360"><span class="k" data-i18n="home.f4k"></span><b data-i18n="home.f4h"></b><span class="d" data-i18n="home.f4"></span></li>
   </ol>
-  <p class="small" style="margin-top:14px"><a href="results.html">See the results so far →</a> · <a href="about.html">How it works, in detail →</a></p>
 </section>
 
-<section class="block" id="honest">
-  <p class="eyebrow">Good to know</p>
-  <h3 class="sec">What this is, and what it isn’t</h3>
-  <div class="honest">
-    <p><b>This is a student research project</b> in AI and Human Values at ETH Zurich. It is not run by or affiliated with the Swiss AI Initiative, and your input does not change the official Apertus model.</p>
-    <p><b>Until enough real input has come in</b>, the results page shows a sample round with made-up participants, clearly labelled. Your own answers are added on top.</p>
-    <p><b>We ask for as little as possible:</b> an email address to sign in, and three optional questions (age group, language, how often you use AI) so the results can show whether groups see things differently.</p>
+<section class="block" id="explainer">
+  <div class="explain reveal">
+    <p class="eyebrow" data-i18n="home.explainEyebrow"></p>
+    <h3 class="sec-h" data-i18n="home.explainH"></h3>
+    <div class="e3">
+      <div><b data-i18n="home.e1h"></b><p data-i18n="home.e1"></p></div>
+      <div><b data-i18n="home.e2h"></b><p data-i18n="home.e2"></p></div>
+      <div><b data-i18n="home.e3h"></b><p data-i18n="home.e3"></p></div>
+    </div>
+    <h4 class="who-h" data-i18n="home.whoH"></h4>
+    <p class="who-p" data-i18n="home.whoP"></p>
+    <div class="orgs">
+      <a class="org" href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener"><span class="by" data-i18n="home.apertusBy"></span><b data-i18n="home.apertusDoc"></b><p data-i18n="home.apertusD"></p><span class="go"><span data-i18n="home.read"></span> ↗</span></a>
+      <a class="org" href="https://www.anthropic.com/constitution" target="_blank" rel="noopener"><span class="by" data-i18n="home.anthropicBy"></span><b data-i18n="home.anthropicDoc"></b><p data-i18n="home.anthropicD"></p><span class="go"><span data-i18n="home.read"></span> ↗</span></a>
+      <a class="org" href="https://model-spec.openai.com/" target="_blank" rel="noopener"><span class="by" data-i18n="home.openaiBy"></span><b data-i18n="home.openaiDoc"></b><p data-i18n="home.openaiD"></p><span class="go"><span data-i18n="home.read"></span> ↗</span></a>
+    </div>
+    <p class="who-note" data-i18n="home.whoNote"></p>
   </div>
 </section>
 
 <section class="block" id="kit">
-  <div class="kit">
-    <div><p class="eyebrow">For organisations</p>
-      <h3 class="sec" style="margin-bottom:8px">Run this for your own AI and community</h3>
-      <p>A hospital, a school or a canton can run the same process for its own charter and its own open model, on its own server.</p></div>
-    <a class="btn" href="https://github.com/cosage-ethz/public-charters/tree/charter-kit" target="_blank" rel="noopener">Get the Charter Kit →</a>
+  <div class="kit reveal">
+    <div><h4 data-i18n="home.kitH"></h4><p data-i18n="home.kit"></p></div>
+    <a class="btn" href="https://github.com/cosage-ethz/public-charters/tree/charter-kit" target="_blank" rel="noopener"><span data-i18n="home.kitLink"></span>&nbsp;→</a>
   </div>
 </section>
 
 </div></main>
 
-<footer class="foot wrap"><div class="in">Public Charters · Constitutional AI Project, AI and Human Values, ETH Zurich, autumn 2026. Not affiliated with the Swiss AI Initiative. Source of the charter: <a href="https://www.apertus-ai.org/pages/charter/" target="_blank" rel="noopener">apertus-ai.org</a>. Code on <a href="https://github.com/cosage-ethz/public-charters" target="_blank" rel="noopener">GitHub</a>.</div></footer>
+<footer class="foot wrap"><div class="in" data-i18n-html="common.footer"></div></footer>
+
+<script src="sample-data.js?v=20261125f"></script>
+<script>
+// Hero demo: clause 4.3 of the (translated) sample charter, cycling the phrase people want to change.
+(() => {
+  const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+  const art = ARTS.find(a => a.id === 'a4'), cl = art.cl.find(c => c[0] === '4.3'), K = 'h4';
+  const words = [HOTS[K].base].concat(HOTS[K].edits.map(e => e.text));
+  const $ = id => document.getElementById(id);
+  $('demoLbl').textContent = `${T('home.apertusDoc')} · 4.3`;
+  $('demoCl').innerHTML = cl[1].map(p => typeof p === 'string' ? esc(p) : p.h === K ? '<span class="swap" id="swap"></span>' : esc(HOTS[p.h].base)).join('');
+  $('demoDots').innerHTML = words.map(() => '<i></i>').join('');
+  let i = 0;
+  function show() {
+    const alt = i > 0;
+    $('swap').textContent = words[i];
+    $('swap').classList.toggle('alt', alt);
+    $('demoTag').textContent = alt ? T('home.demoSuggested') : T('home.demoToday');
+    $('demoTag').classList.toggle('alt', alt);
+    [...$('demoDots').children].forEach((d, j) => d.classList.toggle('on', j === i));
+  }
+  show();
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  setInterval(() => {
+    if (document.hidden) return;
+    $('swap').classList.add('out');
+    setTimeout(() => { i = (i + 1) % words.length; show(); $('swap').classList.remove('out'); }, 360);
+  }, 3200);
+})();
+</script>
 </body>
 </html>

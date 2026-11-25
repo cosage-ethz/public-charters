@@ -18,6 +18,16 @@
 .sn a[aria-current="page"]{color:#fff;background:var(--ink)}
 @media (max-width:560px){.sn{width:100%;justify-content:space-between}.sn a{padding:6px 9px;font-size:14px}}
 
+/* Scroll-in animation (motion.js adds .motion to <html> unless reduced motion is on) */
+.motion .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.motion .reveal.on{opacity:1;transform:none}
+
+/* Language switch: EN · DE · FR */
+.langs{display:inline-flex;gap:2px;align-items:center;font:700 13px/1 var(--ui)}
+.langs a{color:var(--muted);text-decoration:none;padding:6px 7px;border-radius:6px;letter-spacing:.04em}
+.langs a:hover{color:var(--ink);background:var(--sheet)}
+.langs a[aria-current="true"]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent);border-radius:0}
+
 /* Text pages */
 .tp *{box-sizing:border-box}
 body.tp{margin:0;background:var(--desk);color:var(--ink);font:400 17px/1.6 var(--ui);overflow-x:hidden}

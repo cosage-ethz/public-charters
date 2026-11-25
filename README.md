@@ -21,13 +21,18 @@ This branch (`main`) is the public website for the Apertus Charter. The [`charte
 
 ```
 .
-├── index.html            # landing page: what an AI charter is, why take part (public-charters.coraliesage.com)
-├── charter.html          # Charter: the overlay viewer of the Apertus Charter
-├── participate.html      # Take part: compare answers, rate, concerns, propose (optional background)
-├── results.html          # Results: status of every suggestion, breakdowns, charter check, concerns, safety floor, feedback
-├── about.html            # How it works: the process, the research behind it, and the Charter Kit
-├── organise.html         # Organise (admins only, not in the menu): phases, participation, invitations
-├── sample-data.js        # sample charter, proposals and test cases used by the prototype pages
+├── index.html            # home: what an AI charter is, why take part (public-charters.coraliesage.com)
+├── participate.html      # Take part: rate changes one at a time, suggest your own
+├── results.html          # Results: how each suggested change was rated, with breakdowns
+├── charter.html          # The charter: the overlay viewer of the Apertus Charter
+├── about.html            # About: what this is, how we count, your data, research behind it
+├── organise.html         # Organise (admins only, English only, not in the menu)
+├── lang/
+│   ├── en.js             # all English text
+│   ├── de.js             # all German text, incl. translated charter excerpt (draft: needs native review)
+│   └── fr.js             # all French text, incl. translated charter excerpt (draft: needs native review)
+├── i18n.js               # picks the language (?lang=, saved choice, browser) and fills in the text
+├── sample-data.js        # sample charter excerpt, suggested changes and examples (English; translations in lang/)
 ├── bridge.js             # the scoring rule: net support, breakdowns, dissent record (browser and Node)
 ├── community.js          # the sample round (140 made-up participants), plus this browser's own input
 ├── journey.js            # logic of the Take part page
@@ -44,7 +49,34 @@ This branch (`main`) is the public website for the Apertus Charter. The [`charte
 └── CNAME                 # record for the website
 ```
 
+## Languages
+
+The site is in English, German and French. A visitor's language comes from the link (`?lang=de`), then their earlier choice, then their browser, then English; the EN · DE · FR switch is at the top of every page. All text is in `lang/en.js`, `lang/de.js` and `lang/fr.js`, with the same keys in each, so wording can be corrected without touching the code. To add a language, copy `lang/en.js`, translate it (including the `sample` section, see `lang/de.js`), load it in each page's `<head>` and add its code to `LANGS` in `i18n.js`.
+
+The Apertus Charter is published in English only, so the German and French charter sentences are our own translations. Both translations are drafts and should be checked by native speakers before launch. Suggestions made in German or French store the quoted words and the language with them (`anchor.lang`), since the database holds the English charter text.
+
+## Editing the text
+
+Every word on the site lives in three files, one per language, with the same structure:
+
+| File | What's in it |
+|---|---|
+| `lang/en.js` | English |
+| `lang/de.js` | German (Swiss spelling, formal *Sie*) |
+| `lang/fr.js` | French (*vous*) |
+
+Each file is grouped by page: `home` (homepage), `take`, `join`, `rate`, `propose`, `done` (Take part), `results`, `about`, `viewer` (the charter page), plus shared bits (`nav`, `status`, `answer`, `form`, `acct`, `demo`, `common`). Change only the text between the quotes; keep the key names on the left identical in all three files.
+
+- `<b>…</b>` makes text bold, `<em>…</em>` makes the second part of a big headline red, and `<a href="…">…</a>` is a link.
+- `{n}`, `{email}`, `{name}` and similar are filled in automatically; keep them as they are.
+- A quote mark inside a text must be written as `’` (typographic apostrophe), not `'`, or the file breaks.
+- Keys ending in `_one` are the singular version of the key without it (for example `rate.count` / `rate.count_one`).
+
+The charter sentences and the sample suggestions are separate: English in `sample-data.js`, German and French under `sample` at the end of `lang/de.js` and `lang/fr.js`. After editing, reload the page; if a page goes blank, the browser console names the line with the problem.
+
 ## How the public site works
+
+*(Simplified on 25 November: Take part now has only "rate changes" and "suggest your own change", without test cases. The comparison of answers, concerns and surveys were removed from the public site.)*
 
 Anyone can take part in one open round on the Apertus Charter. People sign in with their email (no password), optionally answer three profile questions (age group, main language, how often they use AI chatbots), and then, in any order:
 

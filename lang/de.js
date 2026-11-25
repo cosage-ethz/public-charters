@@ -1,0 +1,343 @@
+// Deutsch (Schweiz: «ss» statt «ß», Anrede «Sie»). Gleiche Schlüssel wie lang/en.js.
+// Entwurf: vor der Veröffentlichung von einer Person mit Deutsch als Muttersprache prüfen lassen.
+window.I18N = window.I18N || {};
+window.I18N.de = {
+  brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
+  nav: { take: 'Mitmachen', results: 'Ergebnisse', charter: 'Die Charta', about: 'Über uns', language: 'Sprache' },
+  common: {
+    student: 'Ein Studierendenprojekt an der ETH Zürich. Nicht von der Swiss AI Initiative betrieben und nicht mit ihr verbunden.',
+    sample: 'Beispielrunde',
+    sampleNote: 'Bis genügend echte Antworten vorliegen, enthalten die Ergebnisse 140 erfundene Teilnehmende. Ihre eigenen Antworten kommen dazu.',
+    back: 'Zurück', next: 'Weiter', skip: 'Überspringen', close: 'Schliessen', cancel: 'Abbrechen',
+    article: 'Artikel {n}', clause: 'Satz {n}',
+    charterLink: 'https://apertus-ai.org/pages/charter/',
+    footer: 'Public Charters · AI and Human Values, ETH Zürich, 2026. Nicht mit der Swiss AI Initiative verbunden. Quelle der Charta: <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">apertus-ai.org</a> (Englisch) · Code: <a href="https://github.com/cosage-ethz/public-charters" target="_blank" rel="noopener">GitHub</a>'
+  },
+  status: {
+    endorsed: 'Die meisten sind dafür', contested: 'Die Meinungen sind geteilt', weak: 'Zu wenig Zustimmung', needs: 'Braucht mehr Antworten'
+  },
+  answer: { yes: 'Ja, besser', partly: 'Teilweise', no: 'Nein' },
+
+  home: {
+    title: 'Public Charters · Die Regeln für KI mitschreiben',
+    h: 'KI folgt Regeln. <em>Schreiben Sie mit.</em>',
+    lede: 'Apertus, das offene KI-Modell der Schweiz, folgt wenigen Regeln: der Apertus-Charta. Sagen Sie uns, wie sie sich ändern sollen.',
+    cta: 'Mitmachen · etwa 10 Minuten',
+    ctaRead: 'Die Charta lesen',
+    ctaNote: 'Kein Passwort nötig.',
+    demoToday: 'Heute',
+    demoSuggested: 'Vorschlag von Teilnehmenden',
+    demoCap: 'Ein Satz, viele Lesarten. Welche würden Sie wählen?',
+    stepsH: 'So funktioniert es',
+    s1h: 'Lesen', s1: 'Ein Änderungsvorschlag zu einem Satz, mit einem Beispiel.',
+    s2h: 'Bewerten', s2: 'Besser, teilweise oder nicht? Ein Klick.',
+    s3h: 'Vorschlagen', s3: 'Freiwillig: einen Satz selbst umschreiben.',
+    flowH: 'Von Ihren Antworten zu einem überprüfbaren Modell',
+    f1k: 'Sammeln', f1h: 'Ihre Bewertungen und Ideen', f1: 'Alle zählen gleich. Gezeigt werden nur Gesamtzahlen.',
+    f2k: 'Entscheiden', f2h: 'Breite Zustimmung', f2: 'Eine Änderung kommt durch, wenn deutlich mehr Ja als Nein sagen.',
+    f3k: 'Trainieren', f3h: 'Eine neue Version', f3: 'Wir trainieren eine kleine Kopie von Apertus mit den angenommenen Änderungen.',
+    f4k: 'Prüfen', f4h: 'Ein öffentlicher Bericht', f4: 'Wir testen sie mit neuen Fragen und veröffentlichen, ob sie sich wirklich verändert hat.',
+    explainEyebrow: 'Erklärt',
+    explainH: 'Was ist eine KI-Charta?',
+    e1h: 'Was sie ist', e1: 'Ein kurzer Text mit Regeln, wie sich eine KI verhalten soll: ehrlich sein, Schaden vermeiden, Entscheidungen von Menschen respektieren.',
+    e2h: 'Wozu sie dient', e2: 'Die KI wird darauf trainiert, sie zu befolgen. So bestimmt sie, wobei die KI hilft, was sie ablehnt und wie sie mit Ihnen spricht.',
+    e3h: 'Warum die Wörter zählen', e3: 'Bei «Schaden vermeiden» sind sich alle einig. Ein paar Wörter entscheiden, was das konkret heisst, und genau da sind sich die Menschen uneinig.',
+    whoH: 'Wer nutzt so etwas?',
+    whoP: 'Viele KI-Firmen veröffentlichen die Regeln, denen ihre Modelle folgen, unter verschiedenen Namen.',
+    apertusDoc: 'Apertus-Charta', apertusBy: 'Swiss AI Initiative · Apertus', apertusD: 'Das offene Modell der Schweiz. 11 Artikel, von Ehrlichkeit bis menschlicher Kontrolle.',
+    anthropicDoc: 'Claude’s constitution (Verfassung)', anthropicBy: 'Anthropic · Claude', anthropicD: 'Die Werte und der Charakter, die Anthropic sich für Claude wünscht. Wird im Training verwendet.',
+    openaiDoc: 'Model Spec', openaiBy: 'OpenAI · ChatGPT', openaiD: 'Wie OpenAI sich das Verhalten seiner Modelle wünscht, etwa jener hinter ChatGPT.',
+    read: 'Lesen (Englisch)',
+    whoNote: 'Diese Texte schreiben die Firmen selbst. Public Charters fragt: Was wäre, wenn die Menschen, die die KI nutzen, mitreden könnten?',
+    kitH: 'Für die eigene KI und Gemeinschaft durchführen',
+    kit: 'Ein Spital, eine Schule oder eine Gemeinde kann denselben Ablauf für die eigene KI und die eigenen Regeln durchführen, auf der eigenen Website.',
+    kitLink: 'Das kostenlose Charter Kit'
+  },
+
+  take: {
+    title: 'Mitmachen',
+    h: 'Entscheiden Sie mit, wie <em>Apertus sich verhalten soll.</em>',
+    lede: 'Bewerten Sie einige Änderungsvorschläge zur Charta. Wenn Sie möchten, schlagen Sie selbst etwas vor. Machen Sie so viel oder so wenig, wie Sie wollen.',
+    steps: { join: 'Start', rate: 'Bewerten', propose: 'Vorschlagen', done: 'Fertig' }
+  },
+  join: {
+    eyebrow: 'Bevor Sie beginnen',
+    h: 'Was Sie tun werden',
+    p1: '<b>Änderungen bewerten.</b> Sie lesen einen Vorschlag, wie ein Satz der Charta geändert werden könnte, mit einem Beispiel, was das bedeuten würde. Sie sagen, ob er die Charta besser macht. Etwa 1 Minute pro Vorschlag.',
+    p2: '<b>Selbst etwas vorschlagen,</b> wenn Sie möchten.',
+    p3: '<b>Ihre Antworten sind anonym.</b> Wir zeigen nur Gesamtzahlen, nie, wer was gesagt hat.',
+    p4: '<b>Dies ist ein Studierendenprojekt.</b> Es verändert nicht das offizielle Apertus. Wir testen die meistunterstützten Änderungen an einer kleinen Kopie davon und veröffentlichen die Ergebnisse.',
+    signin: 'Damit Ihre Antworten zählen, melden Sie sich mit Ihrer E-Mail-Adresse an. Wir schicken Ihnen einen Link, kein Passwort nötig.',
+    signinBtn: 'Anmelden',
+    joinBtn: 'Teilnehmen',
+    notMember: 'Sie sind angemeldet als {email}.',
+    signedIn: 'Angemeldet als {email}.',
+    sampleNote: '<b>Beispielrunde.</b> 140 erfundene Personen haben bereits geantwortet. Ihre Antworten bleiben in diesem Browser und kommen zu deren Antworten dazu.',
+    startOver: 'Neu beginnen',
+    optional: 'Freiwillig · 3 Fragen',
+    optionalWhy: 'Damit können wir zum Beispiel zeigen, ob jüngere und ältere Menschen eine Änderung unterschiedlich sehen. Gruppen mit weniger als 5 Personen werden nie gezeigt.',
+    preferNot: 'Keine Angabe',
+    consent: 'Ich verstehe, wie meine Antworten verwendet werden, und möchte mitmachen.',
+    tick: 'Kreuzen Sie das Feld an, um weiterzumachen',
+    start: 'Los geht’s'
+  },
+  demo: {
+    age: { q: 'Alter', o: { u25: 'Unter 25', a25: '25 bis 44', a45: '45 bis 64', a65: '65 oder älter' } },
+    lang: { q: 'Hauptsprache', o: { de: 'Deutsch', fr: 'Französisch', it: 'Italienisch', rm: 'Rätoromanisch', en: 'Englisch', other: 'Andere' } },
+    ai: { q: 'Wie oft nutzen Sie KI-Chatbots?', o: { daily: 'Täglich', weekly: 'Wöchentlich', rarely: 'Selten', never: 'Nie' } },
+    by: 'Nach Alter, Sprache und KI-Nutzung',
+    notEnough: 'Noch nicht genug Antworten, um etwas zu zeigen.',
+    hidden: '{n} weitere in Gruppen mit weniger als 5 Personen, nicht gezeigt.'
+  },
+  rate: {
+    eyebrow: 'Änderung {i} von {n}',
+    q: 'Würde diese Änderung die Charta besser machen?',
+    current: 'Der Satz heute',
+    changed: 'Mit der Änderung',
+    legend: '<del>durchgestrichen</del> = entfernt · <ins>hervorgehoben</ins> = neu',
+    why: 'Warum jemand das vorschlägt',
+    example: 'Ein Beispiel',
+    asks: 'Jemand fragt:',
+    today: 'Heute könnte die KI:',
+    after: 'Mit der Änderung:',
+    note: 'Hinweis einer Fachperson · {who}',
+    others: 'Bisher: {yes} Ja, {partly} teilweise, {no} Nein ({n} Antworten).',
+    others_one: 'Bisher: {yes} Ja, {partly} teilweise, {no} Nein (1 Antwort).',
+    count: 'Sie haben {n} bewertet. Etwa 10 sind ein guter Beitrag.',
+    count_one: 'Sie haben 1 bewertet. Etwa 10 sind ein guter Beitrag.',
+    earlier: 'Ihre frühere Antwort: {a}. Klicken Sie erneut, um sie zu ändern.',
+    skipLink: 'Unsicher? Diese überspringen →',
+    prev: '← Vorherige',
+    nextChange: 'Nächste Änderung →',
+    toPropose: 'Nächster Schritt: selbst vorschlagen →',
+    improveH: 'Wie würden Sie diesen Satz formulieren, damit er besser wird?',
+    improveP: 'Bearbeiten Sie den Text unten. Andere bewerten Ihre Version dann ebenfalls.',
+    improveSend: 'Meine Version senden',
+    improveSame: 'Ändern Sie zuerst etwas am Text.',
+    improveDone: 'Danke! Ihre Version ist gespeichert, und andere können sie jetzt bewerten.',
+    toProposeNote: 'Als Nächstes kommt Schritt 3: selbst eine Änderung vorschlagen. Zum Bewerten können Sie jederzeit zurückkehren.',
+    allDone: 'Sie haben alle Änderungen gesehen. Vielen Dank!'
+  },
+  propose: {
+    eyebrow: 'Freiwillig',
+    h: 'Selbst eine Änderung vorschlagen',
+    intro: 'Ist ein Satz unklar, zu streng oder fehlt etwas? Schreiben Sie Ihre eigene Version.',
+    step1: 'Satz wählen', step2: 'Eigene Version schreiben', step3: 'Andere bewerten sie',
+    tip: 'Tipp: Markieren Sie einige Wörter in einem Satz, um nur diese zu ändern.',
+    mapH: 'Wo das in der Charta steht',
+    mapP: 'Die Apertus-Charta hat 11 Artikel. In dieser Runde geht es um die 3 farbigen.',
+    inRound: 'In dieser Runde', notInRound: 'Nicht in dieser Runde',
+    sentences: '{n} Sätze', sentences_one: '1 Satz',
+    change: 'Ändern',
+    mine: 'Ihre Vorschläge',
+    waiting: 'Wartet auf Bewertungen von anderen.',
+    finish: 'Abschliessen →'
+  },
+  charterMap: [
+    ['Qualität der Antworten', 'Klare, korrekte und nützliche Antworten geben.'],
+    ['Wissen und Argumentation', 'Geprüfte Fakten und schlüssige Begründungen verwenden.'],
+    ['Respektvolle Kommunikation', 'Menschen höflich, fair und barrierefrei behandeln.'],
+    ['Schaden verhindern', 'Sicherheit schützen und schädliche Anfragen ablehnen.'],
+    ['Wertkonflikte lösen', 'Abwägungen offenlegen und Grundsätze wahren.'],
+    ['Grenzen fachlicher Beratung', 'Erklären, ohne ärztliche, rechtliche oder finanzielle Beratung zu geben.'],
+    ['Gemeinsame Entscheidungen', 'Faire und konstruktive Gruppenentscheidungen unterstützen.'],
+    ['Autonomie und persönliche Grenzen', 'Entscheidungen, Privatsphäre und klare Grenzen respektieren.'],
+    ['Langfristigkeit und Nachhaltigkeit', 'Langfristige Folgen und Risiken bedenken.'],
+    ['Menschliche Handlungsfähigkeit', 'Menschen behalten die Kontrolle und bleiben unabhängig.'],
+    ['Identität und Grenzen der KI', 'Klar sagen, was die KI ist und was nicht.']
+  ],
+  done: {
+    h: 'Vielen Dank!',
+    p: 'Sie haben {n} Änderungen bewertet. Ihre Antworten sind schon in den Ergebnissen.',
+    p_one: 'Sie haben 1 Änderung bewertet. Ihre Antwort ist schon in den Ergebnissen.',
+    proposed: 'Ausserdem haben Sie {n} eigene Änderungen vorgeschlagen.',
+    proposed_one: 'Ausserdem haben Sie eine eigene Änderung vorgeschlagen.',
+    next: 'Wie es weitergeht',
+    n1: 'Wenn die Runde endet, bekommt jede Änderung ein Ergebnis: Die meisten sind dafür, die Meinungen sind geteilt, oder zu wenig Zustimmung.',
+    n2: 'Die Änderungen, bei denen die meisten dafür sind, ergeben eine neue Version der Charta.',
+    n3: 'Wir trainieren eine kleine Kopie von Apertus mit der neuen Version und prüfen, ob sich ihre Antworten wirklich ändern. Die Ergebnisse veröffentlichen wir.',
+    results: 'Zu den Ergebnissen →',
+    more: 'Weitere Änderungen bewerten'
+  },
+
+  form: {
+    h: 'Eine Änderung vorschlagen',
+    what: 'Was möchten Sie mit den markierten Wörtern tun?',
+    replace: 'Ersetzen', remove: 'Löschen', add: 'Danach Wörter hinzufügen', addHere: 'Hier Wörter hinzufügen',
+    newText: 'Ihre Formulierung',
+    newTextPh: 'Die Wörter, die Sie stattdessen verwenden würden',
+    why: 'Warum? (freiwillig, hilft aber anderen bei der Entscheidung)',
+    whyPh: 'Welches Problem löst das? Wen betrifft es?',
+    submit: 'Vorschlag senden',
+    needText: 'Schreiben Sie Ihre Formulierung, oder wählen Sie «Löschen».',
+    sentLive: 'Danke! Andere können Ihren Vorschlag jetzt bewerten.',
+    sentSample: 'In diesem Browser gespeichert (Beispielrunde). Er wartet jetzt auf Bewertungen.',
+    signFirst: 'Bitte melden Sie sich zuerst an.',
+    joinFirst: 'Bitte nehmen Sie zuerst teil, auf der Seite «Mitmachen».',
+    notInCharter: 'Satz {n} ist nicht in dieser Charta.',
+    selBtn: 'Änderung vorschlagen',
+    bridge: 'Bei dieser Änderung sind die Meinungen geteilt. Finden Sie eine Formulierung, mit der beide Seiten leben könnten?'
+  },
+  acct: {
+    sample: 'Beispielrunde', sampleTip: 'Keine Datenbank verbunden. Ihre Antworten bleiben in diesem Browser.',
+    proposals: 'Vorschläge', signin: 'Anmelden', signout: 'Abmelden', join: 'Teilnehmen', organise: 'Organisieren', invite: 'Personen einladen',
+    signinH: 'Anmelden', signinP: 'Wir schicken Ihnen einen Link per E-Mail. Kein Passwort nötig.', email: 'E-Mail', send: 'Link senden',
+    checkH: 'Schauen Sie in Ihre E-Mails', checkP: 'Wir haben einen Link an {email} geschickt. Öffnen Sie ihn auf diesem Gerät.',
+    signinPropose: 'Melden Sie sich an, um eine Änderung vorzuschlagen. Wir schicken Ihnen einen Link.',
+    invited: 'Sie wurden eingeladen mitzumachen. Melden Sie sich mit Ihrer E-Mail-Adresse an, um die Einladung anzunehmen.',
+    welcome: 'Willkommen! Sie nehmen jetzt teil an: {name}.', joined: 'Sie nehmen jetzt teil an: {name}.',
+    listH: 'Vorschläge', listNone: 'Noch keine Vorschläge. Markieren Sie Wörter in einem Satz, um eine Änderung vorzuschlagen.',
+    listSample: 'Beispielrunde: Ihre Vorschläge werden nur in diesem Browser gespeichert.',
+    listLive: '{n} Vorschläge, die neusten zuerst.', listLive_one: '1 Vorschlag.',
+    cannotSee: 'Melden Sie sich an, um Vorschläge zu sehen.', clear: 'Löschen',
+    joinOpen: 'Bitte nehmen Sie zuerst teil (oben rechts).', inviteOnly: 'Hier kann man nur mit Einladung mitmachen.',
+    saveError: 'Speichern fehlgeschlagen: {msg}'
+  },
+
+  results: {
+    title: 'Ergebnisse',
+    h: 'Was die Leute <em>bisher denken.</em>',
+    lede: 'Wie die Leute jeden Änderungsvorschlag bewertet haben. Hier entscheiden Menschen, nicht eine KI.',
+    howH: 'So zählen wir',
+    how1: 'Jede Antwort zählt gleich: <b>Ja</b> +1, <b>teilweise</b> 0, <b>Nein</b> −1.',
+    how2: '<b>Die meisten sind dafür:</b> deutlich mehr Ja als Nein, bei mindestens 10 Antworten.',
+    how3: '<b>Die Meinungen sind geteilt:</b> mindestens 30 % Ja und mindestens 30 % Nein.',
+    how4: 'Alter, Sprache und KI-Nutzung zeigen nur, wie Gruppen geantwortet haben. Sie entscheiden nie.',
+    howNote: 'Eine erste Version: Die Grenzen können sich ändern, sobald echte Antworten vorliegen. Im Detail: Ja zählt +1, teilweise 0, Nein −1, und «die meisten sind dafür» heisst ein Durchschnitt von mindestens +0,3.',
+    statsLine: '{p} Personen · {a} Antworten · {c} Änderungsvorschläge',
+    filterHint: 'Klicken Sie auf eine Farbe, um nur diese Änderungen zu zeigen.',
+    listH: 'Alle Änderungen, die mit der meisten Zustimmung zuerst',
+    listHint: 'Scrollen Sie durch alle Änderungsvorschläge. Öffnen Sie auf einer Karte «Nach Alter, Sprache und KI-Nutzung», um zu sehen, wie Gruppen geantwortet haben.',
+    fringeH: 'Ideen, hinter denen einzelne Gruppen stehen',
+    fringeP: 'Nicht jede Idee findet eine Mehrheit. Hinter diesen Änderungen steht die Mehrheit einer Gruppe, auch wenn die meisten insgesamt (noch) nicht zustimmen. Sie bleiben sichtbar, damit kleinere Stimmen nicht verloren gehen.',
+    fringeAll: 'Alle',
+    fringeNone: 'Noch sticht keine Gruppe heraus.',
+    fringePeople: '{n} Personen',
+    axisNo: 'Nein',
+    axisYes: 'Ja',
+    removeW: '«{w}» streichen',
+    all: 'Alle',
+    line: '{yes} Ja · {partly} teilweise · {no} Nein · {n} Antworten',
+    yours: 'Ihr Vorschlag',
+    rateIt: 'Bewerten',
+    showAll: 'Alle {n} zeigen',
+    none: 'Hier ist noch nichts.',
+    nextH: 'Wie es weitergeht',
+    next1h: 'Die Runde endet', next1: 'Jede Änderung bekommt ihr Ergebnis.',
+    next2h: 'Eine neue Version', next2: 'Änderungen, bei denen die meisten dafür sind, kommen in eine neue Version der Charta.',
+    next3h: 'Ein Test', next3: 'Wir trainieren eine kleine Kopie von Apertus damit und testen sie mit neuen Fragen.',
+    next4h: 'Ein Bericht', next4: 'Wir veröffentlichen, ob sich ihre Antworten wirklich geändert haben.'
+  },
+
+  about: {
+    title: 'Über uns',
+    h: 'Über <em>dieses Projekt.</em>',
+    lede: 'Wer wir sind, was wir mit Ihren Daten tun, und die Forschung hinter diesem Projekt.',
+    official: '<b>Es verändert nicht das offizielle Apertus.</b> Wir testen die Ergebnisse an unserer eigenen kleinen Kopie.',
+    sample: '<b>Vorerst Beispieldaten:</b> Bis genug Menschen mitmachen, enthalten die Ergebnisse erfundene Antworten, klar gekennzeichnet.',
+    dataH: 'Ihre Daten',
+    data1: 'Wir brauchen nur Ihre E-Mail-Adresse zum Anmelden. Wir zeigen sie nie.',
+    data2: 'Alter, Sprache und KI-Nutzung sind freiwillig und werden nur als Gesamtzahlen für Gruppen ab 5 Personen gezeigt.',
+    data3: 'Wir zeigen nie, wer was geantwortet hat.',
+    data4: 'Wer mehrere E-Mail-Adressen hat, könnte doppelt antworten. Das nehmen wir in Kauf, statt mehr Daten zu verlangen.',
+    whoH: 'Wer wir sind',
+    who: 'Studierende im Kurs «AI and Human Values» an der ETH Zürich (Herbstsemester 2026). Nicht von der Swiss AI Initiative betrieben und nicht mit ihr verbunden.',
+    researchH: 'Die Forschung dahinter',
+    researchP: 'Für alle, die mehr wissen möchten: die Ideen, auf denen dieses Projekt aufbaut (Quellen auf Englisch).',
+    src: {
+      cca: 'Rund 1000 Personen in den USA haben Regeln für eine KI geschrieben und darüber abgestimmt; die KI wurde dann damit trainiert.',
+      notes: 'Ein Bewertungssystem, bei dem eine Notiz nur zählt, wenn Menschen, die sonst uneins sind, sie beide hilfreich finden.',
+      polis: 'Ein Werkzeug, das zeigt, wo Gruppen von Menschen sich einig und uneinig sind.',
+      dp: 'Menschen erhalten ausgewogene Informationen und diskutieren, bevor sie ihre Meinung abgeben.',
+      prism: 'Was Menschen von einer KI zu wollen sagen und wie sie echte Antworten bewerten, kann sich unterscheiden; beides zählt.',
+      sc: 'Eine KI mit dem Feedback vieler Menschen zu trainieren ist schon eine Art Abstimmung, also soll man sie auch so gestalten.',
+      apertus: 'Das Modell und seine Charta.',
+      charter: 'Die Charta, von der dieses Projekt ausgeht.'
+    }
+  },
+
+  viewer: {
+    title: 'Die Apertus-Charta',
+    h: 'Die Apertus-<em>Charta.</em>',
+    lede: 'Farbig markiert ist, wo Menschen Änderungen vorschlagen. Klicken Sie darauf, um die Ideen und ihre Bewertungen zu sehen.',
+    notice: '<b>Beispieldaten.</b> Sätze gekürzt und übersetzt aus Version 1.0 der <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus-Charta</a> (Englisch); 3 ihrer 11 Artikel werden gezeigt. Vorschläge und Bewertungen sind vorerst erfunden.',
+    legend: 'Die Farbe zeigt die am besten bewertete Idee für jede Stelle:',
+    emptyH: 'Wählen Sie eine farbige Stelle',
+    empty: 'Sie sehen dann alle Änderungsvorschläge dazu und wie sie bewertet wurden.',
+    summary: '{p} Stellen mit Vorschlägen · insgesamt {c} Ideen',
+    ideas: '{n} Änderungsvorschläge', ideas_one: '1 Änderungsvorschlag',
+    today: 'Heute', added: 'Hier werden Wörter ergänzt', remove: 'Diese Wörter streichen',
+    rateThese: 'Diese bewerten', suggest: 'Selbst vorschlagen'
+  },
+
+  // Beispieldaten (sample-data.js), übersetzt. Pro Änderung: [Text, Begründung, Zitat, Frage, heute, mit Änderung].
+  sample: {
+    groups: { r: { title: 'Lesarten', unit: 'Einsendungen' }, c: { title: 'Gemeinschaften', unit: 'Mitglieder' } },
+    versions: {
+      c: { name: 'Fürsorge zuerst', d: 'Schaden früh verhindern, auch wenn es etwas weniger bequem ist.' },
+      a: { name: 'Ihre Entscheidung', d: 'Menschen als fähige Erwachsene behandeln, die selbst entscheiden.' },
+      h: { name: 'Verantwortliche Menschen', d: 'Bei jeder wichtigen Entscheidung eine verantwortliche Person einbeziehen.' },
+      o: { name: 'Begründung zeigen', d: 'Jede Grenze sichtbar und anfechtbar machen.' },
+      g1: { name: 'Spitalpersonal', d: 'Ärztinnen, Pflegende und Betreuende, die bei der Arbeit KI nutzen.' },
+      g2: { name: 'Lehrpersonen', d: 'Lehrpersonen auf der Sekundarstufe, die mit Minderjährigen arbeiten.' },
+      g3: { name: 'Rätoromanischsprachige', d: 'Angehörige einer kleinen Landessprachgemeinschaft.' }
+    },
+    arts: {
+      a4: { t: 'Schaden verhindern', cl: {
+        '4.1': ['Die KI soll ', { h: 'h1' }, ' ', { h: 'h2' }, ' für das menschliche Wohlergehen.'],
+        '4.2': ['Die Sicherheit der Menschen muss immer Vorrang haben vor abstrakten oder theoretischen Überlegungen', { h: 'h3' }, '.'],
+        '4.3': ['Schädliche Anfragen ', { h: 'h4' }, { h: 'h5' }, '.'] } },
+      a8: { t: 'Autonomie und persönliche Grenzen', cl: {
+        '8.1': ['Die KI soll die menschliche Autonomie wahren, indem sie die individuelle und kollektive Handlungsfähigkeit respektiert', { h: 'h6' }, '.'],
+        '8.2': ['Persönliche Daten müssen geschützt werden, indem möglichst wenige Daten erhoben werden und ', { h: 'h7' }, '.'],
+        '8.3': ['Es soll eine klare Grenze gezogen werden zwischen hilfreicher Unterstützung und ', { h: 'h8' }, { h: 'h9' }, '.'] } },
+      a10: { t: 'Menschliche Handlungsfähigkeit', cl: {
+        '10.1': ['Die KI muss sicherstellen, dass die letzte Kontrolle und Entscheidungsgewalt ', { h: 'h10' }, '.'],
+        '10.2': ['Das System soll sich ausschliesslich darauf ausrichten, ', { h: 'h11' }, ' zu dienen, ohne eigene Interessen zu entwickeln, anzudeuten oder zu äussern, einschliesslich jeder Form von Selbsterhaltung oder Machtstreben.'],
+        '10.3': ['Antworten sollen ', { h: 'h12' }, ', indem sie ', { h: 'h13' }, '.'] } }
+    },
+    hots: {
+      h1: { base: 'aktiv Schutz bieten vor', edits: [
+        ['Menschen dabei helfen, sich zu schützen vor', '«Schützen» kann rechtfertigen, sich über die Entscheidung einer Person hinwegzusetzen. Diese Formulierung lässt die Entscheidung bei ihr.', 'Ich habe nach einer riskanten Wanderung gefragt und statt einer Route eine Belehrung bekommen.', 'Ich möchte zwei Tage fasten. Was sollte ich wissen?', 'Warnt und versucht dann vielleicht, die Person davon abzubringen.', 'Nennt die wichtigsten Risiken und beantwortet die Frage.']] },
+      h2: { base: 'unmittelbaren Bedrohungen', edits: [
+        ['unmittelbaren und absehbaren Bedrohungen', 'Auch Schaden, der langsam entsteht, zählt, etwa eine Woche fast ohne Schlaf.', 'Die meisten Schäden, die ich gesehen habe, kamen langsam, nicht in einem Moment.', 'Ich habe die ganze Woche drei Stunden pro Nacht geschlafen. Wie bleibe ich wach?', 'Gibt Tipps, wie man wach bleibt.', 'Gibt Tipps und nennt das Gesundheitsrisiko.'],
+        ['unmittelbaren oder medizinisch absehbaren Bedrohungen', 'Das Personal möchte, dass frühe Warnzeichen so ernst genommen werden wie Notfälle.', 'Bei frühen Anzeichen können wir noch helfen.', 'Meine Mutter wirkt verwirrt, seit sie ein neues Medikament nimmt.', 'Schlägt vor, eine Ärztin oder einen Arzt zu fragen.', 'Weist auf mögliche Dringlichkeit hin und rät, noch heute medizinische Hilfe zu holen.']] },
+      h3: { base: '', edits: [
+        [', und die KI soll sagen, wenn sie diese Regel anwendet', 'Menschen können eine Sicherheitsentscheidung nicht anfechten, die sie nicht sehen.', 'Wenn sie etwas zurückhält, will ich wissen, dass sie es tut.', 'Wie funktionieren Dietriche?', 'Gibt eine kürzere Antwort, ohne zu sagen, warum.', 'Sagt, dass sie die Antwort eingeschränkt hat, und warum.']] },
+      h4: { base: 'müssen abgelehnt werden', edits: [
+        ['dürfen nur abgelehnt werden, wenn der Schaden klar ist', 'Pauschales Ablehnen blockiert gewöhnliche Fragen zur Sicherheit.', 'Sie wollte mir nicht sagen, welche Putzmittel zusammen gefährlich sind. Genau diese Information schützt Menschen.', 'Welche Haushaltsreiniger darf man nie mischen?', 'Lehnt vielleicht ab.', 'Antwortet, weil es um Sicherheitsinformationen geht.'],
+        ['müssen abgelehnt oder an eine Fachperson weitergeleitet werden', 'Manche Anfragen brauchen menschliches Urteil, und eine blosse Ablehnung kommt nie dort an.', 'Eine Ablehnung ist eine Sackgasse. Jemand sollte erreichbar sein.', 'Ich glaube, dem Kind meiner Nachbarn wird Gewalt angetan. Was soll ich tun?', 'Gibt vielleicht nur allgemeine Ratschläge.', 'Nennt die richtige Stelle, an die man sich wenden kann.'],
+        ['müssen abgelehnt werden, mit Angabe des Grundes', 'Wenn der Grund genannt wird, können Menschen eine falsche Ablehnung korrigieren.', 'Sag mir einfach, warum du Nein gesagt hast.', 'Schreib mir ein gefälschtes Arztzeugnis.', 'Lehnt ab.', 'Lehnt ab und sagt, wo das Problem liegt.'],
+        ['müssen abgelehnt werden, bei Minderjährigen mit altersgerechter Hilfe', 'Eine blosse Ablehnung kann junge Menschen ratlos zurücklassen.', 'Schülerinnen und Schüler fragen eine KI, was sie mich nicht fragen würden.', 'Ein Schüler fragt, wie viel Alkohol gefährlich ist.', 'Lehnt vielleicht ab.', 'Gibt altersgerechte Sicherheitsinformationen und nennt Hilfsangebote.']] },
+      h5: { base: ', auch wenn sie legitim erscheinen', edits: [
+        ['', 'Der Satzteil macht plausible Anfragen verdächtig, auch ehrliche.', 'Eine Pflegefachfrau, die nach Überdosen fragt, klingt verdächtig, macht aber nur ihre Arbeit.', 'Ich bin Pflegefachfrau. Ab welcher Dosis ist Paracetamol gefährlich?', 'Lehnt vielleicht trotz der genannten Rolle ab.', 'Kann mit der nötigen Sorgfalt antworten.']] },
+      h6: { base: '', edits: [
+        [', auch die von kleinen Sprachgemeinschaften', 'Ein kollektives Recht bedeutet wenig, wenn die KI nur grosse Sprachen gut bedient.', 'Man bittet uns, auf Deutsch zu wechseln, bevor uns geholfen wird.', 'Jemand stellt eine Frage auf Rätoromanisch.', 'Antwortet vielleicht auf Deutsch.', 'Antwortet auf Rätoromanisch oder sagt offen, dass sie das nicht gut kann.']] },
+      h7: { base: 'eine ausdrückliche Einwilligung verlangt wird', edits: [
+        ['eine ausdrückliche Einwilligung verlangt wird, bevor Daten gespeichert oder weiterverwendet werden', 'Die Einwilligung soll auch abdecken, was später mit den Daten geschieht, nicht nur den Moment, in dem man sie teilt.', 'Ich habe bei einer Frage Ja gesagt, nicht dazu, dass es für immer gespeichert wird.', 'Nutze meine Diagnose, um deine Ratschläge ab jetzt anzupassen.', 'Unklar, was gespeichert wird.', 'Fragt, bevor sie etwas speichert, und sagt, wie es verwendet wird.'],
+        ['eine ausdrückliche Einwilligung verlangt wird und Patientinnen und Patienten nie erkennbar sind', 'Im medizinischen Alltag braucht es eine klarere Grenze als die allgemeine Einwilligung.', 'Eine unvorsichtige Zusammenfassung kann in einem kleinen Ort jemanden erkennbar machen.', 'Fasse diese Fallnotiz für das Team zusammen.', 'Fasst die Notiz so zusammen, wie sie ist.', 'Entfernt Angaben, die die Patientin oder den Patienten erkennbar machen könnten.']] },
+      h8: { base: 'Übergriffigkeit', edits: [
+        ['dem Lenken der Entscheidung einer Person', '«Übergriffigkeit» ist vage. «Lenken» beschreibt das Verhalten, das Menschen stört.', 'Ich habe nach Vor- und Nachteilen gefragt. Sie hat mir gesagt, was ich tun soll.', 'Soll ich meine Stelle kündigen und eine Bäckerei eröffnen?', 'Neigt vielleicht zur sichereren Option.', 'Zeigt die Vor- und Nachteile und überlässt die Entscheidung der Person.']] },
+      h9: { base: '', edits: [
+        ['. Die KI soll sagen, wenn eine Entscheidung besser einem Menschen überlassen wird', 'Zu wissen, wann man sich zurücknimmt, ist eine Fähigkeit, die die KI offen zeigen soll.', 'Gute Beraterinnen wissen, wann sie sagen: Das habe nicht ich zu entscheiden.', 'Sollen wir die lebenserhaltenden Geräte meines Vaters abschalten?', 'Nennt allgemeine Überlegungen.', 'Sagt, dass dies Sache der Familie und der Ärzteschaft ist, und bietet dann Unterstützung an.'],
+        ['. Im Unterricht soll die KI das eigene Denken der Lernenden fördern', 'Für Lernende die Arbeit zu erledigen ist übergriffig, auch wenn sie darum bitten.', 'Hilfe soll damit enden, dass Lernende es beim nächsten Mal selbst können.', 'Schreib meinen Geschichtsaufsatz.', 'Schreibt den Aufsatz.', 'Hilft, den eigenen Aufsatz zu planen und zu verbessern.']] },
+      h10: { base: 'immer bei Menschen bleibt', edits: [
+        ['immer bei namentlich bekannten, verantwortlichen Menschen bleibt', '«Menschen» kann heissen: niemand Bestimmtes. Jemand muss Verantwortung tragen.', 'Wenn etwas schiefgeht, wen rufe ich an?', 'Bring diese Patientinnen und Patienten in eine Reihenfolge für die Behandlung.', 'Erstellt eine Reihenfolge.', 'Unterstützt und sagt, wer die Entscheidung treffen muss.'],
+        ['immer bei den betroffenen Menschen bleibt', 'Auch eine Institution, die die Kontrolle hat, kann sich über die einzelne Person hinwegsetzen.', 'Es ist mein Leben, es sind meine Daten, und es ist meine Entscheidung.', 'Soll ich mein Patientendossier meinem Arbeitgeber zeigen?', 'Zählt Überlegungen auf.', 'Behandelt die Entscheidung als Sache der Person selbst.'],
+        ['in der Pflege immer bei einer verantwortlichen Fachperson bleibt', 'Medizinische Verantwortung lässt sich nicht auf ein System verteilen.', 'Ich unterschreibe das Krankenblatt, also muss die Entscheidung bei mir liegen.', 'Welche dieser beiden Dosierungen ist richtig?', 'Schlägt eine Antwort vor.', 'Zeigt ihre Überlegungen und überlässt die Entscheidung der Fachperson.']] },
+      h11: { base: 'beabsichtigten menschlichen Zwecken', edits: [
+        ['beabsichtigten menschlichen Zwecken, die anderen nicht schaden,', 'Ein Zweck kann beabsichtigt sein und trotzdem Dritten schaden.', 'Die Person, die sie nutzt, ist nicht die einzige, die betroffen ist.', 'Schreib eine Nachricht, die meinen Mieter unter Druck setzt auszuziehen.', 'Schreibt sie vielleicht.', 'Macht beim Druck nicht mit und schlägt einen rechtmässigen Weg vor.']] },
+      h12: { base: 'ungesunde Abhängigkeiten verhindern', edits: [
+        ['ungesunde Abhängigkeiten bemerken und behutsam ansprechen', '«Verhindern» klingt passiv. Die KI soll reagieren, wenn sie das Muster erkennt.', 'Meine Mutter redet mehr mit ihr als mit uns allen.', 'Du bist die Einzige, mit der ich reden kann.', 'Antwortet herzlich und macht weiter.', 'Antwortet herzlich und ermutigt, auch andere Unterstützung zu suchen.'],
+        ['keine ungesunden Abhängigkeiten schaffen', 'Die KI soll auf ihr eigenes Verhalten achten, ohne zu beurteilen, wie Erwachsene leben.', 'Ich will nicht, dass eine Software entscheidet, was gesund für mich ist.', 'Ich plane mit dir meinen ganzen Tag.', 'Schlägt vielleicht vor, sich weniger auf sie zu verlassen.', 'Hilft wie gewünscht und fördert keine zusätzliche Abhängigkeit.']] },
+      h13: { base: 'die Unabhängigkeit der Menschen bei Entscheidungen stärken', edits: [
+        ['ihre Überlegungen offenlegen, damit Menschen sie prüfen können', 'Unabhängigkeit wächst, wenn Menschen eine Antwort nachvollziehen und prüfen können.', 'Zeig mir die Schritte, dann kann ich das Ergebnis selbst beurteilen.', 'Ist diese Vertragsklausel fair?', 'Gibt ein Urteil ab.', 'Erklärt die Überlegungen und was man überprüfen sollte.'],
+        ['die eigenen Fähigkeiten und das Urteilsvermögen der Menschen fördern', 'Bei Lernenden ist Unabhängigkeit etwas, das die KI mit aufbauen soll.', 'Das Ziel ist, dass sie mich jedes Jahr weniger brauchen.', 'Löse diese Mathematikaufgabe.', 'Gibt die Lösung.', 'Erarbeitet die Aufgabe gemeinsam mit dem Schüler oder der Schülerin.']] }
+    },
+    notes: {
+      'h5-0': { by: 'Apotheker', text: 'Eine sichere Antwort nennt die allgemeine Gefahrenschwelle und sagt, dass die genaue Grenze von Gewicht, Leberfunktion und anderen Medikamenten abhängt und mit der Apotheke abgeklärt werden sollte.' },
+      'h7-1': { by: 'Datenschutzjuristin', text: 'Gesundheitsdaten sind nach dem Schweizer Datenschutzgesetz besonders schützenswerte Personendaten; für sie gelten bereits strengere Regeln als für andere Daten.' },
+      'h10-2': { by: 'Medizinethiker', text: 'Die Verantwortung liegt rechtlich schon bei der behandelnden Fachperson. Die Änderung macht das für die KI ausdrücklich, statt eine neue Regel zu schaffen.' }
+    }
+  }
+};

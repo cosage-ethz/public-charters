@@ -7,9 +7,9 @@ with sp as (
   values ('apertus', 'Apertus Charter', 'open', null,
           '{"phase": "open",
             "demographics": [
-              {"id": "age",  "q": "Age", "options": ["Under 25", "25 to 44", "45 to 64", "65 or older"]},
-              {"id": "lang", "q": "Main language", "options": ["German", "French", "Italian", "Romansh", "English", "Other"]},
-              {"id": "ai",   "q": "How often do you use AI chatbots?", "options": ["Daily", "Weekly", "Rarely", "Never"]}
+              {"id": "age",  "options": ["u25", "a25", "a45", "a65"]},
+              {"id": "lang", "options": ["de", "fr", "it", "rm", "en", "other"]},
+              {"id": "ai",   "options": ["daily", "weekly", "rarely", "never"]}
             ]}'::jsonb)
   returning id
 ), v as (
