@@ -3,7 +3,7 @@ currently deployed at http://public-charters.coraliesage.com (DNS check in progr
 ## Public Charters: Public Opinion Platforms as Participatory Mechanisms to influence Model Values
 
 **Step 1:** build platform prototype (visualisation, backend) and collect reference charter edits from family and friends (potentially analog, paper & pencil), research opinion aggregation/voting mechanisms
--> technical note: good backend contender apparently Supabase (gives us Postgres 500 MB database, 50k accounts, access rules, EU region hosting for GDPR and Swiss data law compilance, with free version, so likely more than enough) 
+-> technical note: good backend contender apparently Supabase (gives us Postgres 500 MB database, 50k accounts, access rules, EU region hosting for GDPR and Swiss data law compilance, with free version, so likely more than enough)
 
 **Step 2:** build opinion aggregation mechanism and live update views and user-specific site views. Collect user opinions here?
 
@@ -72,6 +72,8 @@ Each file is grouped by page: `home` (homepage), `take`, `join`, `rate`, `propos
 - A quote mark inside a text must be written as `’` (typographic apostrophe), not `'`, or the file breaks.
 - Keys ending in `_one` are the singular version of the key without it (for example `rate.count` / `rate.count_one`).
 
+**After editing `lang/en.js`, run `node tools/fill-fallback.js`.** It copies the English text into the HTML pages, so they are readable without JavaScript and for search engines (German and French are filled in by the browser as before).
+
 The charter sentences and the sample suggestions are separate: English in `sample-data.js`, German and French under `sample` at the end of `lang/de.js` and `lang/fr.js`. After editing, reload the page; if a page goes blank, the browser console names the line with the problem.
 
 ## How the public site works
@@ -110,12 +112,12 @@ You need a free [Supabase](https://supabase.com) account.
 Admins see an *Organise* link in the account bar. Sign-in emails use Supabase's built-in sender, which allows only a few emails per hour; before a larger session (such as the presentation), connect your own SMTP sender or enable Google sign-in.
 
 ### Documents & Deadlines
-6. November: 1-pager: https://docs.google.com/document/d 1uiNv3wiHFuFnpSBEH5XlCaNscwk9bIWvY1uUpk8HSD8/edit?usp=sharing
+6. November: [1-pager] (https://docs.google.com/document/d 1uiNv3wiHFuFnpSBEH5XlCaNscwk9bIWvY1uUpk8HSD8/edit?usp=sharing)
 
-15. November: Half-page progress note: [link to be added here]
+23. November: [Half-page progress note] (https://docs.google.com/document/d/1eZqBLXRaK0G6BPYF9t8VtyKy-xgoJ3hmOeAgIPPXdVg/edit?tab=t.0)
 
-22. November: Draft Version: [link to be added here]
+26. November: Draft Version [link to be added here]
 
-29. November: Final Version: [link to be added here]
+30. November: Final Version [link to be added here]
 
-3. December: Presentation
+3. December: 10-12 minute in-class Presentation

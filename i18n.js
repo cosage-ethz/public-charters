@@ -18,6 +18,9 @@ const lang = LANGS.includes(q) ? q : LANGS.includes(stored) ? stored : LANGS.inc
 if (LANGS.includes(q)) { try { localStorage.setItem(KEY, q); } catch {} }
 window.PC_LANG = lang;
 document.documentElement.lang = lang;
+// The HTML holds English text as a fallback (tools/fill-fallback.js). For other languages, hide it
+// until it has been replaced, so visitors never see a flash of English.
+if (lang !== 'en') document.documentElement.classList.add('i18n-wait');
 
 const DICT = window.I18N || {};
 const get = (o, k) => k.split('.').reduce((x, p) => (x == null ? undefined : x[p]), o);
@@ -55,6 +58,7 @@ function apply(root) {
   });
   const title = document.querySelector('meta[name="i18n-title"]');
   if (title) document.title = T(title.content);
+  if (!root) document.documentElement.classList.remove('i18n-wait');
 }
 
 window.T = T;

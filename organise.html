@@ -9,9 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261125l">
-<link rel="stylesheet" href="app.css?v=20261125l">
-<script src="lang/en.js?v=20261125l"></script><script src="lang/de.js?v=20261125l"></script><script src="lang/fr.js?v=20261125l"></script><script src="i18n.js?v=20261125l"></script>
+<link rel="stylesheet" href="site.css?v=20261125m">
+<link rel="stylesheet" href="app.css?v=20261125m">
+<script src="lang/en.js?v=20261125m"></script><script src="lang/de.js?v=20261125m"></script><script src="lang/fr.js?v=20261125m"></script><script src="i18n.js?v=20261125m"></script>
 <style>
 .banner{background:var(--sheet);border:1px solid var(--line);border-left:3px solid var(--accent);padding:12px 16px;font-size:15px;max-width:52em;margin-top:18px}
 .phases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--sheet)}
@@ -29,7 +29,7 @@
 .stat output{display:block;font:600 34px/1 var(--display);font-variant-numeric:tabular-nums;margin-top:6px}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .card{background:var(--sheet);border:1px solid var(--line);padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.card h4{margin:0}
+.card h3{margin:0}
 .card p{margin:0}
 .inv{width:100%;border-collapse:collapse;font-size:14.5px}
 .inv th,.inv td{text-align:left;padding:8px 6px;border-top:1px solid var(--line)}
@@ -54,31 +54,33 @@
 </style>
 </head>
 <body class="tp">
+<a class="skip" href="#main" data-i18n="nav.skip">Skip to content</a>
 <header class="top wrap"><div class="in">
-  <a class="brand" href="./"><p data-i18n="brand.kicker"></p><h1>public<i></i>charters</h1></a>
-  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take"></a><a href="results.html" data-i18n="nav.results"></a><a href="charter.html" data-i18n="nav.charter"></a><a href="about.html" data-i18n="nav.about"></a></nav>
+  <a class="brand" href="./"><p data-i18n="brand.kicker">Constitutional AI Project</p><span class="bn">public<i></i>charters</span></a>
+  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" data-i18n="nav.results">Results</a><a href="charter.html" data-i18n="nav.charter">The charter</a><a href="about.html" data-i18n="nav.about">About</a></nav>
   <span data-langs></span>
   <div class="acct" id="acct" aria-label="Account"></div>
 </div></header>
 
+<main id="main" tabindex="-1">
 <section class="hero wrap"><div class="in">
-  <h2>Run the round <em>for the Apertus Charter.</em></h2>
+  <h1>Run the round <em>for the Apertus Charter.</em></h1>
   <p class="lede" id="lede">For admins of the public site: move the round from phase to phase and see how participation is going. You set up the process; participants decide the content.</p>
   <div class="banner" id="banner" hidden></div>
 </div></section>
 
-<main class="wrap"><div class="in">
+<div class="wrap"><div class="in">
 
 <section class="block">
   <p class="eyebrow">Current phase</p>
-  <h3 class="sec" id="spaceName">Apertus Charter (sample round)</h3>
+  <h2 class="sec" id="spaceName">Apertus Charter (sample round)</h2>
   <ol class="phases" id="phases"></ol>
   <div class="row" id="phaseCtl"></div>
 </section>
 
 <section class="block">
   <p class="eyebrow">Participation</p>
-  <h3 class="sec">Who is taking part</h3>
+  <h2 class="sec">Who is taking part</h2>
   <div class="stats" id="stats"></div>
   <p class="small muted" style="margin-top:10px">Individual ratings and survey answers are private, so they are not shown here; the pipeline uses them to compute combined results.</p>
 </section>
@@ -87,14 +89,14 @@
   <div class="grid2">
     <div class="card">
       <p class="eyebrow">Participants</p>
-      <h4>Invitations (optional)</h4>
+      <h3>Invitations (optional)</h3>
       <p class="small">The space is open: anyone who signs in joins it. Invitation links are still useful to add another admin, or if you switch the space to invitation-only.</p>
       <div><button class="btn primary" id="newInvite">Create invitation link</button></div>
       <div class="tbl" id="invites"></div>
     </div>
     <div class="card">
       <p class="eyebrow">Breakdowns</p>
-      <h4>Optional profile questions</h4>
+      <h3>Optional profile questions</h3>
       <p class="small">Asked once when people join, all optional. Results show how each group rated a change, but groups never block one, and groups with fewer than 5 answers are not shown. Edit the list in <code>community.js</code> and the labels in <code>lang/*.js</code>.</p>
       <div class="tbl"><table class="inv" id="groups"></table></div>
       <p class="small muted">Opinion groups found from the votes, as in Polis, can be added later as another breakdown. They need about 100 active participants.</p>
@@ -108,7 +110,7 @@
 
 <section class="block">
   <p class="eyebrow">After the round</p>
-  <h3 class="sec">Publish, train and report</h3>
+  <h2 class="sec">Publish, train and report</h2>
   <ul class="check">
     <li><span><b>Publish the new charter version</b><br><span class="small muted">Endorsed changes, and bridges endorsed in the bridge phase, become a fixed version with its dissent record. The Charter page shows it as tracked changes.</span></span><span class="when">End of round</span></li>
     <li><span><b>Review the test cases</b><br><span class="small muted">Admins mark the test cases of adopted changes as confirmed before training. Only admins can change a test case’s status.</span></span><span class="when">One week</span></li>
@@ -121,7 +123,7 @@
 
 <section class="block">
   <p class="eyebrow">Setup</p>
-  <h3 class="sec">Connecting the database</h3>
+  <h2 class="sec">Connecting the database</h2>
   <ul class="check" id="setup">
     <li><span><b>Create a free Supabase project</b> and run <code>supabase/schema.sql</code>, then <code>supabase/seed.sql</code>.</span><span class="when">10 min</span></li>
     <li id="cfg"><span><b>Connect the site</b>: put the project URL and public key in <code>config.js</code>.</span><span class="when">2 min</span></li>
@@ -130,16 +132,17 @@
   <p class="small muted" style="margin-top:12px">Want to run this for your own community and model? Use the <a href="https://github.com/cosage-ethz/public-charters/tree/charter-kit" target="_blank" rel="noopener">Charter Kit</a>.</p>
 </section>
 
-</div></main>
+</div></div>
+</main>
 
 <footer class="foot wrap"><div class="in">Full instructions are in the README of the repository.</div></footer>
 
-<script src="sample-data.js?v=20261125l"></script>
+<script src="sample-data.js?v=20261125m"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=20261125l"></script>
-<script src="app.js?v=20261125l"></script>
-<script src="bridge.js?v=20261125l"></script>
-<script src="community.js?v=20261125l"></script>
+<script src="config.js?v=20261125m"></script>
+<script src="app.js?v=20261125m"></script>
+<script src="bridge.js?v=20261125m"></script>
+<script src="community.js?v=20261125m"></script>
 <script>
 (() => {
 const $ = id => document.getElementById(id);

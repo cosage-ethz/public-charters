@@ -61,7 +61,7 @@ VIEWS.join = () => {
   } else acct = `<p class="note">${T('join.sampleNote')} <button class="link" data-reset>${esc(T('join.startOver'))}</button></p>`;
   const sel = q => `<label>${esc(C.qLabel(q))}<select data-pf="${q.id}"><option value="">${esc(T('join.preferNot'))}</option>${q.options.map(o =>
     `<option value="${o}" ${p[q.id] === o ? 'selected' : ''}>${esc(C.oLabel(q, o))}</option>`).join('')}</select></label>`;
-  return `<p class="eyebrow">${esc(T('join.eyebrow'))}</p><h3>${esc(T('join.h'))}</h3>
+  return `<p class="eyebrow">${esc(T('join.eyebrow'))}</p><h2>${esc(T('join.h'))}</h2>
     <ul class="facts"><li>${T('join.p1')}</li><li>${T('join.p2')}</li><li>${T('join.p3')}</li><li>${T('join.p4')}</li></ul>
     ${acct}
     <div class="opt-q"><p class="lbl">${esc(T('join.optional'))}</p>
@@ -88,7 +88,7 @@ VIEWS.rate = () => {
     <div class="sentence"><p class="lbl">${esc(T('rate.changed'))}</p><p class="cl-text">${C.changedClause(s)}</p><p class="key">${T('rate.legend')}</p></div>
     ${s.why ? `<p class="whyline"><span class="lbl">${esc(T('rate.why'))}</span>${esc(s.why)}</p>` : ''}
     ${ex}${note}
-    <h4 class="ask">${esc(T('rate.q'))}</h4>
+    <h3 class="ask">${esc(T('rate.q'))}</h3>
     <div class="choices" role="group" aria-label="${esc(T('rate.q'))}">${VALUES.map(([v, k]) =>
       `<button data-rate="${esc(s.id)}" data-v="${v}" aria-pressed="${now && mine === v}">${esc(T('answer.' + k))}</button>`).join('')}
       ${!now ? `<button class="link skip" ${last ? 'data-go="propose"' : 'data-step="1"'}>${esc(T('rate.skipLink'))}</button>` : ''}</div>
@@ -117,7 +117,7 @@ VIEWS.propose = () => {
     <summary><span class="n">${a.n}</span><span class="t">${esc(a.t)}</span><span class="cnt">${esc(T('propose.sentences', { n: a.cl.length }))}</span></summary>
     ${a.cl.map(c => `<div class="sent"><p class="cl" data-cl="${c[0]}"><span class="num">${c[0]}</span> <span>${esc(C.clauseText(c))}</span></p>
       <button class="btn small" data-whole="${c[0]}">✎ ${esc(T('propose.change'))}</button></div>`).join('')}</details>`).join('');
-  return `<p class="eyebrow">${esc(T('propose.eyebrow'))}</p><h3>${esc(T('propose.h'))}</h3>
+  return `<p class="eyebrow">${esc(T('propose.eyebrow'))}</p><h2>${esc(T('propose.h'))}</h2>
     <p class="intro">${esc(T('propose.intro'))}</p>
     <ol class="how3"><li><span>1</span>${esc(T('propose.step1'))}</li><li><span>2</span>${esc(T('propose.step2'))}</li><li><span>3</span>${esc(T('propose.step3'))}</li></ol>
     <div class="arts">${arts}</div>
@@ -130,7 +130,7 @@ VIEWS.propose = () => {
 
 VIEWS.done = () => {
   const n = C.myCounts();
-  return `<h3>${esc(T('done.h'))}</h3>
+  return `<h2>${esc(T('done.h'))}</h2>
     <p class="intro">${esc(T('done.p', { n: n.ratings }))}${n.proposals ? ' ' + esc(T('done.proposed', { n: n.proposals })) : ''}</p>
     <div class="topic"><p class="lbl">${esc(T('done.next'))}</p>
       <ol class="timeline"><li>${esc(T('done.n1'))}</li><li>${esc(T('done.n2'))}</li><li>${esc(T('done.n3'))}</li></ol></div>
@@ -144,17 +144,30 @@ function renderSteps() {
     <button data-go="${id}" ${k === cur ? 'aria-current="step"' : ''} ${!me.consent && id !== 'join' ? 'disabled' : ''}><span class="dot">${k < cur ? '✓' : k + 1}</span>${esc(T('take.steps.' + id))}</button></li>`).join('');
 }
 let LAST = '';
+const say = msg => { const el = $('sr'); if (el) { el.textContent = ''; setTimeout(() => { el.textContent = msg; }, 60); } };
+// Remember which control had focus, so keyboard users keep their place after a re-render.
+function focusKey() {
+  const a = document.activeElement; if (!a || !$('pane').contains(a)) return null;
+  for (const k of ['rate', 'v', 'step', 'go', 'improve', 'whole']) if (a.dataset && a.dataset[k] != null) return `[data-${k}="${a.dataset[k]}"]` + (a.dataset.v != null && k === 'rate' ? `[data-v="${a.dataset.v}"]` : '');
+  return null;
+}
 function render(scroll) {
   const me = ME();
   if (!me.consent) me.step = 'join';
   if (!VIEWS[me.step]) me.step = 'join';
   renderSteps();
-  const pane = $('pane');
+  const pane = $('pane'), keep = focusKey();
   pane.innerHTML = VIEWS[me.step]();
+  const title = pane.querySelector('h2, .eyebrow'); if (title) title.id = 'paneTitle';
   const key = me.step + (me.step === 'rate' ? ':' + me.at : '');
-  if (key !== LAST) { pane.classList.remove('fade'); void pane.offsetWidth; pane.classList.add('fade'); LAST = key; }
+  if (key !== LAST) {
+    pane.classList.remove('fade'); void pane.offsetWidth; pane.classList.add('fade');
+    // A new view: move focus to it (only once the visitor has started interacting) and announce its title.
+    if (LAST && title) { pane.focus({ preventScroll: true }); say(title.textContent); }
+    LAST = key;
+  } else if (keep) { const el = pane.querySelector(keep); if (el) el.focus({ preventScroll: true }); }
   if (scroll) {
-    const top = $('main').getBoundingClientRect().top + scrollY - 12;
+    const top = $('steps').getBoundingClientRect().top + scrollY - 12;
     if (scrollY > top) scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 }
@@ -175,7 +188,9 @@ document.addEventListener('click', ev => {
     const id = r.dataset.rate, v = +r.dataset.v;
     me.ratings[id] = v; SESSION.add(id); save();
     saveJudgement('rating:' + id, { v });
-    return render();
+    render();
+    const s = C.suggestions().find(x => x.id === id); if (s) say(C.othersLine(s.s));
+    return;
   }
   const im = t.closest('[data-improve]');
   if (im && window.PC) {
