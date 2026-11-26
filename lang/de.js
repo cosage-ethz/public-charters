@@ -3,7 +3,7 @@
 window.I18N = window.I18N || {};
 window.I18N.de = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Mitmachen', results: 'Bisherige Ergebnisse', charter: 'Charta lesen', about: 'Über uns', language: 'Sprache', skip: 'Zum Inhalt springen' },
+  nav: { take: 'Mitmachen', results: 'Statistik', charter: 'Charta lesen', about: 'Über uns', language: 'Sprache', skip: 'Zum Inhalt springen' },
   common: {
     student: 'Ein Studierendenprojekt an der ETH Zürich. Wir sind nicht mit der Swiss AI Initiative verbunden.',
     sample: 'Beispielrunde',
@@ -217,7 +217,7 @@ window.I18N.de = {
   },
 
   results: {
-    title: 'Bisherige Ergebnisse',
+    title: 'Statistik',
     h: 'Was die Leute <em>bisher denken.</em>',
     lede: 'Hier sehen Sie, wie die Leute jeden Änderungsvorschlag bewertet haben. Hier entscheiden echte Menschen, nicht eine KI!',
     howH: 'Wie wir die Meinungen zusammenfassen',
@@ -273,6 +273,14 @@ window.I18N.de = {
     pluralH: 'Warum diese Art der Beteiligung?',
     plural1: 'Die meiste Forschung zu «pluralistischer» KI schaut darauf, was ein Modell sagt: Zeigt es viele Sichtweisen? Wir schauen darauf, wer die Regeln schreiben darf. Die Forschung nennt das <b>institutionellen Pluralismus</b>: Menschen können die Regeln, denen eine KI folgt, mitgestalten, anfechten und überarbeiten.',
     plural2: 'Wir sind ehrlich über die Grenzen. Unsere Ergebnisse binden das offizielle Apertus nicht. Auf Arnsteins «Leiter der Bürgerbeteiligung» ist das noch <b>Konsultation</b>, keine echte Entscheidungsmacht. Wir möchten zeigen, wie der nächste Schritt aussehen könnte.',
+    countH: 'Wie wir Stimmen zählen',
+    count1: '<b>Jede Antwort ist eine Zustimmung:</b> Ja zählt 1, teilweise ½, Nein 0.',
+    count2: '<b>Vorsichtig bei wenigen Antworten:</b> Jede Änderung startet in jeder Sprachgruppe mit 3 angenommenen Ja und 3 angenommenen Nein. Mit nur wenigen Antworten bleibt eine Änderung nahe bei 50 % und kann nicht zufällig angenommen werden.',
+    count3: '<b>Jede Gruppe zählt gleich:</b> Der Wert ist der Durchschnitt der Sprachgruppen. Eine Gruppe erhält also nicht mehr Gewicht, nur weil viele ihrer Mitglieder mitmachen. Wer keine Sprache angibt, bildet eine eigene Gruppe.',
+    count4: '<b>Eine Untergrenze für alle Gruppen:</b> Eine Änderung ist angenommen mit mindestens 10 Antworten, einem Wert von mindestens 60 % und keiner Sprachgruppe mit 5 oder mehr Antworten unter 40 %. Eine Änderung, die eine Gruppe klar ablehnt, wird zurückgehalten, auch wenn die Gesamtzahl hoch ist.',
+    countEx: '<b>Beispiel:</b> 27 von 30 Deutschsprachigen sagen Ja, und 3 von 10 Französischsprachigen. Einfach gezählt wären das 75 % Ja. Unser Wert ist 60 %, aber die französischsprachige Gruppe liegt bei 38 %, also wird die Änderung zurückgehalten.',
+    countWhy: '<b>Warum:</b> Bei wenigen Antworten könnte sonst eine kleine, gut organisierte Gruppe allein entscheiden. Die Idee ähnelt Community Notes und Polis, die Zustimmung über Gruppen hinweg belohnen, die oft uneins sind.',
+    countApply: 'Angenommene Änderungen erscheinen auf der Charta-Seite unter «Mit angenommenen Änderungen». Das offizielle Apertus ändern sie nicht.',
     official: '<b>Es verändert nicht das offizielle Apertus.</b> Wir testen die Ergebnisse an unserer eigenen kleinen Kopie.',
     sample: '<b>Vorerst Beispieldaten:</b> Bis genug Menschen mitmachen, enthalten die Ergebnisse erfundene Antworten, klar gekennzeichnet.',
     dataH: 'Ihre Daten',
@@ -309,7 +317,11 @@ window.I18N.de = {
     summary: '{p} Stellen mit Änderungsvorschlägen · insgesamt {c}',
     ideas: '{n} Änderungsvorschläge', ideas_one: '1 Änderungsvorschlag',
     today: 'Heute', added: 'Hier werden Wörter ergänzt', remove: 'Diese Wörter streichen',
-    rateThese: 'Diese Änderung bewerten', suggest: 'Selbst vorschlagen'
+    rateThese: 'Diese Änderung bewerten', suggest: 'Selbst vorschlagen',
+    modeToday: 'Heute', modeVoted: 'Mit angenommenen Änderungen',
+    votedNote: '{n} angenommene Änderungen eingefügt, als Änderungen markiert. Klicken Sie darauf, um die Bewertungen zu sehen.',
+    votedNote_one: '1 angenommene Änderung eingefügt, als Änderung markiert. Klicken Sie darauf, um die Bewertungen zu sehen.',
+    appliedAria: 'Angenommene Änderung zu «{w}»'
   },
 
   // Beispieldaten (sample-data.js), übersetzt. Pro Änderung: [Text, Begründung, Zitat, Frage, heute, mit Änderung].

@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261126h">
-<link rel="stylesheet" href="app.css?v=20261126h">
-<script src="lang/en.js?v=20261126h"></script><script src="lang/de.js?v=20261126h"></script><script src="lang/fr.js?v=20261126h"></script><script src="i18n.js?v=20261126h"></script>
-<script src="motion.js?v=20261126h"></script>
+<link rel="stylesheet" href="site.css?v=20261126i">
+<link rel="stylesheet" href="app.css?v=20261126i">
+<script src="lang/en.js?v=20261126i"></script><script src="lang/de.js?v=20261126i"></script><script src="lang/fr.js?v=20261126i"></script><script src="i18n.js?v=20261126i"></script>
+<script src="motion.js?v=20261126i"></script>
 <style>
 .prose{max-width:40em;font-size:18px;line-height:1.6}
 .prose p{margin:0 0 12px}
@@ -31,7 +31,7 @@
 .card2 p{margin:0;font-size:16px;line-height:1.5;color:#333}
 .note{max-width:62em;margin:10px 0 0}
 .card2.plural{max-width:52em;border-left:4px solid var(--v4)}
-.card2.plural p+p{margin-top:10px}
+.card2.plural p+p,.card2.plural ul+p{margin-top:10px}
 .ticks.plain{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .ticks.plain li{border:0;background:none;padding:0 0 0 26px;font-size:15.5px}
 .ticks.plain li::before{left:0;top:0}
@@ -48,7 +48,7 @@ details.research summary{cursor:pointer;font:600 22px/1.3 var(--display);letter-
 <a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <header class="top wrap"><div class="in">
   <a class="brand" href="./"><p data-i18n="brand.kicker">Constitutional AI Project</p><span class="bn">public<i></i>charters</span></a>
-  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" data-i18n="nav.results">Results so far</a><a href="charter.html" data-i18n="nav.charter">Read the charter</a><a href="about.html" aria-current="page" data-i18n="nav.about">About</a></nav>
+  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" data-i18n="nav.results">Stats</a><a href="charter.html" data-i18n="nav.charter">Read the charter</a><a href="about.html" aria-current="page" data-i18n="nav.about">About</a></nav>
   <span data-langs></span>
   <div class="acct" id="acct"></div>
 </div></header>
@@ -72,6 +72,10 @@ details.research summary{cursor:pointer;font:600 22px/1.3 var(--display);letter-
 
 <section class="block" id="pluralism">
   <div class="card2 reveal plural"><h2 data-i18n="about.pluralH">Why this kind of participation?</h2><p data-i18n-html="about.plural1">Most research on “pluralistic” AI looks at what a model says: does it present many points of view? We look at who gets to write the rules. Researchers call this <b>institutional pluralism</b>: people can take part in, contest and revise the rules an AI follows.</p><p data-i18n-html="about.plural2">We are honest about the limits. Our results do not bind the official Apertus. On Arnstein’s “ladder of citizen participation”, that is still <b>consultation</b>, not real decision-making power. We want to show what the next step could look like.</p></div>
+</section>
+
+<section class="block" id="counting">
+  <div class="card2 reveal plural"><h2 data-i18n="about.countH">How we count votes</h2><ul class="ticks plain"><li data-i18n-html="about.count1"><b>Every answer is an approval:</b> yes counts 1, partly ½, no 0.</li><li data-i18n-html="about.count2"><b>Cautious with few answers:</b> each change starts with 3 pretend yes and 3 pretend no in every language group. With only a handful of answers, a change stays close to 50% and cannot pass by chance.</li><li data-i18n-html="about.count3"><b>Every group counts the same:</b> the score is the average of the language groups, so a group does not gain weight just because many of its members take part. People who do not give a language form their own group.</li><li data-i18n-html="about.count4"><b>A floor across groups:</b> a change is accepted with at least 10 answers, a score of at least 60%, and no language group with 5 or more answers below 40%. A change that one group clearly rejects is held back, even if the overall count is high.</li></ul><p data-i18n-html="about.countEx"><b>Example:</b> 27 of 30 German speakers say yes, and 3 of 10 French speakers. A plain count says 75% yes. Our score is 60%, but the French group is at 38%, so the change is held back.</p><p data-i18n-html="about.countWhy"><b>Why:</b> with few answers, a small, well-organised group could otherwise decide alone. The idea is close to Community Notes and Polis, which reward agreement across groups that often disagree.</p><p data-i18n="about.countApply">Accepted changes appear on the charter page under “With accepted changes”. They do not change the official Apertus.</p></div>
 </section>
 
 <section class="block">
@@ -106,7 +110,7 @@ document.getElementById('src').innerHTML = SOURCES.map(([t, a, k, u]) =>
   `<li><b><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a></b>, ${esc(a)}<span>${esc(T('about.src.' + k))}</span></li>`).join('');
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=20261126h"></script>
-<script src="app.js?v=20261126h"></script>
+<script src="config.js?v=20261126i"></script>
+<script src="app.js?v=20261126i"></script>
 </body>
 </html>

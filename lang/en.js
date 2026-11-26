@@ -4,7 +4,7 @@
 window.I18N = window.I18N || {};
 window.I18N.en = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Take part', results: 'Results so far', charter: 'Read the charter', about: 'About', language: 'Language', skip: 'Skip to content' },
+  nav: { take: 'Take part', results: 'Stats', charter: 'Read the charter', about: 'About', language: 'Language', skip: 'Skip to content' },
   common: {
     student: 'A student project at ETH Zurich. We are not affiliated with the Swiss AI Initiative.',
     sample: 'Sample round',
@@ -222,7 +222,7 @@ window.I18N.en = {
 
   // ---------- Results ----------
   results: {
-    title: 'Results so far',
+    title: 'Stats',
     h: 'What people <em>think so far.</em>',
     lede: 'This shows how people rated each suggested change. Real people and users decide here, not an AI!',
     howH: 'How we aggregated opinions',
@@ -279,6 +279,14 @@ window.I18N.en = {
     pluralH: 'Why this kind of participation?',
     plural1: 'Most research on “pluralistic” AI looks at what a model says: does it present many points of view? We look at who gets to write the rules. Researchers call this <b>institutional pluralism</b>: people can take part in, contest and revise the rules an AI follows.',
     plural2: 'We are honest about the limits. Our results do not bind the official Apertus. On Arnstein’s “ladder of citizen participation”, that is still <b>consultation</b>, not real decision-making power. We want to show what the next step could look like.',
+    countH: 'How we count votes',
+    count1: '<b>Every answer is an approval:</b> yes counts 1, partly ½, no 0.',
+    count2: '<b>Cautious with few answers:</b> each change starts with 3 pretend yes and 3 pretend no in every language group. With only a handful of answers, a change stays close to 50% and cannot pass by chance.',
+    count3: '<b>Every group counts the same:</b> the score is the average of the language groups, so a group does not gain weight just because many of its members take part. People who do not give a language form their own group.',
+    count4: '<b>A floor across groups:</b> a change is accepted with at least 10 answers, a score of at least 60%, and no language group with 5 or more answers below 40%. A change that one group clearly rejects is held back, even if the overall count is high.',
+    countEx: '<b>Example:</b> 27 of 30 German speakers say yes, and 3 of 10 French speakers. A plain count says 75% yes. Our score is 60%, but the French group is at 38%, so the change is held back.',
+    countWhy: '<b>Why:</b> with few answers, a small, well-organised group could otherwise decide alone. The idea is close to Community Notes and Polis, which reward agreement across groups that often disagree.',
+    countApply: 'Accepted changes appear on the charter page under “With accepted changes”. They do not change the official Apertus.',
     official: '<b>It doesn’t change the official Apertus.</b> We test the results on our own small copy.',
     sample: '<b>Sample data for now:</b> until enough people take part, the results include made-up answers, clearly marked.',
     dataH: 'Your data',
@@ -316,6 +324,10 @@ window.I18N.en = {
     summary: '{p} phrases have suggested changes · {c} in total',
     ideas: '{n} suggested changes', ideas_one: '1 suggested change',
     today: 'Today', added: 'New words added here', remove: 'Remove these words',
-    rateThese: 'Rate this change', suggest: 'Suggest your own'
+    rateThese: 'Rate this change', suggest: 'Suggest your own',
+    modeToday: 'Today', modeVoted: 'With accepted changes',
+    votedNote: '{n} accepted changes applied, shown as tracked changes. Click one to see its ratings.',
+    votedNote_one: '1 accepted change applied, shown as a tracked change. Click it to see its ratings.',
+    appliedAria: 'Accepted change to “{w}”'
   },
 };

@@ -9,14 +9,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261126h">
-<link rel="stylesheet" href="app.css?v=20261126h">
-<script src="lang/en.js?v=20261126h"></script><script src="lang/de.js?v=20261126h"></script><script src="lang/fr.js?v=20261126h"></script><script src="i18n.js?v=20261126h"></script>
-<script src="motion.js?v=20261126h"></script>
+<link rel="stylesheet" href="site.css?v=20261126i">
+<link rel="stylesheet" href="app.css?v=20261126i">
+<script src="lang/en.js?v=20261126i"></script><script src="lang/de.js?v=20261126i"></script><script src="lang/fr.js?v=20261126i"></script><script src="i18n.js?v=20261126i"></script>
+<script src="motion.js?v=20261126i"></script>
 <style>
 /* An annotated document: the charter on the left, the ideas for the chosen phrase on the right. */
 .legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:16px 0 0;font-size:14.5px}
 .legend .t{color:var(--muted)}
+.mode{display:inline-flex;gap:0;margin:18px 0 0;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--sheet)}
+.mode button{all:unset;cursor:pointer;font:700 14px/1 var(--ui);padding:8px 14px;border-radius:999px;color:var(--slate)}
+.mode button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.mode button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.legend[hidden],.mode-note[hidden]{display:none}
+.hl.on del{color:rgba(255,255,255,.75)}
+.mode-note{margin:8px 0 0;font-size:14.5px;color:var(--muted)}
+.hl del{color:var(--muted)}
+.hl ins{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
 .legend span.c{display:inline-flex;align-items:center;gap:6px;font-weight:700}
 .legend span.c i{width:22px;height:12px;border-radius:3px;background:color-mix(in srgb,var(--c) 22%,transparent);box-shadow:inset 0 -3px 0 var(--c)}
 .notice{margin:12px 0 0;font-size:13.5px;color:var(--muted);max-width:60em}
@@ -82,7 +91,7 @@
 <a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <header class="top wrap"><div class="in">
   <a class="brand" href="./"><p data-i18n="brand.kicker">Constitutional AI Project</p><span class="bn">public<i></i>charters</span></a>
-  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" data-i18n="nav.results">Results so far</a><a href="charter.html" aria-current="page" data-i18n="nav.charter">Read the charter</a><a href="about.html" data-i18n="nav.about">About</a></nav>
+  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" data-i18n="nav.results">Stats</a><a href="charter.html" aria-current="page" data-i18n="nav.charter">Read the charter</a><a href="about.html" data-i18n="nav.about">About</a></nav>
   <span data-langs></span>
   <div class="acct" id="acct"></div>
 </div></header>
@@ -92,6 +101,8 @@
   <h1 data-i18n-html="viewer.h">The Apertus <em>Charter.</em></h1>
   <p class="lede" data-i18n="viewer.lede">Coloured phrases show where people suggest changes. To see the proposed changes, click on the highlighted text, which will also show how people rated them.</p>
   <div class="legend" id="legend"></div>
+  <div class="mode" role="group" id="mode"><button data-mode="today" aria-pressed="true" data-i18n="viewer.modeToday">Today</button><button data-mode="voted" aria-pressed="false" data-i18n="viewer.modeVoted">With accepted changes</button></div>
+  <p class="mode-note" id="modeNote" hidden></p>
   <p class="notice" data-i18n-html="viewer.notice"><b>Sample data.</b> Sentences shortened from Version 1.0 of the <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus Charter</a>; 3 of its 11 articles are shown. Suggested changes and ratings are made up for now.</p>
   <noscript><p class="noscript">This page needs JavaScript to show its content. · Diese Seite braucht JavaScript, um ihren Inhalt zu zeigen. · Cette page a besoin de JavaScript pour afficher son contenu.</p></noscript>
 </div></section>
@@ -104,12 +115,12 @@
 
 <footer class="foot wrap"><div class="in" data-i18n-html="common.footer">Public Charters · AI and Human Values, ETH Zurich, 2026. Not affiliated with the Swiss AI Initiative. Charter source: <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">apertus-ai.org</a> · Code: <a href="https://github.com/cosage-ethz/public-charters" target="_blank" rel="noopener">GitHub</a></div></footer>
 
-<script src="sample-data.js?v=20261126h"></script>
+<script src="sample-data.js?v=20261126i"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=20261126h"></script>
-<script src="app.js?v=20261126h"></script>
-<script src="bridge.js?v=20261126h"></script>
-<script src="community.js?v=20261126h"></script>
+<script src="config.js?v=20261126i"></script>
+<script src="app.js?v=20261126i"></script>
+<script src="bridge.js?v=20261126i"></script>
+<script src="community.js?v=20261126i"></script>
 <script>
 (() => {
 const C = window.Community;
@@ -117,7 +128,7 @@ const $ = id => document.getElementById(id);
 const { esc, pct } = C;
 const RANK = { endorsed: 0, contested: 1, weak: 2, needs: 3 };
 const color = k => `var(--${k})`;
-let CUR = null;
+let CUR = null, MODE = 'today';
 
 // Ideas for each phrase, best first, and the colour of the phrase (its best-rated idea).
 function byHot() {
@@ -126,6 +137,8 @@ function byHot() {
   Object.values(out).forEach(list => list.sort((a, b) => (a.s.status === 'needs') - (b.s.status === 'needs') || b.s.support - a.s.support));
   return out;
 }
+// The accepted change for a phrase: the chosen wording among accepted rivals, else the only accepted one.
+const accepted = list => list.find(s => s.s.status === 'endorsed' && s.pick === 'chosen') || (list.filter(s => s.s.status === 'endorsed').length === 1 ? list.find(s => s.s.status === 'endorsed') : null);
 const tone = list => list.reduce((best, s) => RANK[s.s.status] < RANK[best] ? s.s.status : best, 'needs');
 
 function renderLegend() {
@@ -135,16 +148,28 @@ function renderLegend() {
 
 function renderDoc() {
   const H = byHot();
-  let i = 0;
+  let i = 0, applied = 0;
   $('doc').innerHTML = ARTS.map(a => `<section class="art" id="${a.id}"><h2><span class="n">${a.n}</span>${esc(a.t)}</h2>
     ${a.cl.map(c => `<p class="cl" data-cl="${c[0]}"><span class="num">${c[0]}</span><span>${c[1].map(p => {
       if (typeof p === 'string') return esc(p);
       const list = H[p.h], base = HOTS[p.h].base;
       if (!list) return esc(base);
       const k = tone(list);
+      if (MODE === 'voted') {
+        const w = accepted(list);
+        if (!w) return esc(base);
+        applied++;
+        const shown = (base ? `<del>${esc(base)}</del>` : '') + (w.op === 'delete' ? '' : `${base ? ' ' : ''}<ins>${esc(w.text)}</ins>`);
+        return `<button class="hl ${CUR === p.h ? 'on' : ''}" data-k="${p.h}" style="--c:${color('endorsed')};animation-delay:${(i++) * 70}ms"
+          aria-label="${esc(T('viewer.appliedAria', { w: base || T('viewer.added') }))}">${shown}</button>`;
+      }
       return `<button class="hl ${base ? '' : 'plus'} ${CUR === p.h ? 'on' : ''}" data-k="${p.h}" data-n="${list.length}" style="--c:${color(k)};animation-delay:${(i++) * 70}ms"
         aria-label="${esc((base || T('viewer.added')) + ': ' + T('viewer.ideas', { n: list.length }) + ', ' + T('status.' + k))}">${base ? esc(base) : '+'}</button>`;
     }).join('')}</span></p>`).join('')}</section>`).join('');
+  document.querySelectorAll('#mode [data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === MODE)));
+  $('legend').hidden = MODE === 'voted';
+  $('modeNote').hidden = MODE !== 'voted';
+  if (MODE === 'voted') $('modeNote').textContent = T('viewer.votedNote', { n: applied });
 }
 
 function renderPanel() {
@@ -185,6 +210,7 @@ function pick(k) {
 }
 
 document.addEventListener('click', ev => {
+  const m = ev.target.closest('[data-mode]'); if (m) { MODE = m.dataset.mode; return renderDoc(); }
   const h = ev.target.closest('.hl[data-k]'); if (h) return pick(h.dataset.k);
   if (ev.target.closest('[data-close]')) pick(null);
 });

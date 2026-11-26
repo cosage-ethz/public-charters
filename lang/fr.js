@@ -3,7 +3,7 @@
 window.I18N = window.I18N || {};
 window.I18N.fr = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Participer', results: 'Résultats à ce jour', charter: 'Lire la charte', about: 'À propos', language: 'Langue', skip: 'Aller au contenu' },
+  nav: { take: 'Participer', results: 'Statistiques', charter: 'Lire la charte', about: 'À propos', language: 'Langue', skip: 'Aller au contenu' },
   common: {
     student: 'Un projet d’étudiant·es de l’ETH Zurich. Nous ne sommes pas liés à la Swiss AI Initiative.',
     sample: 'Tour d’exemple',
@@ -217,7 +217,7 @@ window.I18N.fr = {
   },
 
   results: {
-    title: 'Résultats à ce jour',
+    title: 'Statistiques',
     h: 'Ce que les gens <em>pensent jusqu’ici.</em>',
     lede: 'Voici comment les gens ont évalué chaque proposition de changement. Ici, ce sont de vraies personnes qui décident, pas une IA !',
     howH: 'Comment nous agrégeons les avis',
@@ -273,6 +273,14 @@ window.I18N.fr = {
     pluralH: 'Pourquoi ce type de participation ?',
     plural1: 'La plupart des recherches sur l’IA « pluraliste » regardent ce que dit un modèle : présente-t-il plusieurs points de vue ? Nous regardons qui peut écrire les règles. Les chercheurs appellent cela le <b>pluralisme institutionnel</b> : les gens peuvent participer aux règles que suit une IA, les contester et les réviser.',
     plural2: 'Nous sommes honnêtes sur les limites. Nos résultats n’engagent pas l’Apertus officiel. Sur « l’échelle de la participation citoyenne » d’Arnstein, c’est encore de la <b>consultation</b>, pas un vrai pouvoir de décision. Nous voulons montrer à quoi pourrait ressembler l’étape suivante.',
+    countH: 'Comment nous comptons les votes',
+    count1: '<b>Chaque réponse est une approbation :</b> oui compte 1, en partie ½, non 0.',
+    count2: '<b>Prudent avec peu de réponses :</b> chaque changement commence avec 3 oui et 3 non fictifs dans chaque groupe linguistique. Avec seulement quelques réponses, un changement reste proche de 50 % et ne peut pas être adopté par hasard.',
+    count3: '<b>Chaque groupe compte autant :</b> le score est la moyenne des groupes linguistiques, donc un groupe ne gagne pas de poids simplement parce que beaucoup de ses membres participent. Les personnes qui n’indiquent pas de langue forment leur propre groupe.',
+    count4: '<b>Un seuil pour tous les groupes :</b> un changement est adopté avec au moins 10 réponses, un score d’au moins 60 % et aucun groupe linguistique d’au moins 5 réponses sous 40 %. Un changement qu’un groupe rejette clairement est retenu, même si le total est élevé.',
+    countEx: '<b>Exemple :</b> 27 germanophones sur 30 disent oui, et 3 francophones sur 10. Un simple comptage donne 75 % de oui. Notre score est de 60 %, mais le groupe francophone est à 38 %, donc le changement est retenu.',
+    countWhy: '<b>Pourquoi :</b> avec peu de réponses, un petit groupe bien organisé pourrait sinon décider seul. L’idée est proche de Community Notes et de Polis, qui récompensent l’accord entre des groupes souvent en désaccord.',
+    countApply: 'Les changements adoptés apparaissent sur la page de la charte sous « Avec les changements adoptés ». Ils ne modifient pas l’Apertus officiel.',
     official: '<b>Il ne modifie pas l’Apertus officiel.</b> Nous testons les résultats sur notre propre petite copie.',
     sample: '<b>Des données d’exemple pour l’instant :</b> tant qu’il n’y a pas assez de participant·es, les résultats incluent des réponses inventées, clairement signalées.',
     dataH: 'Vos données',
@@ -309,7 +317,11 @@ window.I18N.fr = {
     summary: '{p} passages avec propositions de changement · {c} au total',
     ideas: '{n} propositions de changement', ideas_one: '1 proposition de changement',
     today: 'Aujourd’hui', added: 'Des mots ajoutés ici', remove: 'Supprimer ces mots',
-    rateThese: 'Évaluer ce changement', suggest: 'Proposer le vôtre'
+    rateThese: 'Évaluer ce changement', suggest: 'Proposer le vôtre',
+    modeToday: 'Aujourd’hui', modeVoted: 'Avec les changements adoptés',
+    votedNote: '{n} changements adoptés appliqués, affichés comme modifications. Cliquez dessus pour voir les évaluations.',
+    votedNote_one: '1 changement adopté appliqué, affiché comme modification. Cliquez dessus pour voir les évaluations.',
+    appliedAria: 'Changement adopté pour « {w} »'
   },
 
   // Données d'exemple (sample-data.js), traduites. Par changement : [texte, raison, citation, question, aujourd'hui, avec le changement].
