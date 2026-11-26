@@ -5,6 +5,9 @@
 window.PC_CONFIG = {
   supabaseUrl: 'https://qphphvzibsrlzidnazzr.supabase.co',
   supabaseAnonKey: 'sb_publishable_LRejjn8NS1h8NGpS0UZjog_MRvorPz4',
+  // Show a field for the 6-digit code from the sign-in email. Only switch this on after adding
+  // {{ .Token }} to the "Magic Link" and "Confirm signup" email templates in Supabase.
+  emailCode: false,
   // The one public space (its slug), created by supabase/seed.sql
   space: 'apertus'
 };

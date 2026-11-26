@@ -103,11 +103,48 @@ function signInDialog(reason) {
     <p class="err" role="alert"></p>
     <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.cancel'))}</button><button type="submit" class="btn primary">${esc(T('acct.send'))}</button></div>
   </form>`, async (fd, d) => {
-    const { error } = await A.db.auth.signInWithOtp({ email: fd.get('email'), options: { emailRedirectTo: location.href } });
+    // Step 2: the visitor typed the code from the email.
+    if (d.dataset.email) {
+      const token = String(fd.get('code') || '').replace(/\D/g, '');
+      if (token.length < 6) throw new Error(T('acct.codeBad'));
+      const { error } = await A.db.auth.verifyOtp({ email: d.dataset.email, token, type: 'email' });
+      if (error) throw new Error(T('acct.codeBad'));
+      d.close();
+      return;
+    }
+    // Step 1: send the email. People come back to this page without any "#section" marker:
+    // Supabase adds the login data after a "#", and a second "#" would make it unreadable.
+    const email = String(fd.get('email') || '').trim();
+    const back = location.origin + location.pathname + location.search;
+    const { error } = await A.db.auth.signInWithOtp({ email, options: { emailRedirectTo: back } });
     if (error) throw error;
-    d.querySelector('form').innerHTML = `<h2>${esc(T('acct.checkH'))}</h2><p class="hint">${esc(T('acct.checkP', { email: fd.get('email') }))}</p>
-      <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.close'))}</button></div>`;
+    // The email has a link and a code. The code also works when a mail scanner already opened
+    // the link, or when the email is read on another device.
+    if (!CFG.emailCode) {
+      d.querySelector('form').innerHTML = `<h2>${esc(T('acct.checkH'))}</h2><p class="hint">${esc(T('acct.checkLink', { email }))}</p>
+        <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.close'))}</button></div>`;
+      return;
+    }
+    d.dataset.email = email;
+    d.querySelector('form').innerHTML = `<h2>${esc(T('acct.checkH'))}</h2><p class="hint">${esc(T('acct.checkP', { email }))}</p>
+      <label>${esc(T('acct.code'))}<input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></label>
+      <p class="err" role="alert"></p>
+      <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.close'))}</button><button type="submit" class="btn primary">${esc(T('acct.codeBtn'))}</button></div>`;
+    d.querySelector('[name=code]').focus();
   });
+}
+
+// If a sign-in link failed (expired, already used), Supabase sends people back with an error in
+// the address. Say so clearly instead of failing silently, and clean the address.
+function authErrorFromUrl() {
+  const h = new URLSearchParams(location.hash.slice(1)), q = new URLSearchParams(location.search);
+  const code = h.get('error_code') || q.get('error_code') || h.get('error') || q.get('error');
+  if (!code) return;
+  toast(T('acct.linkFailed'));
+  const url = new URL(location.href); url.hash = '';
+  ['error', 'error_code', 'error_description'].forEach(k => url.searchParams.delete(k));
+  history.replaceState(null, '', url);
+  setTimeout(() => signInDialog(T('acct.linkFailed')), 600);
 }
 
 // Admins only (Organise page); kept in English.
@@ -349,6 +386,7 @@ const ready = () => document.dispatchEvent(new CustomEvent('pc:ready'));
 async function init() {
   renderAcct();
   if (!LIVE) return ready();
+  authErrorFromUrl();
   const { data: { session } } = await A.db.auth.getSession();
   A.user = session ? session.user : null;
   await loadSpace();
