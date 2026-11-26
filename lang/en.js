@@ -4,7 +4,7 @@
 window.I18N = window.I18N || {};
 window.I18N.en = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Take part', results: 'Results', charter: 'The charter', about: 'About', language: 'Language', skip: 'Skip to content' },
+  nav: { take: 'Take part', results: 'Results so far', charter: 'Read the charter', about: 'About', language: 'Language', skip: 'Skip to content' },
   common: {
     student: 'A student project at ETH Zurich. We are not affiliated with the Swiss AI Initiative.',
     sample: 'Sample round',
@@ -26,7 +26,6 @@ window.I18N.en = {
     lede: 'Apertus, Switzerland’s AI model, follows a set of rules called the Apertus Charter. Tell us how they should change.',
     cta: 'Take part · about 10 minutes',
     ctaRead: 'Read the charter',
-    ctaNote: 'No password needed.',
     demoToday: 'Current wording',
     demoSuggested: 'Suggested by the user community',
     demoCap: 'One sentence, many interpretations. Which would you choose?',
@@ -69,9 +68,10 @@ window.I18N.en = {
     openaiDoc: 'Model Spec', openaiBy: 'OpenAI · ChatGPT', openaiD: 'A specification of how OpenAI wants its model to behave and what principles to uphold.',
     read: 'Read it',
     whoNote: 'These are written by the companies themselves. We at Public Charters ask: what if the people who use AI had a say? We want to give you a voice.',
+    kitTag: 'For technical teams',
     kitH: 'Run this for your own AI and community',
-    kit: 'A hospital, a school or a town can run the same process for its own AI and rules, on its own website.',
-    kitLink: 'Get the free Charter Kit'
+    kit: 'A hospital, a school or a town can run the same process for its own AI and rules. The Charter Kit is free, open-source code on GitHub. Setting it up needs some technical know-how: you host the website yourself and connect a free database.',
+    kitLink: 'View the code on GitHub'
   },
 
   // ---------- Take part ----------
@@ -88,7 +88,7 @@ window.I18N.en = {
     p2: '<b>Suggest your own,</b> if you like.',
     p3: '<b>Your answers are completely anonymous.</b> We only show total changes and opinion breakdowns, never who said what.',
     p4: '<b>This is a student project.</b> It (unfortunately) does not change the official Apertus. However, we plan to test the most supported changes on a small version of Apertus and publish the results.',
-    signin: 'To have your answers be saved and count, sign in with your email. We send you a link, no password needed.',
+    signin: 'To have your answers be saved and count, sign in with your email. We send you a link.',
     signinBtn: 'Sign in',
     joinBtn: 'Join',
     notMember: 'You are signed in as {email}.',
@@ -203,7 +203,7 @@ window.I18N.en = {
   acct: {
     sample: 'Sample round', sampleTip: 'No database connected. Your answers stay in this browser.',
     proposals: 'Suggested changes', signin: 'Sign in', signout: 'Sign out', join: 'Join', organise: 'Organise', invite: 'Invite people',
-    signinH: 'Sign in', signinP: 'We email you a link. No password needed.', email: 'Email', send: 'Send link',
+    signinH: 'Sign in', signinP: 'We email you a link to sign in.', email: 'Email', send: 'Send link',
     checkH: 'Check your email', checkP: 'We sent an email to {email}. Click the link in it, or type the code from the email here.',
     checkLink: 'We sent a link to {email}. Open it in this browser.',
     code: 'Code from the email', codeBtn: 'Sign in',
@@ -222,7 +222,7 @@ window.I18N.en = {
 
   // ---------- Results ----------
   results: {
-    title: 'Results',
+    title: 'Results so far',
     h: 'What people <em>think so far.</em>',
     lede: 'This shows how people rated each suggested change. Real people and users decide here, not an AI!',
     howH: 'How we aggregated opinions',
