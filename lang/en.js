@@ -4,7 +4,7 @@
 window.I18N = window.I18N || {};
 window.I18N.en = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Take part', results: 'Results so far', charter: 'Read the charter', about: 'About', language: 'Language', skip: 'Skip to content' },
+  nav: { take: 'Take part', results: 'Stats', charter: 'Read the charter', about: 'About', language: 'Language', skip: 'Skip to content' },
   common: {
     student: 'A student project at ETH Zurich. We are not affiliated with the Swiss AI Initiative.',
     sample: 'Sample round',
@@ -222,14 +222,14 @@ window.I18N.en = {
 
   // ---------- Results ----------
   results: {
-    title: 'Results so far',
+    title: 'Stats',
     h: 'What people <em>think so far.</em>',
     lede: 'This shows how people rated each suggested change. Real people and users decide here, not an AI!',
     howH: 'How we aggregated opinions',
-    how1: 'Each rating submitted by users counts the same: <b>yes</b> +1, <b>partly</b> 0, <b>no</b> −1.',
-    how2: '<b>We classify a change as "Most people agree" if:</b> clearly more yes than no, from at least 10 answers.',
-    how3: '<b>We classify a change as causing divided opinions if:</b> at least 30% yes and at least 30% no.',
-    how4: 'Age, language and AI use is only used to analyse how different groups rate and propose changes, and is never used to decide approvals.',
+    how1: 'Each answer counts as an approval: <b>yes</b> 1, <b>partly</b> ½, <b>no</b> 0. To stay cautious with few answers, every change starts with 3 pretend yes and 3 pretend no in each group.',
+    how2: '<b>A change is accepted (“Most people agree”) if:</b> it has at least 10 answers, its score is at least 60%, and no language group with 5 or more answers is below 40%. The score is the average of the language groups, so each group counts the same however many of its members take part.',
+    how3: '<b>Opinions are divided if:</b> the score is at least 60% but one language group is below 40%, or at least 30% say yes and at least 30% say no.',
+    how4: 'Language sets the groups for this rule; people who did not say form their own group. Age and AI use are only used to show how different groups rated a change.',
     how5: '<b>“Bridges groups”:</b> a badge for changes that most people support in every age, language and AI-use group. It never decides on its own.',
     how6: '<b>Rival wordings:</b> if several wordings for the same words pass, the one with the most support is chosen. Close calls may go to a head-to-head vote later.',
     bridgeBadge: 'Bridges groups',
@@ -241,6 +241,9 @@ window.I18N.en = {
     bridgeH: 'Agreed across groups',
     bridgeP: 'These changes have a majority in every group we can show: young and old, across languages, and among frequent and rare AI users. Agreement across groups that often see things differently is a strong sign.',
     bridgeNone: 'No change has bridged all groups yet.',
+    scoreLine: 'Score {s} (accepted from 60%)',
+    heldBack: 'Held back: {g} at {s}, below {f}.',
+    notStated: 'Language not stated',
     howNote: 'Note: this is a first version: we may adjust these classification limits once many real answers come in.',
     statsLine: '{p} people · {a} answers · {c} suggested changes',
     filterHint: 'Click a colour to show only those changes.',
@@ -276,6 +279,14 @@ window.I18N.en = {
     pluralH: 'Why this kind of participation?',
     plural1: 'Most research on “pluralistic” AI looks at what a model says: does it present many points of view? We look at who gets to write the rules. Researchers call this <b>institutional pluralism</b>: people can take part in, contest and revise the rules an AI follows.',
     plural2: 'We are honest about the limits. Our results do not bind the official Apertus. On Arnstein’s “ladder of citizen participation”, that is still <b>consultation</b>, not real decision-making power. We want to show what the next step could look like.',
+    countH: 'How we count votes',
+    count1: '<b>Every answer is an approval:</b> yes counts 1, partly ½, no 0.',
+    count2: '<b>Cautious with few answers:</b> each change starts with 3 pretend yes and 3 pretend no in every language group. With only a handful of answers, a change stays close to 50% and cannot pass by chance.',
+    count3: '<b>Every group counts the same:</b> the score is the average of the language groups, so a group does not gain weight just because many of its members take part. People who do not give a language form their own group.',
+    count4: '<b>A floor across groups:</b> a change is accepted with at least 10 answers, a score of at least 60%, and no language group with 5 or more answers below 40%. A change that one group clearly rejects is held back, even if the overall count is high.',
+    countEx: '<b>Example:</b> 27 of 30 German speakers say yes, and 3 of 10 French speakers. A plain count says 75% yes. Our score is 60%, but the French group is at 38%, so the change is held back.',
+    countWhy: '<b>Why:</b> with few answers, a small, well-organised group could otherwise decide alone. The idea is close to Community Notes and Polis, which reward agreement across groups that often disagree.',
+    countApply: 'Accepted changes appear on the charter page under “With accepted changes”. They do not change the official Apertus.',
     official: '<b>It doesn’t change the official Apertus.</b> We test the results on our own small copy.',
     sample: '<b>Sample data for now:</b> until enough people take part, the results include made-up answers, clearly marked.',
     dataH: 'Your data',
@@ -290,7 +301,13 @@ window.I18N.en = {
     src: {
       cca: 'About 1,000 Americans wrote and voted on rules for an AI, which was then trained on them.',
       notes: 'A rating system where a note only counts if people who usually disagree both find it helpful.',
-      polis: 'A tool that shows where groups of people agree and disagree.',
+      polis: 'Groups people by how they vote and looks for statements that every group supports. Our floor across groups follows the same idea, with groups people declare themselves.',
+      bridging: 'Argues that systems should reward what people from different sides agree on, not just what is most popular. The idea behind our floor.',
+      approval: 'Shows that simply saying yes or no to each option is a simple, robust way to vote. Our yes / partly / no answers are a form of it.',
+      bayes: 'Explains why a few ratings should be pulled towards a neutral start. That is what our 3 pretend yes and 3 pretend no do.',
+      lijphart: 'How divided societies protect groups from being outvoted: decisions need support across groups. Our 40% floor is a light version of this.',
+      swiss: 'Swiss constitutional amendments need a majority of the people and of the cantons. Our rule likewise asks for overall support and support in every group.',
+      olson: 'Explains why small, well-organised groups often have more influence than large, spread-out ones. Equal weight per group limits this.',
       dp: 'People get balanced information and discuss before they give their view.',
       prism: 'What people say they want from an AI and how they rate real answers can differ, so both matter.',
       sc: 'Training an AI on many people’s feedback is already a kind of vote, so it should be designed as one.',
@@ -313,6 +330,10 @@ window.I18N.en = {
     summary: '{p} phrases have suggested changes · {c} in total',
     ideas: '{n} suggested changes', ideas_one: '1 suggested change',
     today: 'Today', added: 'New words added here', remove: 'Remove these words',
-    rateThese: 'Rate this change', suggest: 'Suggest your own'
+    rateThese: 'Rate this change', suggest: 'Suggest your own',
+    modeToday: 'Today', modeVoted: 'With accepted changes',
+    votedNote: '{n} accepted changes applied, shown as tracked changes. Click one to see its ratings.',
+    votedNote_one: '1 accepted change applied, shown as a tracked change. Click it to see its ratings.',
+    appliedAria: 'Accepted change to “{w}”'
   },
 };

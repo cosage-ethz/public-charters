@@ -3,7 +3,7 @@
 window.I18N = window.I18N || {};
 window.I18N.fr = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Participer', results: 'Résultats à ce jour', charter: 'Lire la charte', about: 'À propos', language: 'Langue', skip: 'Aller au contenu' },
+  nav: { take: 'Participer', results: 'Statistiques', charter: 'Lire la charte', about: 'À propos', language: 'Langue', skip: 'Aller au contenu' },
   common: {
     student: 'Un projet d’étudiant·es de l’ETH Zurich. Nous ne sommes pas liés à la Swiss AI Initiative.',
     sample: 'Tour d’exemple',
@@ -217,14 +217,14 @@ window.I18N.fr = {
   },
 
   results: {
-    title: 'Résultats à ce jour',
+    title: 'Statistiques',
     h: 'Ce que les gens <em>pensent jusqu’ici.</em>',
     lede: 'Voici comment les gens ont évalué chaque proposition de changement. Ici, ce sont de vraies personnes qui décident, pas une IA !',
     howH: 'Comment nous agrégeons les avis',
-    how1: 'Chaque évaluation compte autant : <b>oui</b> +1, <b>en partie</b> 0, <b>non</b> −1.',
-    how2: '<b>Nous classons un changement comme « La plupart sont pour » si :</b> nettement plus de oui que de non, sur au moins 10 réponses.',
-    how3: '<b>Nous classons un changement comme partageant les avis si :</b> au moins 30 % de oui et au moins 30 % de non.',
-    how4: 'L’âge, la langue et l’utilisation de l’IA servent uniquement à analyser comment différents groupes évaluent et proposent des changements ; ils ne servent jamais à décider de leur adoption.',
+    how1: 'Chaque réponse compte comme une approbation : <b>oui</b> 1, <b>en partie</b> ½, <b>non</b> 0. Pour rester prudent avec peu de réponses, chaque changement commence avec 3 oui et 3 non fictifs dans chaque groupe.',
+    how2: '<b>Un changement est adopté (« La plupart sont pour ») si :</b> il a au moins 10 réponses, son score atteint au moins 60 % et aucun groupe linguistique d’au moins 5 réponses n’est sous 40 %. Le score est la moyenne des groupes linguistiques, pour que chaque groupe compte autant, quel que soit le nombre de participants.',
+    how3: '<b>Les avis sont partagés si :</b> le score atteint 60 % mais un groupe linguistique est sous 40 %, ou si au moins 30 % disent oui et au moins 30 % disent non.',
+    how4: 'La langue définit les groupes de cette règle ; les personnes qui ne l’indiquent pas forment leur propre groupe. L’âge et l’utilisation de l’IA servent seulement à montrer comment différents groupes ont évalué un changement.',
     how5: '<b>« Rassemble les groupes » :</b> un badge pour les changements soutenus par la majorité dans chaque groupe d’âge, de langue et d’utilisation de l’IA. Il ne décide jamais seul.',
     how6: '<b>Formulations concurrentes :</b> si plusieurs formulations pour le même passage passent, celle qui a le plus de soutien est retenue. Les cas serrés pourront passer plus tard par un vote en face à face.',
     bridgeBadge: 'Rassemble les groupes',
@@ -236,6 +236,9 @@ window.I18N.fr = {
     bridgeH: 'Soutenu par tous les groupes',
     bridgeP: 'Ces changements ont une majorité dans chaque groupe que nous pouvons afficher : jeunes et aînés, toutes langues confondues, utilisateurs fréquents ou rares de l’IA. Un accord entre des groupes qui voient souvent les choses différemment est un signe fort.',
     bridgeNone: 'Aucun changement n’a encore rassemblé tous les groupes.',
+    scoreLine: 'Score {s} (adopté dès 60 %)',
+    heldBack: 'Retenu : {g} à {s}, sous {f}.',
+    notStated: 'Langue non indiquée',
     howNote: 'Remarque : il s’agit d’une première version ; nous ajusterons peut-être ces seuils quand de nombreuses vraies réponses arriveront.',
     statsLine: '{p} personnes · {a} réponses · {c} propositions de changement',
     filterHint: 'Cliquez sur une couleur pour n’afficher que ces changements.',
@@ -270,6 +273,14 @@ window.I18N.fr = {
     pluralH: 'Pourquoi ce type de participation ?',
     plural1: 'La plupart des recherches sur l’IA « pluraliste » regardent ce que dit un modèle : présente-t-il plusieurs points de vue ? Nous regardons qui peut écrire les règles. Les chercheurs appellent cela le <b>pluralisme institutionnel</b> : les gens peuvent participer aux règles que suit une IA, les contester et les réviser.',
     plural2: 'Nous sommes honnêtes sur les limites. Nos résultats n’engagent pas l’Apertus officiel. Sur « l’échelle de la participation citoyenne » d’Arnstein, c’est encore de la <b>consultation</b>, pas un vrai pouvoir de décision. Nous voulons montrer à quoi pourrait ressembler l’étape suivante.',
+    countH: 'Comment nous comptons les votes',
+    count1: '<b>Chaque réponse est une approbation :</b> oui compte 1, en partie ½, non 0.',
+    count2: '<b>Prudent avec peu de réponses :</b> chaque changement commence avec 3 oui et 3 non fictifs dans chaque groupe linguistique. Avec seulement quelques réponses, un changement reste proche de 50 % et ne peut pas être adopté par hasard.',
+    count3: '<b>Chaque groupe compte autant :</b> le score est la moyenne des groupes linguistiques, donc un groupe ne gagne pas de poids simplement parce que beaucoup de ses membres participent. Les personnes qui n’indiquent pas de langue forment leur propre groupe.',
+    count4: '<b>Un seuil pour tous les groupes :</b> un changement est adopté avec au moins 10 réponses, un score d’au moins 60 % et aucun groupe linguistique d’au moins 5 réponses sous 40 %. Un changement qu’un groupe rejette clairement est retenu, même si le total est élevé.',
+    countEx: '<b>Exemple :</b> 27 germanophones sur 30 disent oui, et 3 francophones sur 10. Un simple comptage donne 75 % de oui. Notre score est de 60 %, mais le groupe francophone est à 38 %, donc le changement est retenu.',
+    countWhy: '<b>Pourquoi :</b> avec peu de réponses, un petit groupe bien organisé pourrait sinon décider seul. L’idée est proche de Community Notes et de Polis, qui récompensent l’accord entre des groupes souvent en désaccord.',
+    countApply: 'Les changements adoptés apparaissent sur la page de la charte sous « Avec les changements adoptés ». Ils ne modifient pas l’Apertus officiel.',
     official: '<b>Il ne modifie pas l’Apertus officiel.</b> Nous testons les résultats sur notre propre petite copie.',
     sample: '<b>Des données d’exemple pour l’instant :</b> tant qu’il n’y a pas assez de participant·es, les résultats incluent des réponses inventées, clairement signalées.',
     dataH: 'Vos données',
@@ -284,7 +295,13 @@ window.I18N.fr = {
     src: {
       cca: 'Environ 1000 personnes aux États-Unis ont écrit des règles pour une IA et voté sur ces règles ; l’IA a ensuite été entraînée avec.',
       notes: 'Un système d’évaluation où une note ne compte que si des personnes habituellement en désaccord la trouvent toutes utiles.',
-      polis: 'Un outil qui montre où des groupes de personnes sont d’accord ou non.',
+      polis: 'Regroupe les personnes selon leurs votes et cherche les affirmations que chaque groupe soutient. Notre seuil pour tous les groupes suit la même idée, avec des groupes déclarés par chacun.',
+      bridging: 'Plaide pour des systèmes qui récompensent ce sur quoi des camps différents s’accordent, pas seulement ce qui est le plus populaire. L’idée derrière notre seuil.',
+      approval: 'Montre que dire simplement oui ou non à chaque option est une façon de voter simple et robuste. Nos réponses oui / en partie / non en sont une forme.',
+      bayes: 'Explique pourquoi peu d’évaluations doivent être ramenées vers un point de départ neutre. C’est ce que font nos 3 oui et 3 non fictifs.',
+      lijphart: 'Comment les sociétés divisées protègent les groupes d’être mis en minorité : les décisions demandent un soutien entre les groupes. Notre seuil de 40 % en est une forme légère.',
+      swiss: 'En Suisse, une modification de la Constitution exige la majorité du peuple et des cantons. Notre règle demande aussi un soutien global et dans chaque groupe.',
+      olson: 'Explique pourquoi de petits groupes bien organisés ont souvent plus d’influence que de grands groupes dispersés. Le même poids par groupe limite cela.',
       dp: 'Les personnes reçoivent une information équilibrée et discutent avant de donner leur avis.',
       prism: 'Ce que les gens disent attendre d’une IA et la façon dont ils évaluent de vraies réponses peuvent différer ; les deux comptent.',
       sc: 'Entraîner une IA avec les avis de nombreuses personnes est déjà une sorte de vote ; il faut donc la concevoir comme tel.',
@@ -306,7 +323,11 @@ window.I18N.fr = {
     summary: '{p} passages avec propositions de changement · {c} au total',
     ideas: '{n} propositions de changement', ideas_one: '1 proposition de changement',
     today: 'Aujourd’hui', added: 'Des mots ajoutés ici', remove: 'Supprimer ces mots',
-    rateThese: 'Évaluer ce changement', suggest: 'Proposer le vôtre'
+    rateThese: 'Évaluer ce changement', suggest: 'Proposer le vôtre',
+    modeToday: 'Aujourd’hui', modeVoted: 'Avec les changements adoptés',
+    votedNote: '{n} changements adoptés appliqués, affichés comme modifications. Cliquez dessus pour voir les évaluations.',
+    votedNote_one: '1 changement adopté appliqué, affiché comme modification. Cliquez dessus pour voir les évaluations.',
+    appliedAria: 'Changement adopté pour « {w} »'
   },
 
   // Données d'exemple (sample-data.js), traduites. Par changement : [texte, raison, citation, question, aujourd'hui, avec le changement].

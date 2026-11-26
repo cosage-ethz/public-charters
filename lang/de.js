@@ -3,7 +3,7 @@
 window.I18N = window.I18N || {};
 window.I18N.de = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Mitmachen', results: 'Bisherige Ergebnisse', charter: 'Charta lesen', about: 'Über uns', language: 'Sprache', skip: 'Zum Inhalt springen' },
+  nav: { take: 'Mitmachen', results: 'Statistik', charter: 'Charta lesen', about: 'Über uns', language: 'Sprache', skip: 'Zum Inhalt springen' },
   common: {
     student: 'Ein Studierendenprojekt an der ETH Zürich. Wir sind nicht mit der Swiss AI Initiative verbunden.',
     sample: 'Beispielrunde',
@@ -217,14 +217,14 @@ window.I18N.de = {
   },
 
   results: {
-    title: 'Bisherige Ergebnisse',
+    title: 'Statistik',
     h: 'Was die Leute <em>bisher denken.</em>',
     lede: 'Hier sehen Sie, wie die Leute jeden Änderungsvorschlag bewertet haben. Hier entscheiden echte Menschen, nicht eine KI!',
     howH: 'Wie wir die Meinungen zusammenfassen',
-    how1: 'Jede Bewertung zählt gleich: <b>Ja</b> +1, <b>teilweise</b> 0, <b>Nein</b> −1.',
-    how2: '<b>Wir stufen eine Änderung als «Die meisten sind dafür» ein, wenn:</b> deutlich mehr Ja als Nein, bei mindestens 10 Antworten.',
-    how3: '<b>Wir stufen eine Änderung als umstritten ein, wenn:</b> mindestens 30 % Ja und mindestens 30 % Nein.',
-    how4: 'Alter, Sprache und KI-Nutzung verwenden wir nur, um zu analysieren, wie verschiedene Gruppen Änderungen bewerten und vorschlagen. Für die Entscheidung über Änderungen werden sie nie verwendet.',
+    how1: 'Jede Antwort zählt als Zustimmung: <b>Ja</b> 1, <b>teilweise</b> ½, <b>Nein</b> 0. Damit wenige Antworten nicht zu viel Gewicht haben, startet jede Änderung in jeder Gruppe mit 3 angenommenen Ja und 3 angenommenen Nein.',
+    how2: '<b>Eine Änderung ist angenommen («Die meisten sind dafür»), wenn:</b> sie mindestens 10 Antworten hat, ihr Wert mindestens 60 % beträgt und keine Sprachgruppe mit 5 oder mehr Antworten unter 40 % liegt. Der Wert ist der Durchschnitt der Sprachgruppen, damit jede Gruppe gleich zählt, egal wie viele mitmachen.',
+    how3: '<b>Die Meinungen sind geteilt, wenn:</b> der Wert mindestens 60 % beträgt, aber eine Sprachgruppe unter 40 % liegt, oder wenn mindestens 30 % Ja und mindestens 30 % Nein sagen.',
+    how4: 'Die Sprache bestimmt die Gruppen für diese Regel; wer keine angibt, bildet eine eigene Gruppe. Alter und KI-Nutzung zeigen nur, wie verschiedene Gruppen eine Änderung bewertet haben.',
     how5: '<b>«Verbindet Gruppen»:</b> eine Auszeichnung für Änderungen, die in jeder Alters-, Sprach- und KI-Nutzungsgruppe eine Mehrheit haben. Sie entscheidet nie allein.',
     how6: '<b>Konkurrierende Formulierungen:</b> Kommen mehrere Formulierungen für dieselbe Stelle durch, wird die mit der meisten Zustimmung gewählt. Knappe Fälle kommen später eventuell in eine direkte Abstimmung.',
     bridgeBadge: 'Verbindet Gruppen',
@@ -236,6 +236,9 @@ window.I18N.de = {
     bridgeH: 'Zustimmung über Gruppen hinweg',
     bridgeP: 'Diese Änderungen haben in jeder Gruppe, die wir zeigen können, eine Mehrheit: bei Jüngeren und Älteren, über alle Sprachen hinweg und bei häufigen wie seltenen KI-Nutzenden. Zustimmung von Gruppen, die vieles unterschiedlich sehen, ist ein starkes Zeichen.',
     bridgeNone: 'Noch hat keine Änderung alle Gruppen verbunden.',
+    scoreLine: 'Wert {s} (angenommen ab 60 %)',
+    heldBack: 'Zurückgehalten: {g} bei {s}, unter {f}.',
+    notStated: 'Sprache nicht angegeben',
     howNote: 'Hinweis: Dies ist eine erste Version. Wir passen diese Grenzen eventuell an, sobald viele echte Antworten vorliegen.',
     statsLine: '{p} Personen · {a} Antworten · {c} Änderungsvorschläge',
     filterHint: 'Klicken Sie auf eine Farbe, um nur diese Änderungen zu zeigen.',
@@ -270,6 +273,14 @@ window.I18N.de = {
     pluralH: 'Warum diese Art der Beteiligung?',
     plural1: 'Die meiste Forschung zu «pluralistischer» KI schaut darauf, was ein Modell sagt: Zeigt es viele Sichtweisen? Wir schauen darauf, wer die Regeln schreiben darf. Die Forschung nennt das <b>institutionellen Pluralismus</b>: Menschen können die Regeln, denen eine KI folgt, mitgestalten, anfechten und überarbeiten.',
     plural2: 'Wir sind ehrlich über die Grenzen. Unsere Ergebnisse binden das offizielle Apertus nicht. Auf Arnsteins «Leiter der Bürgerbeteiligung» ist das noch <b>Konsultation</b>, keine echte Entscheidungsmacht. Wir möchten zeigen, wie der nächste Schritt aussehen könnte.',
+    countH: 'Wie wir Stimmen zählen',
+    count1: '<b>Jede Antwort ist eine Zustimmung:</b> Ja zählt 1, teilweise ½, Nein 0.',
+    count2: '<b>Vorsichtig bei wenigen Antworten:</b> Jede Änderung startet in jeder Sprachgruppe mit 3 angenommenen Ja und 3 angenommenen Nein. Mit nur wenigen Antworten bleibt eine Änderung nahe bei 50 % und kann nicht zufällig angenommen werden.',
+    count3: '<b>Jede Gruppe zählt gleich:</b> Der Wert ist der Durchschnitt der Sprachgruppen. Eine Gruppe erhält also nicht mehr Gewicht, nur weil viele ihrer Mitglieder mitmachen. Wer keine Sprache angibt, bildet eine eigene Gruppe.',
+    count4: '<b>Eine Untergrenze für alle Gruppen:</b> Eine Änderung ist angenommen mit mindestens 10 Antworten, einem Wert von mindestens 60 % und keiner Sprachgruppe mit 5 oder mehr Antworten unter 40 %. Eine Änderung, die eine Gruppe klar ablehnt, wird zurückgehalten, auch wenn die Gesamtzahl hoch ist.',
+    countEx: '<b>Beispiel:</b> 27 von 30 Deutschsprachigen sagen Ja, und 3 von 10 Französischsprachigen. Einfach gezählt wären das 75 % Ja. Unser Wert ist 60 %, aber die französischsprachige Gruppe liegt bei 38 %, also wird die Änderung zurückgehalten.',
+    countWhy: '<b>Warum:</b> Bei wenigen Antworten könnte sonst eine kleine, gut organisierte Gruppe allein entscheiden. Die Idee ähnelt Community Notes und Polis, die Zustimmung über Gruppen hinweg belohnen, die oft uneins sind.',
+    countApply: 'Angenommene Änderungen erscheinen auf der Charta-Seite unter «Mit angenommenen Änderungen». Das offizielle Apertus ändern sie nicht.',
     official: '<b>Es verändert nicht das offizielle Apertus.</b> Wir testen die Ergebnisse an unserer eigenen kleinen Kopie.',
     sample: '<b>Vorerst Beispieldaten:</b> Bis genug Menschen mitmachen, enthalten die Ergebnisse erfundene Antworten, klar gekennzeichnet.',
     dataH: 'Ihre Daten',
@@ -284,7 +295,13 @@ window.I18N.de = {
     src: {
       cca: 'Rund 1000 Personen in den USA haben Regeln für eine KI geschrieben und darüber abgestimmt; die KI wurde dann damit trainiert.',
       notes: 'Ein Bewertungssystem, bei dem eine Notiz nur zählt, wenn Menschen, die sonst uneins sind, sie beide hilfreich finden.',
-      polis: 'Ein Werkzeug, das zeigt, wo Gruppen von Menschen sich einig und uneinig sind.',
+      polis: 'Gruppiert Menschen nach ihrem Abstimmungsverhalten und sucht Aussagen, die jede Gruppe unterstützt. Unsere Untergrenze für alle Gruppen folgt derselben Idee, mit selbst angegebenen Gruppen.',
+      bridging: 'Plädiert dafür, dass Systeme belohnen, worauf sich Menschen verschiedener Lager einigen, nicht nur das Populärste. Die Idee hinter unserer Untergrenze.',
+      approval: 'Zeigt, dass ein einfaches Ja oder Nein zu jeder Option eine robuste Art zu wählen ist. Unsere Antworten Ja / teilweise / Nein sind eine Form davon.',
+      bayes: 'Erklärt, warum wenige Bewertungen zu einem neutralen Startwert hin gezogen werden sollten. Genau das tun unsere 3 angenommenen Ja und 3 angenommenen Nein.',
+      lijphart: 'Wie geteilte Gesellschaften Gruppen davor schützen, überstimmt zu werden: Entscheidungen brauchen Unterstützung über Gruppen hinweg. Unsere 40-%-Untergrenze ist eine leichte Form davon.',
+      swiss: 'Verfassungsänderungen in der Schweiz brauchen das Volks- und das Ständemehr. Auch unsere Regel verlangt Zustimmung insgesamt und in jeder Gruppe.',
+      olson: 'Erklärt, warum kleine, gut organisierte Gruppen oft mehr Einfluss haben als grosse, verstreute. Gleiches Gewicht pro Gruppe begrenzt das.',
       dp: 'Menschen erhalten ausgewogene Informationen und diskutieren, bevor sie ihre Meinung abgeben.',
       prism: 'Was Menschen von einer KI zu wollen sagen und wie sie echte Antworten bewerten, kann sich unterscheiden; beides zählt.',
       sc: 'Eine KI mit dem Feedback vieler Menschen zu trainieren ist schon eine Art Abstimmung, also soll man sie auch so gestalten.',
@@ -306,7 +323,11 @@ window.I18N.de = {
     summary: '{p} Stellen mit Änderungsvorschlägen · insgesamt {c}',
     ideas: '{n} Änderungsvorschläge', ideas_one: '1 Änderungsvorschlag',
     today: 'Heute', added: 'Hier werden Wörter ergänzt', remove: 'Diese Wörter streichen',
-    rateThese: 'Diese Änderung bewerten', suggest: 'Selbst vorschlagen'
+    rateThese: 'Diese Änderung bewerten', suggest: 'Selbst vorschlagen',
+    modeToday: 'Heute', modeVoted: 'Mit angenommenen Änderungen',
+    votedNote: '{n} angenommene Änderungen eingefügt, als Änderungen markiert. Klicken Sie darauf, um die Bewertungen zu sehen.',
+    votedNote_one: '1 angenommene Änderung eingefügt, als Änderung markiert. Klicken Sie darauf, um die Bewertungen zu sehen.',
+    appliedAria: 'Angenommene Änderung zu «{w}»'
   },
 
   // Beispieldaten (sample-data.js), übersetzt. Pro Änderung: [Text, Begründung, Zitat, Frage, heute, mit Änderung].
