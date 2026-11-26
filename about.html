@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261126i">
-<link rel="stylesheet" href="app.css?v=20261126i">
-<script src="lang/en.js?v=20261126i"></script><script src="lang/de.js?v=20261126i"></script><script src="lang/fr.js?v=20261126i"></script><script src="i18n.js?v=20261126i"></script>
-<script src="motion.js?v=20261126i"></script>
+<link rel="stylesheet" href="site.css?v=20261126j">
+<link rel="stylesheet" href="app.css?v=20261126j">
+<script src="lang/en.js?v=20261126j"></script><script src="lang/de.js?v=20261126j"></script><script src="lang/fr.js?v=20261126j"></script><script src="i18n.js?v=20261126j"></script>
+<script src="motion.js?v=20261126j"></script>
 <style>
 .prose{max-width:40em;font-size:18px;line-height:1.6}
 .prose p{margin:0 0 12px}
@@ -96,7 +96,13 @@ details.research summary{cursor:pointer;font:600 22px/1.3 var(--display);letter-
 const SOURCES = [
   ['Collective Constitutional AI', 'Anthropic and the Collective Intelligence Project, 2023', 'cca', 'https://www.anthropic.com/research/collective-constitutional-ai-aligning-a-language-model-with-public-input'],
   ['Community Notes (Birdwatch)', 'Wojcik et al., 2022', 'notes', 'https://arxiv.org/abs/2210.15723'],
-  ['Polis', 'The Computational Democracy Project', 'polis', 'https://pol.is/'],
+  ['Polis: Scaling Deliberation by Mapping High Dimensional Opinion Spaces', 'Small et al., Recerca 2021', 'polis', 'https://www.e-revistes.uji.es/index.php/recerca/article/view/5516'],
+  ['Bridging Systems', 'Ovadya and Thorburn, 2023', 'bridging', 'https://arxiv.org/abs/2301.09976'],
+  ['Approval Voting', 'Brams and Fishburn, American Political Science Review 1978', 'approval', 'https://www.cambridge.org/core/journals/american-political-science-review/article/abs/approval-voting/7CE5DEEE235794B0B12F76ADAE621482'],
+  ['Bayesian Average Ratings', 'Evan Miller', 'bayes', 'https://www.evanmiller.org/bayesian-average-ratings.html'],
+  ['Consociational Democracy', 'Lijphart, World Politics 1969', 'lijphart', 'https://www.cambridge.org/core/journals/world-politics/article/abs/consociational-democracy/BB47BF2A5A4EBAE341FD3FA4E262410F'],
+  ['Federal Constitution, Art. 140 and 142 (majority of the people and the cantons)', 'Swiss Confederation, 1999', 'swiss', 'https://www.parlament.ch/centers/documents/en/20240301_BV-en.pdf'],
+  ['The Logic of Collective Action', 'Olson, Harvard University Press 1965', 'olson', 'https://doi.org/10.4159/9780674041660'],
   ['Deliberative Polling', 'Stanford Deliberative Democracy Lab', 'dp', 'https://deliberation.stanford.edu/'],
   ['PRISM', 'Kirk et al., NeurIPS 2024', 'prism', 'https://arxiv.org/abs/2404.16019'],
   ['Social choice should guide AI alignment', 'Conitzer et al., ICML 2024', 'sc', 'https://arxiv.org/abs/2404.10271'],
@@ -110,7 +116,7 @@ document.getElementById('src').innerHTML = SOURCES.map(([t, a, k, u]) =>
   `<li><b><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a></b>, ${esc(a)}<span>${esc(T('about.src.' + k))}</span></li>`).join('');
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=20261126i"></script>
-<script src="app.js?v=20261126i"></script>
+<script src="config.js?v=20261126j"></script>
+<script src="app.js?v=20261126j"></script>
 </body>
 </html>
