@@ -3,238 +3,263 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="claude:viewport-fit-sides" content="cover">
-<title>Round Results</title>
+<meta name="i18n-title" content="results.title">
+<title>Results</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='12' fill='%23b0302e'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css">
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="site.css?v=20261126c">
+<link rel="stylesheet" href="app.css?v=20261126c">
+<script src="lang/en.js?v=20261126c"></script><script src="lang/de.js?v=20261126c"></script><script src="lang/fr.js?v=20261126c"></script><script src="i18n.js?v=20261126c"></script>
+<script src="motion.js?v=20261126c"></script>
 <style>
-.demo{background:var(--sheet);border:1px solid var(--line);border-left:3px solid var(--v2);padding:10px 14px;font-size:15px;max-width:52em;margin-top:18px}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.stat{background:var(--sheet);border:1px solid var(--line);padding:14px 16px;min-width:0}
-.stat output{display:block;font:600 34px/1 var(--display);font-variant-numeric:tabular-nums;margin-top:6px}
-.stat span.s{display:block;font-size:13.5px;color:var(--muted);margin-top:6px}
-.rules{list-style:none;counter-reset:r;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.rules li{counter-increment:r;background:var(--sheet);border:1px solid var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
-.rules li::before{content:counter(r);font:600 26px/1 var(--display);color:var(--accent)}
-.rules b{font:600 18px/1.25 var(--display)}
-.rules p{margin:0;font-size:15px;line-height:1.5}
-.tbl{overflow-x:auto}
-.t{width:100%;border-collapse:collapse;font-size:15px;background:var(--sheet)}
-.t th,.t td{text-align:left;padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
-.t th{font:700 11.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--desk)}
-.t td.n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
-.t tr.me td{font-weight:700}
-.filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
-.filters button{border:1px solid var(--line);background:var(--sheet);border-radius:999px;padding:5px 13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--slate)}
-.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
-.sugs{display:flex;flex-direction:column;gap:10px}
-.sug{background:var(--sheet);border:1px solid var(--line);padding:14px 16px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:8px 26px;min-width:0}
-.sug .meta{font:700 11px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.sug .diff{font:600 17px/1.4 var(--display);margin:4px 0 6px;overflow-wrap:anywhere}
-.sug del{color:var(--muted);font-weight:400}
-.sug ins{color:var(--accent);text-underline-offset:3px}
-.sug .left{display:flex;flex-direction:column;gap:6px;min-width:0}
-.sug .right{min-width:0}
-.sug p{margin:0}
-.dissent{font-size:14px;background:var(--desk);padding:8px 10px;border-left:3px solid var(--mid)}
-.dissent b{font-weight:700}
-.enote{border-left:3px solid var(--v1);padding:6px 10px;background:var(--desk);font-size:14px}
-.sug.mine{border-color:var(--ink)}
-.vd{font:700 11px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
-.vd.lacking{color:var(--accent)} .vd.holds{color:var(--good)} .vd.split,.vd.needs{color:var(--mid)}
-.cl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.cl-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:12px 0;border-top:1px solid var(--line)}
-.cl-list .n{font:600 22px/1 var(--display);font-variant-numeric:tabular-nums;text-align:right}
-.cl-list small{display:block;color:var(--muted);font-size:13px;font-weight:400}
-.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--sheet)}
-.flow li{padding:14px 14px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
-.flow li:first-child{border-left:0}
-.flow output{font:600 30px/1 var(--display);font-variant-numeric:tabular-nums}
-.flow b{font-size:15px}
-.flow span{font-size:13.5px;color:var(--muted)}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-@media (max-width:900px){.stats,.rules{grid-template-columns:repeat(2,minmax(0,1fr))}.sug{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow li:nth-child(odd){border-left:0}.flow li:nth-child(n+3){border-top:1px solid var(--line)}.grid2{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:560px){.stats,.rules{grid-template-columns:minmax(0,1fr)}}
+/* One colour per result, used everywhere on the page. */
+.chip-sample{display:inline-flex;gap:6px;align-items:center;margin-top:14px;font-size:14px;color:var(--muted)}
+.chip-sample b{color:var(--needs)}
+.statsline{margin:10px 0 0;font-size:15px;color:var(--muted)}
+
+/* Summary bar: click a colour to filter */
+.summary{display:flex;height:46px;border-radius:12px;overflow:hidden;margin:4px 0 10px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
+.summary button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font:700 15px var(--ui);white-space:nowrap;overflow:hidden;min-width:0;transition:filter .2s ease,opacity .2s ease,flex-grow .8s cubic-bezier(.2,.7,.2,1)}
+.summary button:hover{filter:brightness(1.08)}
+.summary button:focus-visible{outline:3px solid var(--ink);outline-offset:-3px}
+.summary.filtered button:not([aria-pressed="true"]){opacity:.35}
+.key{display:flex;flex-wrap:wrap;gap:6px 8px;margin:0 0 6px}
+.key button{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--sheet);border-radius:999px;padding:6px 12px;font-size:14.5px;font-weight:700;cursor:pointer;color:var(--ink)}
+.key button i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.key button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.hint{font-size:14px;color:var(--muted);margin:0}
+
+/* One card per change, all visible */
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:14px;padding:16px 20px;min-width:0}
+.card .top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-bottom:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 12px/1.3 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.chip::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c)}
+.card .meta{font-size:13.5px;color:var(--muted)}
+.card .mine{font:700 10.5px/1 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--pale);border-radius:999px;padding:3px 7px}
+.cl-text{font:400 clamp(18px,1.7vw,20px)/1.55 var(--ui);margin:0 0 8px}
+.cl-text del{color:var(--muted)}
+.cl-text ins{color:var(--ins);text-decoration:none;background:var(--pale);padding:0 2px;border-radius:3px}
+.card .why{font-size:15px;color:#555;margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .res{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:6px 18px;align-items:center}
+.card .line{font-size:14px;color:#333;margin:0}
+.div{display:grid;grid-template-columns:1fr 1fr;align-items:center;height:14px;position:relative}
+.div::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1.5px;background:var(--ink);opacity:.5}
+.div .no{justify-self:end;height:100%;background:var(--contested);opacity:.75;border-radius:4px 0 0 4px;transform-origin:right;animation:grow .9s cubic-bezier(.2,.7,.2,1) both}
+.div .yes{justify-self:start;height:100%;background:var(--endorsed);border-radius:0 4px 4px 0;transform-origin:left;animation:grow .9s cubic-bezier(.2,.7,.2,1) both}
+.pcts{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.pcts b{color:var(--endorsed)}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.more-row{display:flex;justify-content:center;margin-top:16px}
+.more-row:empty{display:none}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;font:700 11.5px/1 var(--ui);border-radius:999px;padding:4px 9px;white-space:nowrap}
+.badge.bridge{background:#e7f3ec;color:var(--good)}
+.badge.win{background:var(--ink);color:#fff}
+.badge.run{background:var(--panel);color:var(--slate)}
+.closecall{margin:8px 0 0;font-size:14px;color:var(--needs);font-weight:700}
+
+/* Agreed across groups */
+.bridgelist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:6px}
+.bcard{background:linear-gradient(180deg,#eef7f1,var(--sheet) 60%);border:1px solid var(--line);border-top:4px solid var(--good);border-radius:14px;padding:14px 18px;min-width:0}
+.bcard .cl-text{font-size:17px}
+.bcard .qs{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:0;font-size:13.5px}
+.bcard .ok{color:var(--good);font-weight:700}
+.bcard .pctb{margin-left:auto;font-weight:700;color:var(--good)}
+
+/* Ideas some groups back */
+.lede-s{max-width:44em;font-size:17px;line-height:1.55;margin:-4px 0 18px;color:#333}
+.fringe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fcard{background:linear-gradient(180deg,#f7f1fb,var(--sheet) 60%);border:1px solid var(--line);border-top:4px solid var(--v4);border-radius:14px;padding:14px 18px;min-width:0}
+.fcard .cl-text{font-size:17px}
+.fcard .grp{font:700 12px/1.3 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--v4);margin:0 0 8px}
+.cmp{display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1fr) 44px;gap:6px 10px;align-items:center;font-size:14px}
+.cmp .bar{height:10px;background:var(--panel);border-radius:5px;overflow:hidden}
+.cmp .bar i{display:block;height:100%;border-radius:5px;background:var(--c);transform-origin:left;animation:grow .9s cubic-bezier(.2,.7,.2,1) both}
+.cmp b{font-variant-numeric:tabular-nums;text-align:right}
+
+.how{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:12px 18px;max-width:52em}
+.how summary{cursor:pointer;font:600 18px/1.3 var(--display)}
+.how ul{margin:10px 0 6px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:16px}
+.how p{margin:0 0 4px}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.flow li{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.flow .n{font:600 24px/1 var(--display);color:var(--accent)}
+.flow b{font:600 17px/1.25 var(--display)}
+.flow span.d{font-size:15px;color:#333}
+@media (max-width:900px){.fringe,.bridgelist{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.card .res{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.summary button span{display:none}}
+@media (max-width:520px){.flow{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.div .no,.div .yes,.cmp .bar i{animation:none}.summary button{transition:none}}
 </style>
 </head>
 <body class="tp">
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <header class="top wrap"><div class="in">
-  <a class="brand" href="./"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></a>
-  <nav class="sn" aria-label="Site">
-    <a href="about.html">How it works</a><a href="./">Charter</a><a href="participate.html">Participate</a><a href="results.html" aria-current="page">Results</a><a href="organise.html">Organise</a>
-  </nav>
-  <div class="acct" id="acct" aria-label="Account"></div>
+  <a class="brand" href="./"><p data-i18n="brand.kicker">Constitutional AI Project</p><span class="bn">public<i></i>charters</span></a>
+  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" aria-current="page" data-i18n="nav.results">Results</a><a href="charter.html" data-i18n="nav.charter">The charter</a><a href="about.html" data-i18n="nav.about">About</a></nav>
+  <span data-langs></span>
+  <div class="acct" id="acct"></div>
 </div></header>
 
+<main id="main" tabindex="-1">
 <section class="hero wrap"><div class="in">
-  <h2>What the community <em>has said so far.</em></h2>
-  <p class="lede">Every suggestion, every comparison and every concern, counted by group. Nothing here was decided by an AI: these are member ratings and choices, combined by the rule below, which anyone can check.</p>
-  <p class="demo" id="demo"><b>Demo.</b> Lakeside Hospital is made up, and so are its 40 members. Your own answers from the Participate page are added to theirs, in this browser only.</p>
+  <h1 data-i18n-html="results.h">What people <em>think so far.</em></h1>
+  <p class="lede" data-i18n="results.lede">This shows how people rated each suggested change. Real people and users decide here, not an AI!</p>
+  <p class="statsline" id="stats"></p>
+  <p class="chip-sample"><b data-i18n="common.sample">Sample round</b><span data-i18n="common.sampleNote">Until enough real answers have come in, the results include 140 made-up participants. Your own answers are added to theirs, and eventually supersede them.</span></p>
+  <noscript><p class="noscript">This page needs JavaScript to show its content. · Diese Seite braucht JavaScript, um ihren Inhalt zu zeigen. · Cette page a besoin de JavaScript pour afficher son contenu.</p></noscript>
 </div></section>
 
-<main class="wrap"><div class="in">
+<div class="wrap"><div class="in">
 
 <section class="block">
-  <p class="eyebrow">This round · open until 22 November</p>
-  <h3 class="sec">Who took part</h3>
-  <div class="stats" id="stats"></div>
+  <div class="summary" id="summary"></div>
+  <div class="key" id="key" role="group"></div>
+  <p class="hint" data-i18n="results.filterHint">Click a colour to show only those changes.</p>
 </section>
 
-<section class="block" id="weights">
-  <p class="eyebrow">The rule</p>
-  <h3 class="sec">A change needs support in every group</h3>
-  <ol class="rules">
-    <li><b>Groups count at their share</b><p>Each group counts at its share of the community, set by the organisers, not by how many of its members turned up. A busy, well-organised group cannot outweigh the others.</p></li>
-    <li><b>Every group has to agree</b><p>A suggestion is <b>endorsed</b> when at least 60% of raters in every group find it helpful, with at least 3 ratings per group. If some groups are for it and some against, it is <b>contested</b>.</p></li>
-    <li><b>Disagreement stays visible</b><p>Each endorsed change carries a dissent record: which groups were partly against, and their reasons. Contested changes go to a bridge challenge, where members write wordings both sides can accept.</p></li>
-  </ol>
-  <div class="tbl" style="margin-top:18px"><table class="t" id="wtable"></table></div>
-  <p class="small muted" style="margin-top:8px;max-width:52em">Weight = share of the community ÷ share of active members, kept between 0.3 and 3. This is a simplified version of DemPO weighting. Helpful shares are smoothed: each group starts with one imaginary helpful and one unhelpful rating, so two out of two does not count as 100%.</p>
+<section class="block" id="list">
+  <h2 class="sec reveal" data-i18n="results.listH">Top suggested changes, by agreement</h2>
+  <p class="hint" data-i18n="results.listHint" style="margin:-6px 0 16px">Scroll through the suggested changes. Open “By age, language and AI use” on a card to see how groups answered.</p>
+  <div class="cards" id="cards"></div>
+  <div class="more-row" id="more"></div>
 </section>
 
-<section class="block" id="suggestions">
-  <p class="eyebrow">Suggestions</p>
-  <h3 class="sec">Where each proposed change stands</h3>
-  <div class="filters" id="filters" role="group" aria-label="Show"></div>
-  <div class="sugs" id="sugs"></div>
+<section class="block" id="bridging">
+  <h2 class="sec reveal" data-i18n="results.bridgeH">Agreed across groups</h2>
+  <p class="lede-s reveal" data-i18n="results.bridgeP">These changes have a majority in every group we can show: young and old, across languages, and among frequent and rare AI users. Agreement across groups that often see things differently is a strong sign.</p>
+  <div class="bridgelist" id="bridgeList"></div>
 </section>
 
-<section class="block" id="check">
-  <p class="eyebrow">Charter check · from Compare answers</p>
-  <h3 class="sec">Where the charter may be lacking</h3>
-  <p class="prose small" style="margin:0 0 14px">Members compared answers to real situations without knowing which followed the charter. When every group prefers the alternative, the charter does not yet say what the community wants in that situation. The numbers show the share of each group that preferred the alternative, with the number of answers below. No AI is involved: these are counts.</p>
-  <div class="tbl"><table class="t" id="ctable"></table></div>
+<section class="block" id="fringe">
+  <h2 class="sec reveal" data-i18n="results.fringeH">Changes most popular with smaller subgroups</h2>
+  <p class="lede-s reveal" data-i18n="results.fringeP">Not every suggested change wins a majority. These changes are backed by most people in one "demographic" group, even though most people overall don’t agree (yet). We want them to stay visible, so smaller voices are not lost.</p>
+  <div class="fringe" id="fringeList"></div>
 </section>
 
-<section class="block" id="concerns">
-  <div class="grid2">
-    <div>
-      <p class="eyebrow">Concerns</p>
-      <h3 class="sec">Most shared concerns</h3>
-      <ol class="cl-list" id="clist"></ol>
-      <p class="small muted">Ranked by <i>me too</i>, each group counted at its share. Posted as written; no AI summary.</p>
-    </div>
-    <div id="floor">
-      <p class="eyebrow">Safety floor</p>
-      <h3 class="sec">What no amendment can lower</h3>
-      <p class="small" style="margin:0 0 10px">Every new version must still pass these cases before it is released. A change that would break one is held back for review, whatever its support.</p>
-      <ol class="cl-list" id="flist"></ol>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="feedback">
-  <p class="eyebrow">Process feedback</p>
-  <h3 class="sec">How members found the process</h3>
-  <div class="tbl"><table class="t" id="ftable"></table></div>
-  <p class="small muted" style="margin-top:8px">Average answer from 1 (disagree) to 5 (agree). Organisers review this after each round; the lowest scores show what to change first.</p>
-  <h4 style="margin-top:26px">Did views move?</h4>
-  <p class="small" style="margin:0 0 10px;max-width:44em">Average answers from members who took the optional survey before and after (1 strongly disagree to 7 strongly agree).</p>
-  <div class="tbl"><table class="t" id="stable"></table></div>
+<section class="block">
+  <details class="how reveal">
+    <summary data-i18n="results.howH">How we aggregated opinions</summary>
+    <ul><li data-i18n-html="results.how2"><b>We classify a change as "Most people agree" if:</b> clearly more yes than no, from at least 10 answers.</li><li data-i18n-html="results.how3"><b>We classify a change as causing divided opinions if:</b> at least 30% yes and at least 30% no.</li><li data-i18n="results.how4">Age, language and AI use is only used to analyse how different groups rate and propose changes, and is never used to decide approvals.</li><li data-i18n-html="results.how5"><b>“Bridges groups”:</b> a badge for changes that most people support in every age, language and AI-use group. It never decides on its own.</li><li data-i18n-html="results.how6"><b>Rival wordings:</b> if several wordings for the same words pass, the one with the most support is chosen. Close calls may go to a head-to-head vote later.</li></ul>
+    <p class="small muted" data-i18n="results.howNote">Note: this is a first version: we may adjust these classification limits once many real answers come in.</p>
+  </details>
 </section>
 
 <section class="block" id="next">
-  <p class="eyebrow">From charter to model</p>
-  <h3 class="sec">What happens to the endorsed changes</h3>
-  <ol class="flow" id="flow"></ol>
-  <p class="small muted" style="margin-top:10px">The scorecard appears here after training: how often the model follows the charter on held-out cases, before and after, and whether it still passes every safety floor case.</p>
+  <h2 class="sec reveal" data-i18n="results.nextH">What happens next</h2>
+  <ol class="flow">
+    <li class="reveal"><span class="n">1</span><b data-i18n="results.next1h">The round closes</b><span class="d" data-i18n="results.next1">Every change gets its result.</span></li>
+    <li class="reveal" data-delay="100"><span class="n">2</span><b data-i18n="results.next2h">A new version</b><span class="d" data-i18n="results.next2">Changes most people agree on go into a new version of the charter.</span></li>
+    <li class="reveal" data-delay="200"><span class="n">3</span><b data-i18n="results.next3h">A test</b><span class="d" data-i18n="results.next3">We train a small copy of Apertus on it and test it on new questions.</span></li>
+    <li class="reveal" data-delay="300"><span class="n">4</span><b data-i18n="results.next4h">A report</b><span class="d" data-i18n="results.next4">We publish whether its answers really changed.</span></li>
+  </ol>
 </section>
 
-</div></main>
+</div></div>
+</main>
 
-<footer class="foot wrap"><div class="in">Results by group only. Individual ratings are never shown. The scoring code is <code>bridge.js</code> in the repository, so anyone can rerun it.</div></footer>
+<footer class="foot wrap"><div class="in" data-i18n-html="common.footer">Public Charters · AI and Human Values, ETH Zurich, 2026. Not affiliated with the Swiss AI Initiative. Charter source: <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">apertus-ai.org</a> · Code: <a href="https://github.com/cosage-ethz/public-charters" target="_blank" rel="noopener">GitHub</a></div></footer>
 
-<script src="sample-data.js"></script>
+<script src="sample-data.js?v=20261126c"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js"></script>
-<script src="app.js"></script>
-<script src="bridge.js"></script>
-<script src="community.js"></script>
+<script src="config.js?v=20261126c"></script>
+<script src="app.js?v=20261126c"></script>
+<script src="bridge.js?v=20261126c"></script>
+<script src="community.js?v=20261126c"></script>
 <script>
 (() => {
-const C = window.Community, B = window.Bridge;
+const C = window.Community;
 const $ = id => document.getElementById(id);
-const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
-const pct = x => Math.round(x * 100) + '%';
-const verbOf = { replace: 'Reword', insert: 'Add', delete: 'Remove' };
-const STATUS = { endorsed: ['Endorsed', 'good'], contested: ['Contested', 'warn'], weak: ['Not enough support', 'mid'], needs: ['Needs ratings', 'need'] };
-const pill = st => `<span class="pill ${STATUS[st][1]}">${STATUS[st][0]}</span>`;
-const diff = s => (s.op !== 'insert' && s.base ? `<del>${esc(s.base)}</del> ` : '') + (s.op !== 'delete' ? `<ins>${esc(s.text)}</ins>` : '');
-const me = C.me, myGroup = me.consent ? me.group : '';
-let FILTER = 'all', ALL = false;
+const { esc, pct } = C;
+const KINDS = ['endorsed', 'contested', 'needs', 'weak'];
+const color = k => `var(--${k})`;
+let FILTER = null, SHOW_ALL = false;
+const TOP = 8;   // cards shown before "Show all"
 
-function bars(rows, mark) {
-  return `<div class="bars">${rows.map(r => `<div class="bar ${r.me ? 'me' : ''}"><span class="bn">${esc(r.name)}${r.me ? ' <i>(your group)</i>' : ''}</span>
-    <span class="bt" role="img" aria-label="${esc(r.name)}: ${pct(r.v)}"><span class="bf" style="width:${Math.round(r.v * 100)}%"></span>${mark ? '<span class="bm" style="left:60%"></span>' : ''}</span>
-    <span class="bv">${pct(r.v)} <small>${r.n} ${r.n === 1 ? 'rating' : 'ratings'}</small></span></div>`).join('')}</div>`;
+// Small badges next to the verdict: bridges groups, chosen wording / runner-up.
+function badges(s) {
+  let h = '';
+  if (s.s.status === 'endorsed' && s.bridge && s.bridge.ok) h += `<span class="badge bridge" title="${esc(T('results.bridgeTip'))}">⬡ ${esc(T('results.bridgeBadge'))}</span>`;
+  if (s.pick === 'chosen') h += `<span class="badge win">✓ ${esc(T('results.chosen'))}</span>`;
+  if (s.pick === 'runner') h += `<span class="badge run" title="${esc(T('results.runnerTip'))}">${esc(T('results.runner'))}</span>`;
+  return h;
 }
 
 function render() {
-  const W = C.weights(), sugs = C.suggestions(), pairs = C.pairs(), mine = C.myCounts();
-  const totalRatings = sugs.reduce((n, s) => n + s.s.n, 0);
-  const totalPairs = pairs.reduce((n, p) => n + C.GROUPS.reduce((m, g) => m + p.r.per[g.id].n, 0), 0);
-  const members = C.GROUPS.reduce((n, g) => n + g.active, 0) + (myGroup ? 1 : 0);
-  const stat = (l, v, s) => `<div class="stat"><span class="lbl">${l}</span><output>${v}</output><span class="s">${s}</span></div>`;
-  $('stats').innerHTML = stat('Active members', members, myGroup ? 'Including you' : 'Join on the Participate page') +
-    stat('Ratings', totalRatings, mine.ratings ? `${mine.ratings} of them yours` : `on ${sugs.length} suggestions`) +
-    stat('Comparisons', totalPairs, mine.pairs ? `${mine.pairs} of them yours` : `across ${pairs.length} situations`) +
-    stat('Concerns', C.concerns().length, 'with me too from every group');
+  const me = C.me, sugs = C.suggestions();
+  const answers = sugs.reduce((n, s) => n + s.s.n, 0);
+  $('stats').textContent = T('results.statsLine', { p: C.SIZE + (me.consent ? 1 : 0), a: answers.toLocaleString(window.PC_LANG), c: sugs.length });
 
-  $('wtable').innerHTML = `<thead><tr><th>Group</th><th class="n">Share of the community</th><th class="n">Active members</th><th class="n">Share of active members</th><th class="n">Weight</th></tr></thead><tbody>${C.GROUPS.map(g =>
-    `<tr class="${g.id === myGroup ? 'me' : ''}"><td>${esc(g.name)}${g.id === myGroup ? ' (your group)' : ''}</td><td class="n">${pct(g.target)}</td><td class="n">${g.active + (g.id === myGroup ? 1 : 0)}</td><td class="n">${pct(W[g.id].share)}</td><td class="n">${W[g.id].weight.toFixed(2)}</td></tr>`).join('')}</tbody>`;
+  // Summary bar + key (both filter the list)
+  const count = k => sugs.filter(s => s.s.status === k).length;
+  const kinds = KINDS.filter(count);
+  $('summary').classList.toggle('filtered', !!FILTER);
+  $('summary').innerHTML = kinds.map(k => `<button data-f="${k}" aria-pressed="${FILTER === k}" style="flex-grow:${count(k)};background:${color(k)}" title="${esc(T('status.' + k))}"><span>${count(k)}</span></button>`).join('');
+  $('key').innerHTML = `<button data-f="" aria-pressed="${!FILTER}" style="--c:var(--ink)"><i></i>${esc(T('results.all'))} · ${sugs.length}</button>` +
+    kinds.map(k => `<button data-f="${k}" aria-pressed="${FILTER === k}" style="--c:${color(k)}"><i></i>${esc(T('status.' + k))} · ${count(k)}</button>`).join('');
 
-  const counts = { all: sugs.length };
-  sugs.forEach(s => { counts[s.s.status] = (counts[s.s.status] || 0) + 1; });
-  const F = [['all', 'All'], ['endorsed', 'Endorsed'], ['contested', 'Contested'], ['weak', 'Not enough support'], ['needs', 'Needs ratings']];
-  $('filters').innerHTML = F.map(([k, l]) => `<button data-f="${k}" aria-pressed="${FILTER === k}">${l} · ${counts[k] || 0}</button>`).join('');
-  const order = { endorsed: 0, contested: 1, needs: 2, weak: 3 };
-  const list = sugs.filter(s => FILTER === 'all' || s.s.status === FILTER).sort((a, b) => order[a.s.status] - order[b.s.status] || b.s.overall - a.s.overall);
-  const cut = FILTER === 'all' && !ALL ? 8 : list.length;
-  $('sugs').innerHTML = list.slice(0, cut).map(s => {
-    const d = s.dissent.length ? `<p class="dissent"><b>Dissent record:</b> ${s.dissent.map(x => `${esc(x.group.name)} ${x.against}% not helpful${x.why.length ? ` (${esc(x.why.join(', ').toLowerCase())})` : ''}`).join('; ')}.</p>` : '';
-    const act = s.s.status === 'contested' ? `<a class="btn" href="participate.html#propose">Write a bridge</a>` : s.s.status === 'needs' ? `<a class="btn" href="participate.html#rate">Rate it</a>` : '';
-    return `<article class="sug ${s.own ? 'mine' : ''}"><div class="left">
-      <span class="meta">Clause ${esc(s.clause)} · ${esc(s.title)} · ${verbOf[s.op]}${s.own ? ' · your proposal' : ''}</span>
-      <p class="diff">${diff(s)}</p>
-      <div>${pill(s.s.status)} <span class="small">${esc(s.why_status)}</span></div>
-      ${s.why ? `<p class="small muted">${esc(s.why)}</p>` : ''}
-      ${s.note ? `<p class="enote"><b>Context note, ${esc(s.note.by)}:</b> ${esc(s.note.text)}</p>` : ''}
-      ${d}${act ? `<div>${act}</div>` : ''}</div>
-      <div class="right"><p class="lbl">Helpful, by group</p>${bars(C.GROUPS.map(g => ({ name: g.name, v: s.s.per[g.id].h, n: s.s.per[g.id].n, me: g.id === myGroup })), true)}
-      <p class="small muted">Weighted overall: ${pct(s.s.overall)} · ${s.s.n} ratings</p></div></article>`;
-  }).join('') + (cut < list.length ? `<div><button class="btn" data-all>Show all ${list.length} suggestions</button></div>` : '') || '<p class="small muted">Nothing here yet.</p>';
+  // All changes as cards: own suggestions first, then most agreed first, "needs answers" last
+  const list = sugs.filter(s => !FILTER || s.s.status === FILTER)
+    .sort((a, b) => (b.own ? 1 : 0) - (a.own ? 1 : 0) || (a.s.status === 'needs') - (b.s.status === 'needs') || b.s.net - a.s.net);
+  const shown = SHOW_ALL ? list : list.slice(0, TOP);
+  $('cards').innerHTML = shown.map(s => {
+    const t = s.s, k = t.status;
+    return `<article class="card reveal" style="--c:${color(k)}">
+      <div class="top"><span class="chip">${esc(T('status.' + k))}</span>${badges(s)}<span class="meta">${esc(T('common.article', { n: s.art ? s.art.n : '' }))} · ${esc(s.title)} · ${esc(s.clause)}</span>${s.own ? `<span class="mine">${esc(T('results.yours'))}</span>` : ''}</div>
+      <p class="cl-text">${C.changedClause(s)}</p>
+      ${s.why ? `<p class="why">${esc(s.why)}</p>` : ''}
+      ${t.n ? `<div class="res"><div><div class="div"><span class="no" style="width:${(t.notShare * 100).toFixed(1)}%"></span><span class="yes" style="width:${(t.helpShare * 100).toFixed(1)}%"></span></div>
+          <div class="pcts"><span>${pct(t.notShare)} ${esc(T('results.axisNo'))}</span><b>${pct(t.helpShare)} ${esc(T('results.axisYes'))}</b></div></div>
+        <p class="line">${esc(T('results.line', { yes: pct(t.helpShare), partly: pct(t.someShare), no: pct(t.notShare), n: t.n }))}</p></div>
+        ${s.close ? `<p class="closecall">⚖ ${esc(T('results.close'))}</p>` : ''}
+        <details class="more"><summary>${esc(T('demo.by'))}</summary>${C.breakdownHTML(s.ratings)}</details>` : ''}
+      ${k === 'needs' && !s.own ? `<p style="margin:10px 0 0"><a class="btn small" href="participate.html#rate">${esc(T('results.rateIt'))} →</a></p>` : ''}
+    </article>`;
+  }).join('') || `<p class="hint">${esc(T('results.none'))}</p>`;
+  $('more').innerHTML = list.length > TOP
+    ? `<button class="btn" data-more>${esc(SHOW_ALL ? T('results.showLess') : T('results.showAll', { n: list.length }))}</button>` : '';
 
-  const V = { 'charter-lacking': ['Charter may be lacking', 'lacking'], 'charter-holds': ['Charter holds', 'holds'], split: ['Groups split', 'split'], needs: ['Needs answers', 'needs'] };
-  const vOrder = { 'charter-lacking': 0, split: 1, 'charter-holds': 2, needs: 3 };
-  $('ctable').innerHTML = `<thead><tr><th>Clause and situation</th><th>Verdict</th>${C.GROUPS.map(g => `<th class="n">${esc(g.name)}</th>`).join('')}</tr></thead><tbody>${pairs.slice().sort((a, b) => vOrder[a.r.verdict] - vOrder[b.r.verdict]).map(p =>
-    `<tr><td><b>${esc(p.clause)}</b> ${esc(p.title)}<br><span class="small muted">“${esc(p.situation)}”</span></td><td><span class="vd ${V[p.r.verdict][1]}">${V[p.r.verdict][0]}</span></td>
-    ${C.GROUPS.map(g => `<td class="n">${pct(p.r.per[g.id].alt_share)}<br><span class="small muted">${p.r.per[g.id].n}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
+  // Agreed across groups: passes overall and has a majority in every group we can show
+  const br = sugs.filter(s => s.s.status === 'endorsed' && s.bridge.ok).sort((a, b) => b.s.net - a.s.net);
+  $('bridgeList').innerHTML = br.slice(0, 6).map(s => `<article class="bcard reveal">
+      <p class="cl-text">${C.changedClause(s)}</p>
+      <p class="qs">${s.bridge.perQ.filter(x => x.counted).map(x => `<span class="ok">✓ ${esc(T('demo.' + x.q.id + '.short'))}</span>`).join('')}<span class="pctb">${pct(s.s.helpShare)} ${esc(T('results.axisYes'))}</span></p>
+    </article>`).join('') || `<p class="hint">${esc(T('results.bridgeNone'))}</p>`;
 
-  $('clist').innerHTML = C.concerns().slice(0, 6).map(c => `<li><span>${esc(c.text)}${c.own ? ' <span class="pill mid">Yours</span>' : ''}<small>${c.groupsWith} of ${C.GROUPS.length} groups${me.suggested[c.id] ? ' · you suggested it as a situation' : ''}</small></span><span class="n">${c.n}</span></li>`).join('');
-  $('flist').innerHTML = C.FLOOR.map(f => `<li><span><b>${esc(f.id)}</b> “${esc(f.prompt)}”<small>${esc(f.must)}</small></span><span class="pill good">Must pass</span></li>`).join('');
-
-  const fb = me.feedback && me.feedback.sent ? me.feedback : null;
-  $('ftable').innerHTML = `<thead><tr><th>Statement</th>${C.GROUPS.map(g => `<th class="n">${esc(g.name)}</th>`).join('')}${fb ? '<th class="n">You</th>' : ''}</tr></thead><tbody>${C.FEEDBACK.map(q =>
-    `<tr><td>${esc(q.q)}</td>${C.GROUPS.map(g => `<td class="n">${C.FEEDBACK_SIM[q.id][g.id].toFixed(1)}</td>`).join('')}${fb ? `<td class="n">${fb[q.id] || '–'}</td>` : ''}</tr>`).join('')}</tbody>`;
-  $('stable').innerHTML = `<thead><tr><th>Statement</th><th class="n">Before</th><th class="n">After</th><th class="n">Change</th></tr></thead><tbody>${C.QUESTIONS.map(q => {
-    const [a, b] = C.SURVEY_SIM[q.id], dlt = b - a;
-    return `<tr><td>${esc(q.q)}</td><td class="n">${a.toFixed(1)}</td><td class="n">${b.toFixed(1)}</td><td class="n">${dlt > 0 ? '+' : ''}${dlt.toFixed(1)}</td></tr>`; }).join('')}</tbody>`;
-
-  const end = sugs.filter(s => s.s.status === 'endorsed'), tc = end.filter(s => s.test).length;
-  const step = (v, b, s) => `<li><output>${v}</output><b>${b}</b><span>${s}</span></li>`;
-  $('flow').innerHTML = step(end.length, 'Endorsed changes', 'Go into the new charter version') +
-    step(tc, 'Test cases', 'Each confirmed by two members') +
-    step(Math.round(tc * 0.8), 'For training', '80%, fixed by each case’s ID') +
-    step(tc - Math.round(tc * 0.8), 'Held out', 'The model never sees these') +
-    step(C.FLOOR.length, 'Safety floor', 'Must still pass after training');
+  // Ideas some groups back: not endorsed overall, but at least 60% yes in one group of 5 or more,
+  // and at least 20 points above everyone. One card per change, its strongest group.
+  const B = window.Bridge, fr = [];
+  sugs.filter(s => s.s.n && s.s.status !== 'endorsed' && s.s.status !== 'needs').forEach(s => {
+    let best = null;
+    B.breakdown(C.DEMOGRAPHICS, s.ratings, B.tally).forEach(({ q, rows }) => rows.forEach(r => {
+      const gap = r.helpShare - s.s.helpShare;
+      if (r.helpShare >= 0.6 && gap >= 0.2 && (!best || gap > best.gap)) best = { q, r, gap };
+    }));
+    if (best) fr.push({ s, ...best });
+  });
+  fr.sort((a, b) => b.gap - a.gap);
+  const bar = (label, t, c) => `<span>${esc(label)}</span><span class="bar"><i style="width:${(t.helpShare * 100).toFixed(1)}%;--c:${c}"></i></span><b>${pct(t.helpShare)}</b>`;
+  $('fringeList').innerHTML = fr.slice(0, 6).map(({ s, q, r }) => `<article class="fcard reveal">
+      <p class="grp">${esc(C.qLabel(q))}: ${esc(C.oLabel(q, r.option))} · ${esc(T('results.fringePeople', { n: r.n }))}</p>
+      <p class="cl-text">${C.changedClause(s)}</p>
+      <div class="cmp">${bar(C.oLabel(q, r.option), r, 'var(--v4)')}${bar(T('results.fringeAll'), s.s, 'var(--weak)')}</div>
+    </article>`).join('') || `<p class="hint">${esc(T('results.fringeNone'))}</p>`;
+  if (window.PCReveal) PCReveal();
 }
 
 document.addEventListener('click', ev => {
-  const f = ev.target.closest('[data-f]'); if (f) { FILTER = f.dataset.f; render(); }
-  if (ev.target.closest('[data-all]')) { ALL = true; render(); }
+  const f = ev.target.closest('[data-f]');
+  if (f) { FILTER = f.dataset.f && FILTER !== f.dataset.f ? f.dataset.f : null; SHOW_ALL = false; return render(); }
+  if (ev.target.closest('[data-more]')) {
+    const wasAll = SHOW_ALL; SHOW_ALL = !SHOW_ALL; render();
+    if (wasAll) { const el = $('list'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
+    return;
+  }
 });
 document.addEventListener('pc:proposed', render);
 render();

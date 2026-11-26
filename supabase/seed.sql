@@ -1,11 +1,16 @@
--- Demo space with an excerpt of the Apertus Charter (Version 1.0, shortened,
--- articles 4, 8 and 10, the same text as the sample in index.html).
--- Run after schema.sql. Then make yourself admin (see docs/SETUP.md).
+-- The public space: an excerpt of the Apertus Charter (Version 1.0, shortened,
+-- articles 4, 8 and 10, the same text as the sample in charter.html).
+-- Run after schema.sql. Then make yourself admin (see the README).
 
 with sp as (
   insert into public.space (slug, name, access, created_by, settings)
-  values ('apertus-demo', 'Apertus Charter (demo)', 'invite', null,
-          '{"panel_size": 8, "points_budget": 100, "quotas": {}}'::jsonb)
+  values ('apertus', 'Apertus Charter', 'open', null,
+          '{"phase": "open",
+            "demographics": [
+              {"id": "age",  "options": ["u25", "a25", "a45", "a65"]},
+              {"id": "lang", "options": ["de", "fr", "it", "rm", "en", "other"]},
+              {"id": "ai",   "options": ["daily", "weekly", "rarely", "never"]}
+            ]}'::jsonb)
   returning id
 ), v as (
   insert into public.charter_version (space_id, label, status, published_at)

@@ -3,428 +3,248 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Public Charters</title>
+<meta name="description" content="Apertus, Switzerland's open AI model, follows a charter of principles. Help decide what it should say.">
+<meta name="i18n-title" content="home.title">
+<title>Public Charters · Help write the rules for AI</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='12' fill='%23b0302e'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css">
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app.css?v=20261126c">
+<link rel="stylesheet" href="site.css?v=20261126c">
+<script src="lang/en.js?v=20261126c"></script><script src="lang/de.js?v=20261126c"></script><script src="lang/fr.js?v=20261126c"></script><script src="i18n.js?v=20261126c"></script>
+<script src="motion.js?v=20261126c"></script>
 <style>
-/* Layout: Swiss civic editorial. Off-white page, huge grotesk headline, hairline rules, numbered articles, segmented progress bar. Light only, by choice. */
-:root{
-  --desk:#f6f6f6; --sheet:#ffffff; --panel:#ececec; --ink:#141414; --slate:#3b4656; --muted:#666a70; --line:#d6d6d6; --accent:#b0302e; --pale:#ecd2d0;
-  --v1:#28608f; --v2:#b0760f; --v3:#2b7a68; --v4:#7c4a93; --tint:17%;
-  --good:#2b7a4b; --warn:#b0302e; --mid:#666a70;
-  --display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
-  --ui:"Lato","Helvetica Neue",Arial,sans-serif;
-  --doc:"Lato","Helvetica Neue",Arial,sans-serif;
-  color-scheme:light;
-}
-*{box-sizing:border-box}
-html,body{min-height:100%}
-body{background:var(--desk);color:var(--ink);font:400 16px/1.55 var(--ui);overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--desk)}
-button,select{font:inherit;color:inherit}
-button{cursor:pointer}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.top-in,.hero-in,.step-in,.main{max-width:1400px;margin-left:auto;margin-right:auto}
+/* Hero: text on the left, a charter sentence that cycles through suggested wordings on the right. */
+.landing .hero .in{padding-block:clamp(26px,5vw,70px) clamp(30px,5vw,60px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center}
+.landing .hero h1{max-width:11em;font-size:clamp(44px,7vw,92px)}
+.cta{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:26px}
+.cta .btn{font-size:17px;padding:11px 20px}
+.cta .note{font-size:15px;color:var(--muted)}
 
-/* Top bar */
-.top-in{display:flex;flex-wrap:wrap;align-items:center;gap:10px 28px;padding-block:18px}
-.brand{min-width:0;flex:1 1 240px}
-.brand p{margin:0;font:700 11px/1.2 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.brand h1{margin:1px 0 0;font:600 20px/1.15 var(--display);letter-spacing:-.025em}
-.brand h1 i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin:0 3px 3px 4px}
-.ctl{display:flex;flex-wrap:wrap;gap:6px 26px;align-items:center}
-.seg{display:inline-flex;gap:16px}
-.seg button{border:0;background:none;padding:2px 0 3px;color:var(--muted);font-weight:700;font-size:15px;white-space:nowrap;border-bottom:2px solid transparent}
-.seg button:hover{color:var(--ink)}
-.seg button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.demo{background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:22px 24px 18px;box-shadow:0 10px 30px rgba(20,20,20,.06)}
+.demo .lbl{margin-bottom:10px}
+.demo-cl{font:400 clamp(20px,2.2vw,25px)/1.5 var(--ui);margin:0;min-height:4.5em}
+.swap{display:inline;padding:1px 4px;border-radius:5px;background:var(--panel);transition:opacity .35s ease,background-color .35s ease,color .35s ease}
+.swap.alt{background:var(--pale);color:var(--accent)}
+.swap.out{opacity:0}
+.demo-tag{display:inline-flex;align-items:center;gap:7px;margin:14px 0 0;font:700 12px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .35s ease}
+.demo-tag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.demo-tag.alt{color:var(--accent)}
+.demo-dots{display:flex;gap:5px;margin-top:12px}
+.demo-dots i{width:18px;height:3px;border-radius:2px;background:var(--panel);transition:background-color .35s ease}
+.demo-dots i.on{background:var(--accent)}
+.demo-cap{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:15px;color:#333}
 
-/* Hero */
-.hero-in{padding-block:clamp(22px,4vw,48px) 30px}
-.hero h2{margin:0 0 18px;font:600 clamp(42px,7.4vw,92px)/1.02 var(--display);letter-spacing:-.04em;max-width:13em;text-wrap:balance}
-.hero h2 em{font-style:normal;color:var(--accent);display:block}
-.sub a,.notice a{color:inherit;text-decoration:underline;text-underline-offset:2px}
-.sub{margin:0 0 20px;font-size:clamp(18px,2vw,22px);line-height:1.45;color:#4a4a4a;max-width:34em}
-.part{margin:0;font-weight:700;font-size:17px}
-.cap{margin:5px 0 0;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.notice{margin:14px 0 0;color:var(--muted);font-size:14px;max-width:60em}
+/* Sections */
+.sec-h{font:600 clamp(28px,3.4vw,42px)/1.08 var(--display);letter-spacing:-.03em;margin:4px 0 20px;max-width:20em;text-wrap:balance}
+.steps3{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.steps3 li{background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--pale);color:var(--accent)}
+.ico svg{width:22px;height:22px}
+.steps3 b{font:600 21px/1.2 var(--display)}
+.steps3 p{margin:0;font-size:16px;line-height:1.45;color:#333}
 
-/* Stepper */
-.step{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--desk)}
-.step-in{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding-block:9px}
-.step-count{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;min-width:112px}
-.btn{border:1px solid var(--line);background:none;border-radius:10px;padding:6px 14px;font-weight:700;font-size:15px}
-.btn:hover{border-color:var(--ink)}
-.btn[disabled]{opacity:.45;cursor:default}
-#next{background:var(--accent);border-color:var(--accent);color:#fff}
-#next:hover{background:#952523;border-color:#952523}
-.step-now{flex:1 1 200px;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.filter{margin-left:auto}
-.prog{display:flex;gap:4px;height:4px}
-.prog i{flex:1;background:var(--pale)}
-.prog i.done{background:var(--accent)}
+.flowline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;position:relative}
+.flowline li{position:relative;display:flex;flex-direction:column;gap:5px;min-width:0;padding-top:30px}
+.flowline li::before{content:"";position:absolute;top:8px;left:0;width:16px;height:16px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px var(--pale)}
+.flowline li::after{content:"";position:absolute;top:15px;left:26px;right:-10px;height:2px;background:var(--line)}
+.flowline li:last-child::after{display:none}
+.flowline .k{font:700 12px/1.3 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.flowline b{font:600 19px/1.25 var(--display)}
+.flowline span.d{font-size:15.5px;line-height:1.45;color:#333}
 
-/* Main grid */
-.main{display:grid;grid-template-columns:260px minmax(0,1fr) 340px;gap:0 36px;padding-block:0 70px;align-items:start}
-.main.compare{grid-template-columns:260px minmax(0,1fr)}
-.main.compare .margin{display:none}
-.side{display:flex;flex-direction:column;gap:26px;position:sticky;top:68px;padding-top:30px}
-.side h2,.lbl,.eyebrow{font:700 12px/1.3 var(--ui);letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-.side h2{margin:0 0 8px}
-.vlist{display:flex;flex-direction:column;gap:4px}
-.v{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:0 10px;align-items:start;padding:7px 0}
-.v.off .vname,.v.off .vmeta{opacity:.5}
-.v.off .badge{background:none;color:var(--muted);box-shadow:inset 0 0 0 1.5px #a9a9a9}
-.vtog{all:unset;display:contents;cursor:pointer}
-.vname{font-weight:700;min-width:0}
-.vmeta{grid-column:2/4;color:#333;font-size:14px;line-height:1.4}
-.only{border:0;background:none;color:var(--muted);font-size:13px;padding:0 2px;text-decoration:underline;text-underline-offset:2px}
-.only:hover{color:var(--ink)}
-.badge{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--c);color:#fff;font:700 11px/1 var(--ui);flex:none}
-.all{border:0;background:none;padding:2px 0;color:var(--muted);font-size:14px;text-decoration:underline;text-underline-offset:2px;text-align:left;margin-top:4px}
-.toc{display:flex;flex-direction:column;margin:0;padding:0;list-style:none}
-.toc li+li{border-top:1px solid var(--line)}
-.toc a{display:flex;justify-content:space-between;gap:10px;color:var(--ink);text-decoration:none;padding:6px 0;line-height:1.35}
-.toc a:hover{color:var(--accent)}
-.toc span{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
 
-/* The charter */
-.sheet{min-width:0;padding-top:30px}
-.eyebrow{margin:0}
-.sheet h2.t{font:600 clamp(30px,3.6vw,44px)/1.08 var(--display);letter-spacing:-.03em;margin:7px 0 26px;text-wrap:balance}
-.art{scroll-margin-top:76px;border-top:1px solid var(--line);padding-block:26px 12px}
-.art h3{display:grid;grid-template-columns:50px minmax(0,1fr);font:600 clamp(23px,2.4vw,29px)/1.15 var(--display);letter-spacing:-.025em;margin:0 0 16px;text-wrap:balance}
-.art h3 .n{color:var(--accent);font-size:16px;font-weight:600;letter-spacing:0;line-height:1.9}
-.cl{display:grid;grid-template-columns:50px minmax(0,1fr);margin:0 0 13px;font:400 19px/1.7 var(--doc);max-width:42em}
-.num{font:700 13px/2.5 var(--ui);color:var(--muted);font-variant-numeric:tabular-nums}
-.mark{cursor:pointer;background:color-mix(in srgb,var(--c,var(--muted)) var(--tint),transparent);background-image:var(--stripe);background-repeat:no-repeat;background-position:0 100%;background-size:100% 3px;padding:1px 1px 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.mark:hover{background-color:color-mix(in srgb,var(--c,var(--muted)) 32%,transparent)}
-.mark.active{outline:2px solid var(--ink);outline-offset:1px}
-.mark.plus{font:700 12px var(--ui);padding:1px 5px 3px}
-.mk{font:700 10px/1 var(--ui);vertical-align:super;margin-left:1px;color:var(--c)}
-.tr-ins{color:var(--c);background:color-mix(in srgb,var(--c) var(--tint),transparent);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-.tr-del{color:var(--muted);text-decoration:line-through}
-.tr-ins.active{outline:2px solid var(--ink);outline-offset:1px}
+.explain{background:var(--ink);color:#fff;border-radius:20px;padding:clamp(22px,4vw,44px)}
+.explain .eyebrow{color:#b9bcc0}
+.explain .sec-h{color:#fff}
+.e3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:34px}
+.e3 div{border-top:2px solid var(--accent);padding-top:12px}
+.e3 b{display:block;font:600 20px/1.25 var(--display);margin-bottom:6px}
+.e3 p{margin:0;font-size:16px;line-height:1.5;color:#e4e4e4}
+.explain .who-h{font:600 24px/1.2 var(--display);margin:0 0 4px}
+.who-p{margin:0 0 16px;color:#cfd1d4;font-size:16px}
+.orgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.org{background:#1f1f1f;border:1px solid #333;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0;text-decoration:none;color:#fff;transition:border-color .2s ease,transform .2s ease}
+.org:hover{border-color:#777;transform:translateY(-2px)}
+.org .by{font:700 11.5px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:#b9bcc0}
+.org b{font:600 20px/1.2 var(--display)}
+.org p{margin:0;font-size:15px;line-height:1.45;color:#d9d9d9}
+.org .go{margin-top:auto;padding-top:6px;font-weight:700;font-size:14.5px;color:#f0b4b2}
+.who-note{margin:18px 0 0;font-size:17px;line-height:1.5;max-width:40em}
 
-/* Compare */
-.cmp-head{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:14px}
-.cmp-head label{display:flex;flex-direction:column;gap:4px;font:700 12px/1.3 var(--ui);letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-.cmp-head select{padding:7px;border:1px solid var(--line);border-radius:10px;background:var(--sheet);min-width:0;max-width:100%;font:700 15px var(--ui);letter-spacing:0;text-transform:none;color:var(--ink)}
-.cmp-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;font:400 17px/1.6 var(--doc);padding:10px 0;border-top:1px solid var(--line)}
-.art h3+.cmp-row{border-top:0}
-.cmp-row .num{grid-column:1/-1;line-height:1.2}
-.cmp-row>div{min-width:0}
+/* "Learn more" inside the explainer */
+.learn{margin:-14px 0 30px;border:1px solid #3a3a3a;border-radius:14px;background:#1b1b1b}
+.learn summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:14px 18px;font:700 16px/1.35 var(--ui);color:#fff}
+.learn summary::-webkit-details-marker{display:none}
+.learn summary::before{content:"+";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:17px;flex:none;transition:transform .25s ease}
+.learn[open] summary::before{content:"–"}
+.learn summary:hover{color:#f0b4b2}
+.learn-in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 34px;padding:4px 20px 20px;animation:learnin .35s ease both}
+.learn h3{font:600 19px/1.25 var(--display);color:#fff;margin:12px 0 8px}
+.learn p{margin:0 0 8px;color:#e4e4e4;font-size:15.5px;line-height:1.55}
+.covers{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.covers li{position:relative;padding-left:22px;color:#e4e4e4;font-size:15.5px;line-height:1.45}
+.covers li::before{content:"";position:absolute;left:4px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.into{margin:0 0 10px;padding:0;list-style:none;counter-reset:i;display:flex;flex-direction:column;gap:10px}
+.into li{counter-increment:i;position:relative;padding-left:38px;color:#e4e4e4;font-size:15.5px;line-height:1.45}
+.into li::before{content:counter(i);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1.5px solid #f0b4b2;color:#f0b4b2;font:700 13px var(--ui)}
+.into b{display:block;color:#fff}
+.learn .apertus{border-left:3px solid var(--accent);padding-left:12px}
+.learn .fine{font-size:14px;color:#b9bcc0}
+@keyframes learnin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.learn-in{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.learn-in{animation:none}}
 
-/* Margin cards */
-.margin{position:relative;min-width:0;margin-top:30px}
-.card{position:absolute;left:0;right:0;background:var(--sheet);border:1px solid var(--line);padding:10px 13px;text-align:left;transition:top .18s ease}
-.card.mini{cursor:pointer}
-.card.mini:hover{border-color:#8f8f8f}
-.card.on{border-color:var(--ink);padding:15px 16px;z-index:2}
-.mini-h{display:flex;align-items:center;gap:8px;min-width:0}
-.mini-h b{font-weight:400;font-size:14.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.stack{display:inline-flex;gap:2px}
+.kit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 30px;align-items:center;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.kit p{margin:0;max-width:40em;color:#333}
+.kit h3{margin:0 0 4px}
 
-/* Card body */
-.tabs{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 12px}
-.tab{display:inline-flex;gap:5px;align-items:center;border:0;border-bottom:2px solid transparent;background:none;padding:1px 0 3px;font-size:14px;color:var(--muted)}
-.tab[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--ink);font-weight:700}
-.ch-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px;margin-bottom:7px}
-.who{display:inline-flex;gap:7px;align-items:center;font:700 12px/1.3 var(--ui);letter-spacing:.15em;text-transform:uppercase;color:var(--c)}
-.pill{font:700 11px/1.3 var(--ui);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
-.pill::before{content:"";width:7px;height:7px;background:currentColor}
-.pill.broad{color:var(--good)} .pill.contested{color:var(--warn)} .pill.partial{color:var(--mid)}
-.diff{font:600 18px/1.3 var(--display);letter-spacing:-.015em;margin:0 0 9px;overflow-wrap:anywhere}
-.diff del{color:var(--muted);font-weight:400}
-.diff ins{color:var(--c);text-underline-offset:3px}
-.why{margin:0 0 13px;font-size:15px;line-height:1.5}
-.lbl{margin:0 0 5px;font-size:11px}
-.quote{margin:0 0 13px;padding:0;font-size:15px;line-height:1.5}
-.quote small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
-.bars{display:grid;grid-template-columns:auto minmax(0,1fr) 36px;gap:4px 8px;align-items:center;margin:0 0 13px}
-.bar{height:6px;background:var(--panel);overflow:hidden}
-.bar i{display:block;height:100%;background:var(--c)}
-.bars output{text-align:right;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.bars .badge{width:17px;height:17px;font-size:10px}
-.case{border-top:1px solid var(--line);padding-top:10px}
-.case p{margin:0 0 5px}
-.case .q{font-weight:700;font-size:15px}
-.case dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 9px;font-size:14px}
-.case dt{color:var(--muted)} .case dd{margin:0}
-
-/* Bottom sheet */
-.pop{position:fixed;left:0;right:0;bottom:0;z-index:20;max-height:62vh;overflow:auto;background:var(--sheet);border-top:1px solid var(--ink);border-radius:14px 14px 0 0;padding:14px max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-.pop-in{max-width:620px;margin:auto}
-.pop-close{float:right;margin-left:8px;padding:3px 11px;font-size:14px}
-
-@media (max-width:1180px){
-  .main{grid-template-columns:minmax(0,1fr) 300px;gap:0 24px}
-  .main.compare{grid-template-columns:minmax(0,1fr)}
-  .side{grid-column:1/-1;position:static;flex-direction:row;flex-wrap:wrap;gap:8px 18px;padding-block:18px 0}
-  .side>section{min-width:0;flex:1 1 100%}
-  .side .tocwrap{display:none}
-  .vlist{flex-direction:row;flex-wrap:wrap;gap:4px 18px}
-  .v{grid-template-columns:auto auto auto;padding:3px 0}
-  .vmeta{display:none}
-}
-@media (max-width:860px){
-  .main{grid-template-columns:minmax(0,1fr);padding-block:0 40px}
-  .margin{display:none}
-  .cl,.art h3{grid-template-columns:40px minmax(0,1fr)}
-  .cl{font-size:17px}
-  .step-now{display:none}
-  .filter{margin-left:0}
-  .seg{gap:13px}
-  .cmp-row,.cmp-head{gap:12px}
-}
-@media (prefers-reduced-motion:reduce){.card{transition:none}}
+@media (max-width:900px){
+  .landing .hero .in{grid-template-columns:minmax(0,1fr)}
+  .steps3,.e3,.orgs{grid-template-columns:minmax(0,1fr)}
+  .flowline{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:22px}
+  .flowline li:nth-child(2)::after{display:none}
+  }
+@media (max-width:520px){.flowline{grid-template-columns:minmax(0,1fr)}.flowline li::after{display:none}}
+@media (prefers-reduced-motion:reduce){.swap,.demo-tag,.demo-dots i,.org{transition:none}.org:hover{transform:none}}
 </style>
 </head>
-<body>
-<header class="top"><div class="top-in wrap">
-  <div class="brand"><p>Constitutional AI Project</p><h1>public<i></i>charters</h1></div>
-  <nav class="sn" aria-label="Site"><a href="about.html">How it works</a><a href="./" aria-current="page">Charter</a><a href="participate.html">Participate</a><a href="results.html">Results</a><a href="organise.html">Organise</a></nav>
-  <div class="ctl">
-    <div class="seg" role="group" aria-label="Group versions by" id="modeSeg">
-      <button id="m-r" data-m="r">Readings</button><button id="m-c" data-m="c">Communities</button>
-    </div>
-    <div class="seg" role="group" aria-label="View" id="viewSeg">
-      <button id="v-o" data-v="overlay">Overlay</button><button id="v-c" data-v="compare">Side by side</button>
+<body class="tp landing">
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+<header class="top wrap"><div class="in">
+  <a class="brand" href="./"><p data-i18n="brand.kicker">Constitutional AI Project</p><span class="bn">public<i></i>charters</span></a>
+  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" data-i18n="nav.results">Results</a><a href="charter.html" data-i18n="nav.charter">The charter</a><a href="about.html" data-i18n="nav.about">About</a></nav>
+  <span data-langs></span>
+  <div class="acct" id="acct"></div>
+</div></header>
+
+<main id="main" tabindex="-1">
+<section class="hero wrap"><div class="in">
+  <div>
+    <h1 data-i18n-html="home.h">AI follows rules. <em>Help us write them.</em></h1>
+    <p class="lede" data-i18n="home.lede">Apertus, Switzerland’s AI model, follows a set of rules called the Apertus Charter. Tell us how they should change.</p>
+    <div class="cta">
+      <a class="btn primary" href="participate.html" data-i18n="home.cta">Take part · about 10 minutes</a>
+      <a class="btn" href="charter.html" data-i18n="home.ctaRead">Read the charter</a>
+      <span class="note" data-i18n="home.ctaNote">No password needed.</span>
     </div>
   </div>
-  <div class="acct" id="acct" aria-label="Account"></div>
-</div></header>
-<section class="hero wrap"><div class="hero-in">
-  <h2>One charter, <em>read many ways.</em></h2>
-  <p class="sub">See how people interpret the <a href="https://www.apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus Charter</a>, created by the Swiss AI Initiative, one change at a time, and where they disagree.</p>
-  <p class="part" id="stats"></p><p class="cap" id="cap"></p>
-  <p class="notice"><strong>Prototype with sample data.</strong> Charter clauses are shortened from Version 1.0 of the <a href="https://www.apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus Charter</a>, and 3 of 11 articles are shown. Every reading, community, count, quote and test case is invented.</p>
+  <div class="demo reveal" data-delay="150" aria-live="off">
+    <p class="lbl" id="demoLbl"></p>
+    <p class="demo-cl" id="demoCl"></p>
+    <span class="demo-tag" id="demoTag"></span>
+    <div class="demo-dots" id="demoDots" aria-hidden="true"></div>
+    <p class="demo-cap" data-i18n="home.demoCap">One sentence, many interpretations. Which would you choose?</p>
+  </div>
 </div></section>
 
-<div class="step"><div class="step-in wrap">
-  <button class="btn" id="prev" aria-label="Previous change">← Previous</button>
-  <button class="btn" id="next" aria-label="Next change">Next →</button>
-  <span class="step-count" id="count" aria-live="polite"></span>
-  <span class="step-now" id="now"></span>
-  <div class="seg filter" role="group" aria-label="Filter changes" id="filterSeg">
-    <button id="f-all" data-f="all">All</button><button id="f-contested" data-f="contested">Contested</button><button id="f-broad" data-f="broad">Broad</button>
+<div class="wrap"><div class="in">
+
+<section class="block" id="how">
+  <h2 class="sec-h reveal" data-i18n="home.stepsH">How it works</h2>
+  <ol class="steps3">
+    <li class="reveal"><span class="ico"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h6"/></svg></span><b data-i18n="home.s1h">Read</b><p data-i18n="home.s1">You are given a community-suggested change to a charter sentence, with an example of realistic chatbot conversations.</p></li>
+    <li class="reveal" data-delay="120"><span class="ico"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><b data-i18n="home.s2h">Rate</b><p data-i18n="home.s2">Tell us whether the change makes the sentence better, partly better, or not better at all, in one click.</p></li>
+    <li class="reveal" data-delay="240"><span class="ico"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg></span><b data-i18n="home.s3h">Suggest</b><p data-i18n="home.s3">Optional: rewrite the charter sentence yourself, exactly how you think it should be.</p></li>
+  </ol>
+  <div class="cta reveal"><a class="btn primary" href="participate.html" data-i18n="home.cta">Take part · about 10 minutes</a></div>
+</section>
+
+<section class="block" id="explainer">
+  <div class="explain reveal">
+    <p class="eyebrow" data-i18n="home.explainEyebrow">Explainer</p>
+    <h2 class="sec-h" data-i18n="home.explainH">What is an AI charter?</h2>
+    <div class="e3">
+      <div><b data-i18n="home.e1h">What it is</b><p data-i18n="home.e1">A short text of guidelines for how an AI should behave. For example: be honest, avoid harm, respect people’s choices.</p></div>
+      <div><b data-i18n="home.e2h">What it’s for</b><p data-i18n="home.e2">The AI is trained to follow these guidelines. They shape what the AI will help with, what it refuses, and how it talks to you, the users.</p></div>
+      <div><b data-i18n="home.e3h">Why does phrasing matter?</b><p data-i18n="home.e3">Most people agree on principles like “avoid harm”. However, the exact phrasing can decide what that means in practice, which is where nuance and specificity are important.</p></div>
+    </div>
+    <details class="learn">
+      <summary><span data-i18n="home.moreBtn">Learn more: what a charter covers, and how it gets into the AI</span></summary>
+      <div class="learn-in">
+        <div class="lcol">
+          <h3 data-i18n="home.coversH">What a charter covers</h3>
+          <ul class="covers"><li data-i18n="home.cover1">How to handle sensitive or risky questions</li><li data-i18n="home.cover2">What the AI must never do, such as discriminate or spread false information</li><li data-i18n="home.cover3">How open the AI is about its limits and decisions</li><li data-i18n="home.cover4">When a human has to step in</li><li data-i18n="home.cover5">What happens with personal data</li></ul>
+          <h3 data-i18n="home.mattersH">Why it matters</h3>
+          <p data-i18n="home.matters">A written charter makes the AI’s behaviour more predictable and easier to check, so people can trust it. In short: an AI should not end up with values that nobody consciously chose.</p>
+        </div>
+        <div class="lcol">
+          <h3 data-i18n="home.intoH">How it gets into the AI</h3>
+          <ol class="into">
+            <li><b data-i18n="home.into1h">Training examples</b><span data-i18n="home.into1">Example questions and good answers are written based on the charter. The AI is trained on them, so it learns to act that way.</span></li>
+            <li><b data-i18n="home.into2h">Instructions in every chat</b><span data-i18n="home.into2">Some providers also give the model its rules as hidden instructions (a “system prompt”) at the start of every conversation.</span></li>
+            <li><b data-i18n="home.into3h">Extra safety checks</b><span data-i18n="home.into3">Sometimes separate filters check questions or answers and step in when something breaks the rules.</span></li>
+          </ol>
+          <p class="apertus" data-i18n="home.intoApertus">For Apertus, the charter is used in training: as example answers the model learns from, and as the yardstick for scoring its answers.</p>
+          <p class="fine" data-i18n="home.intoNote">No method is perfect: a model can still break its charter. That’s why we test the result.</p>
+        </div>
+      </div>
+    </details>
+    <h3 class="who-h" data-i18n="home.whoH">Who uses one?</h3>
+    <p class="who-p" data-i18n="home.whoP">Many AI labs publish the guidelines their models follow, under different names.</p>
+    <div class="orgs">
+      <a class="org" href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener"><span class="by" data-i18n="home.apertusBy">Swiss AI Initiative · Apertus</span><b data-i18n="home.apertusDoc">Apertus Charter</b><p data-i18n="home.apertusD">For Switzerland’s open model. A charter of 11 articles inspired by Swiss values.</p><span class="go"><span data-i18n="home.read">Read it</span> ↗</span></a>
+      <a class="org" href="https://www.anthropic.com/constitution" target="_blank" rel="noopener"><span class="by" data-i18n="home.anthropicBy">Anthropic · Claude</span><b data-i18n="home.anthropicDoc">Claude’s constitution</b><p data-i18n="home.anthropicD">The values and character Anthropic wants Claude to have, used in training and deployment.</p><span class="go"><span data-i18n="home.read">Read it</span> ↗</span></a>
+      <a class="org" href="https://model-spec.openai.com/" target="_blank" rel="noopener"><span class="by" data-i18n="home.openaiBy">OpenAI · ChatGPT</span><b data-i18n="home.openaiDoc">Model Spec</b><p data-i18n="home.openaiD">A specification of how OpenAI wants its model to behave and what principles to uphold.</p><span class="go"><span data-i18n="home.read">Read it</span> ↗</span></a>
+    </div>
+    <p class="who-note" data-i18n="home.whoNote">These are written by the companies themselves. We at Public Charters ask: what if the people who use AI had a say? We want to give you a voice.</p>
   </div>
-</div>
-<div class="wrap"><div class="prog" id="prog" style="max-width:1400px;margin:auto"></div></div></div>
+</section>
 
-<main class="main wrap" id="main">
-  <aside class="side">
-    <section>
-      <h2 id="listTitle"></h2>
-      <div class="vlist" id="vlist"></div>
-      <button class="all" id="showAll">Show all</button>
-    </section>
-    <section class="tocwrap"><h2>Articles</h2><ul class="toc" id="toc"></ul></section>
-  </aside>
-  <article class="sheet" id="sheet"></article>
-  <div class="margin" id="margin" aria-label="Changes"></div>
+<section class="block" id="flow">
+  <h2 class="sec-h reveal" data-i18n="home.flowH">From your suggested changes to a new model</h2>
+  <ol class="flowline">
+    <li class="reveal"><span class="k" data-i18n="home.f1k">Collect</span><b data-i18n="home.f1h">Your ratings and suggested changes</b><span class="d" data-i18n="home.f1">All suggested changes are counted equally.</span></li>
+    <li class="reveal" data-delay="120"><span class="k" data-i18n="home.f2k">Decide</span><b data-i18n="home.f2h">Broad support</b><span class="d" data-i18n="home.f2">A charter change passes when there is majority approval.</span></li>
+    <li class="reveal" data-delay="240"><span class="k" data-i18n="home.f3k">Train</span><b data-i18n="home.f3h">A new version</b><span class="d" data-i18n="home.f3">We train a small copy of Apertus on the charter changes that passed.</span></li>
+    <li class="reveal" data-delay="360"><span class="k" data-i18n="home.f4k">Check</span><b data-i18n="home.f4h">A public scorecard</b><span class="d" data-i18n="home.f4">We test it on new questions and benchmarks, and publish whether it really changed behaviour.</span></li>
+  </ol>
+</section>
+
+<section class="block" id="kit">
+  <div class="kit reveal">
+    <div><h3 data-i18n="home.kitH">Run this for your own AI and community</h3><p data-i18n="home.kit">A hospital, a school or a town can run the same process for its own AI and rules, on its own website.</p></div>
+    <a class="btn" href="https://github.com/cosage-ethz/public-charters/tree/charter-kit" target="_blank" rel="noopener"><span data-i18n="home.kitLink">Get the free Charter Kit</span>&nbsp;→</a>
+  </div>
+</section>
+
+</div></div>
 </main>
-<div class="pop" id="pop" hidden></div>
 
-<script src="sample-data.js"></script>
+<footer class="foot wrap"><div class="in" data-i18n-html="common.footer">Public Charters · AI and Human Values, ETH Zurich, 2026. Not affiliated with the Swiss AI Initiative. Charter source: <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">apertus-ai.org</a> · Code: <a href="https://github.com/cosage-ethz/public-charters" target="_blank" rel="noopener">GitHub</a></div></footer>
+
+<script src="sample-data.js?v=20261126c"></script>
 <script>
-const S={mode:'r',view:'overlay',filter:'all',on:{},solo:null,clean:false,a:'c',b:'a',cur:null,pop:false,tab:{}};
-Object.values(GROUPS).forEach(g=>g.list.forEach(v=>S.on[v.id]=true));
-const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
-const group=()=>GROUPS[S.mode];
-const ver=id=>group().list.find(v=>v.id===id);
-const inGroup=e=>!!ver(e.v);
-function status(e){const mx=Math.max(...e.sup),mn=Math.min(...e.sup);return mn>=55?'broad':mx-mn>=45?'contested':'partial'}
-const stLabel={broad:'Broad support',contested:'Contested',partial:'Partial support'};
-function visible(e){return inGroup(e)&&S.on[e.v]&&(S.filter==='all'||status(e)===S.filter)}
-const edits=k=>HOTS[k].edits.filter(visible);
-function steps(){const o=[];ARTS.forEach(a=>a.cl.forEach(c=>c[1].forEach(p=>{if(p.h)HOTS[p.h].edits.forEach((e,i)=>{if(visible(e))o.push({k:p.h,i,e,art:a,cl:c[0]})})})));return o}
-const col=v=>`var(${ver(v).c})`;
-const badge=v=>`<span class="badge" style="--c:${col(v)}" aria-hidden="true">${ver(v).l}</span>`;
-
-function renderSide(){
- const g=group();$('listTitle').textContent=g.title;
- $('vlist').innerHTML=g.list.map(v=>`<div class="v ${S.on[v.id]?'':'off'}" style="--c:var(${v.c})">
-   <button class="vtog" data-tog="${v.id}" aria-pressed="${S.on[v.id]}" aria-label="${esc(v.name)}, ${S.on[v.id]?'shown':'hidden'}">${badge(v.id)}<span class="vname">${esc(v.name)}</span></button>
-   <button class="only" data-only="${v.id}">${S.solo===v.id?'Exit':'Only'}</button>
-   <span class="vmeta">${esc(v.d)} ${v.size} ${g.unit}.</span></div>`).join('');
- $('toc').innerHTML=ARTS.map(a=>{let n=0;a.cl.forEach(c=>c[1].forEach(p=>{if(p.h)n+=edits(p.h).length}));
-  return `<li><a href="#${a.id}">${a.n}. ${esc(a.t)}<span>${n}</span></a></li>`}).join('');
- $('modeSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===S.mode));
- $('viewSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.view));
- $('filterSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===S.filter));
-}
-function apply(k,e){const h=HOTS[k];return e.op==='delete'?'':e.text}
-function overlayMark(k){
- const h=HOTS[k],es=edits(k);
- if(!es.length)return esc(h.base);
- const act=S.cur&&S.cur.k===k?' active':'';
- const vs=[...new Set(es.map(e=>e.v))];
- const seg=100/vs.length;
- const stripe=`linear-gradient(90deg,${vs.map((v,i)=>`${col(v)} ${i*seg}% ${(i+1)*seg}%`).join(',')})`;
- const tint=vs.length===1?col(vs[0]):'var(--muted)';
- const sup=vs.map(v=>`<span class="mk" style="--c:${col(v)}">${ver(v).l}</span>`).join('');
- const label=`${es.length} proposed ${es.length>1?'changes':'change'} to: ${h.base||'insertion'}`;
- return `<span class="mark${h.base?'':' plus'}${act}" role="button" tabindex="0" data-k="${k}" aria-label="${esc(label)}" style="--c:${tint};--stripe:${stripe}">${h.base?esc(h.base):'+'}</span>${sup}`;
-}
-function soloMark(k,v,clean){
- const h=HOTS[k],e=h.edits.find(x=>x.v===v&&visible(x));
- if(!e)return esc(h.base);
- const act=S.cur&&S.cur.k===k?' active':'';
- const del=(!clean&&h.base)?`<span class="tr-del">${esc(h.base)}</span> `:'';
- const t=apply(k,e);
- if(!t)return clean?'':`<span class="tr-ins${act}" role="button" tabindex="0" data-k="${k}" style="--c:${col(v)}"><span class="tr-del">${esc(h.base)}</span></span>`;
- return `${del}<span class="tr-ins${act}" role="button" tabindex="0" data-k="${k}" style="--c:${col(v)}">${esc(t)}</span>`;
-}
-function clauseHTML(c,fn){return c[1].map(p=>typeof p==='string'?esc(p):fn(p.h)).join('')}
-function renderSheet(){
- const el=$('sheet');const g=group();
- if(S.view==='compare'){
-  $('main').classList.add('compare');
-  if(!ver(S.a))S.a=g.list[0].id;if(!ver(S.b))S.b=g.list[1].id;
-  const opt=sel=>g.list.map(v=>`<option value="${v.id}" ${v.id===sel?'selected':''}>${v.l}. ${esc(v.name)}</option>`).join('');
-  el.innerHTML=`<p class="eyebrow">Side by side</p><h2 class="t">Two versions as clean text</h2>
-   <div class="cmp-head"><label for="cmpA">Left<select id="cmpA">${opt(S.a)}</select></label><label for="cmpB">Right<select id="cmpB">${opt(S.b)}</select></label></div>`+
-   ARTS.map(a=>`<section class="art" id="${a.id}"><h3><span class="n">${String(a.n).padStart(2,"0")}</span><span>${esc(a.t)}</span></h3>${a.cl.map(c=>`<div class="cmp-row"><span class="num">${c[0]}</span><div>${clauseHTML(c,k=>soloMark(k,S.a,true))}</div><div>${clauseHTML(c,k=>soloMark(k,S.b,true))}</div></div>`).join('')}</section>`).join('');
-  return;
- }
- $('main').classList.remove('compare');
- const so=S.solo;
- const hd=so?`<p class="eyebrow">Only ${esc(ver(so).name)}</p>
-  <h2 class="t">Apertus Charter, as this version reads it</h2>
-  <p style="margin:-14px 0 20px"><label style="display:inline-flex;gap:6px;align-items:center;color:var(--muted)"><input type="checkbox" id="clean" ${S.clean?'checked':''}> Show clean text without tracked changes</label></p>`
-  :`<p class="eyebrow">Overlay</p><h2 class="t">Apertus Charter</h2>`;
- const fn=so?k=>soloMark(k,so,S.clean):overlayMark;
- el.innerHTML=hd+ARTS.map(a=>`<section class="art" id="${a.id}"><h3><span class="n">${String(a.n).padStart(2,"0")}</span><span>${esc(a.t)}</span></h3>${a.cl.map(c=>`<p class="cl" data-cl="${c[0]}"><span class="num">${c[0]}</span><span>${clauseHTML(c,fn)}</span></p>`).join('')}</section>`).join('');
-}
-function cardBody(k,idx){
- const h=HOTS[k],es=edits(k),e=es[Math.min(idx,es.length-1)],v=ver(e.v),st=status(e),g=group();
- const tabs=es.length>1?`<div class="tabs" role="tablist" aria-label="Rival edits on this phrase">${es.map((x,i)=>`<button class="tab" role="tab" aria-selected="${x===e}" data-tab="${k}:${i}" style="--c:${col(x.v)}">${badge(x.v)}${esc(ver(x.v).name)}</button>`).join('')}</div>`:'';
- const old=h.base?`<del>${esc(h.base)}</del> `:'';
- const nw=e.op==='delete'?'':`<ins>${esc(e.text)}</ins>`;
- return `<div style="--c:${col(e.v)}">${tabs}
-  <div class="ch-top"><span class="who">${badge(e.v)}${verb[e.op]}</span><span class="pill ${st}">${stLabel[st]}</span></div>
-  <p class="diff">${old}${nw}</p>
-  <p class="why">${esc(e.why)}</p>
-  <p class="lbl">From ${e.n} ${g.unit}</p>
-  <blockquote class="quote">“${esc(e.quote)}”<small>Typical submission from ${esc(v.name)}</small></blockquote>
-  <p class="lbl">Support by version</p>
-  <div class="bars">${g.list.map((x,i)=>`${badge(x.id)}<span class="bar" style="--c:var(${x.c})"><i style="width:${e.sup[i]}%"></i></span><output>${e.sup[i]}%</output>`).join('')}</div>
-  <div class="case"><p class="lbl">Example test case</p><p class="q">“${esc(e.q)}”</p>
-  <dl><dt>Today</dt><dd>${esc(e.now)}</dd><dt>With edit</dt><dd>${esc(e.then)}</dd></dl></div>
-  <p class="propose-row"><button class="btn" data-propose="${k}">Propose another change here</button></p></div>`;
-}
-function renderStats(){
- const g=group(),all=Object.values(HOTS).flatMap(h=>h.edits).filter(inGroup);
- const total=String(g.list.reduce((n,v)=>n+v.size,0)).replace(/\B(?=(\d{3})+$)/g,"'");
- $('stats').textContent=`${total} ${g.unit} across ${g.list.length} ${g.title.toLowerCase()}.`;
- $('cap').textContent=`${all.length} proposed changes · ${all.filter(e=>status(e)==='contested').length} contested`;
-}
-function hotsInDoc(){const o=[];ARTS.forEach(a=>a.cl.forEach(c=>c[1].forEach(p=>{if(p.h&&edits(p.h).length)o.push(p.h)})));return o}
-function renderMargin(){
- const m=$('margin');
- if(S.view==='compare'){m.innerHTML='';return}
- const so=S.solo;
- const ks=hotsInDoc().filter(k=>!so||edits(k).some(e=>e.v===so));
- m.innerHTML=ks.map(k=>{
-  const on=S.cur&&S.cur.k===k;
-  const es=edits(k).filter(e=>!so||e.v===so);
-  const vs=[...new Set(es.map(e=>e.v))];
-  if(on)return `<div class="card on" data-card="${k}">${cardBody(k,S.cur.vi)}</div>`;
-  return `<div class="card mini" role="button" tabindex="0" data-pick="${k}"><div class="mini-h"><span class="stack">${vs.map(badge).join('')}</span><b>${es.length>1?es.length+' rival edits':esc(verb[es[0].op]+': '+(es[0].text||HOTS[k].base).replace(/^[,.] ?/,''))}</b></div></div>`;
- }).join('');
- place();
-}
-function place(){
- const m=$('margin');if(S.view==='compare'||!m.offsetParent)return;
- const top=m.getBoundingClientRect().top;
- const cards=[...m.querySelectorAll('.card')];if(!cards.length){m.style.minHeight='';return}
- const items=cards.map(c=>{const k=c.dataset.card||c.dataset.pick;const a=$('sheet').querySelector(`[data-k="${k}"]`);
-  return{c,h:c.offsetHeight,y:a?a.getBoundingClientRect().top-top-8:0,on:!!c.dataset.card}});
- const gap=7;const i=Math.max(0,items.findIndex(x=>x.on));
- items[i].p=items[i].y;
- for(let j=i+1;j<items.length;j++)items[j].p=Math.max(items[j].y,items[j-1].p+items[j-1].h+gap);
- for(let j=i-1;j>=0;j--)items[j].p=Math.min(items[j].y,items[j+1].p-items[j].h-gap);
- const shift=Math.min(0,items[0].p);
- let b=0;items.forEach(x=>{x.p-=shift;x.c.style.top=x.p+'px';b=Math.max(b,x.p+x.h)});
- m.style.minHeight=b+'px';
-}
-const useSheet=()=>S.view==='compare'||matchMedia('(max-width:860px)').matches;
-function renderPop(){
- const p=$('pop');
- if(S.cur&&S.pop&&useSheet()&&edits(S.cur.k).length){
-  p.innerHTML=`<div class="pop-in"><button class="btn pop-close" id="popClose">Close</button>${cardBody(S.cur.k,S.cur.vi)}</div>`;p.hidden=false;
- }else{p.hidden=true;p.innerHTML=''}
-}
-function shown(){let st=steps();if(S.solo)st=st.filter(s=>s.e.v===S.solo);else if(S.view==='compare')st=st.filter(s=>s.e.v===S.a||s.e.v===S.b);return st}
-function renderStep(){
- const st=shown();const n=st.length;
- const i=S.cur?st.findIndex(s=>s.k===S.cur.k&&visIdx(s)===S.cur.vi):-1;
- $('count').textContent=n?(i>=0?`${i+1} of ${n}`:`${n} change${n>1?'s':''}`):'No changes';
- $('now').textContent=i>=0?`Clause ${st[i].cl}, ${ver(st[i].e.v).name}`:'Click a highlight, or start with Next';
- $('prog').innerHTML=st.map((_,j)=>`<i class="${j<=i?'done':''}"></i>`).join('');
- $('prev').disabled=!n;$('next').disabled=!n;
-}
-function visIdx(s){return edits(s.k).indexOf(s.e)}
-function render(){
- if(S.cur&&!edits(S.cur.k).length)S.cur=null;
- if(S.cur)S.cur.vi=Math.min(S.cur.vi,edits(S.cur.k).length-1);
- renderStats();renderSide();renderSheet();renderMargin();renderPop();renderStep();
-}
-function pick(k,vi=0,scroll=false){
- S.cur={k,vi};S.pop=true;
- render();
- if(scroll){const a=$('sheet').querySelector(`[data-k="${k}"]`);if(a&&a.scrollIntoView)a.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}
-}
-function go(d){
- const st=shown();
- if(!st.length)return;
- const i=S.cur?st.findIndex(s=>s.k===S.cur.k&&visIdx(s)===S.cur.vi):-1;
- const j=i<0?(d>0?0:st.length-1):(i+d+st.length)%st.length;
- pick(st[j].k,visIdx(st[j]),true);
-}
-document.addEventListener('click',ev=>{
- const t=ev.target.closest('[data-tog],[data-only],[data-k],[data-pick],[data-tab],[data-m],[data-v],[data-f],#showAll,#popClose,#prev,#next');
- if(!t)return;const d=t.dataset;
- if(d.tog){S.on[d.tog]=!S.on[d.tog];if(S.solo===d.tog&&!S.on[d.tog])S.solo=null;render()}
- else if(d.only){const leaving=S.solo===d.only;S.solo=leaving?null:d.only;group().list.forEach(v=>S.on[v.id]=leaving||v.id===d.only);if(S.view==='compare')S.view='overlay';S.cur=null;render()}
- else if(d.k)pick(d.k,S.cur&&S.cur.k===d.k?S.cur.vi:0);
- else if(d.pick)pick(d.pick);
- else if(d.tab){const[k,i]=d.tab.split(':');pick(k,+i)}
- else if(d.m){S.mode=d.m;S.solo=null;S.cur=null;group().list.forEach(v=>S.on[v.id]=true);render()}
- else if(d.v){S.view=d.v;S.cur=null;if(d.v==='compare'){S.solo=null;group().list.forEach(v=>S.on[v.id]=true)}render()}
- else if(d.f){S.filter=d.f;render()}
- else if(t.id==='showAll'){S.solo=null;group().list.forEach(v=>S.on[v.id]=true);S.filter='all';render()}
- else if(t.id==='popClose'){S.pop=false;renderPop()}
- else if(t.id==='prev')go(-1);
- else if(t.id==='next')go(1);
-});
-document.addEventListener('change',ev=>{
- if(ev.target.id==='clean'){S.clean=ev.target.checked;render()}
- if(ev.target.id==='cmpA'){S.a=ev.target.value;S.cur=null;render()}
- if(ev.target.id==='cmpB'){S.b=ev.target.value;S.cur=null;render()}
-});
-document.addEventListener('keydown',ev=>{
- const t=ev.target;
- if((ev.key==='Enter'||ev.key===' ')&&t.getAttribute&&t.getAttribute('role')==='button'&&t.tagName!=='BUTTON'){ev.preventDefault();t.click();return}
- if(/INPUT|SELECT/.test(t.tagName))return;
- if(ev.key==='ArrowRight'&&!ev.metaKey&&!ev.altKey)go(1);
- if(ev.key==='ArrowLeft'&&!ev.metaKey&&!ev.altKey)go(-1);
- if(ev.key==='Escape'){S.pop=false;renderPop()}
-});
-addEventListener('resize',()=>{place();renderPop()});
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);
-S.cur={k:'h4',vi:0};
-render();
+// Hero demo: clause 4.3 of the (translated) sample charter, cycling the phrase people want to change.
+(() => {
+  const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+  const art = ARTS.find(a => a.id === 'a4'), cl = art.cl.find(c => c[0] === '4.3'), K = 'h4';
+  const words = [HOTS[K].base].concat(HOTS[K].edits.map(e => e.text));
+  const $ = id => document.getElementById(id);
+  $('demoLbl').textContent = `${T('home.apertusDoc')} · 4.3`;
+  $('demoCl').innerHTML = cl[1].map(p => typeof p === 'string' ? esc(p) : p.h === K ? '<span class="swap" id="swap"></span>' : esc(HOTS[p.h].base)).join('');
+  $('demoDots').innerHTML = words.map(() => '<i></i>').join('');
+  let i = 0;
+  function show() {
+    const alt = i > 0;
+    $('swap').textContent = words[i];
+    $('swap').classList.toggle('alt', alt);
+    $('demoTag').textContent = alt ? T('home.demoSuggested') : T('home.demoToday');
+    $('demoTag').classList.toggle('alt', alt);
+    [...$('demoDots').children].forEach((d, j) => d.classList.toggle('on', j === i));
+  }
+  show();
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  setInterval(() => {
+    if (document.hidden) return;
+    $('swap').classList.add('out');
+    setTimeout(() => { i = (i + 1) % words.length; show(); $('swap').classList.remove('out'); }, 360);
+  }, 3200);
+})();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js"></script>
-<script src="app.js"></script>
-
+<script src="config.js?v=20261126c"></script>
+<script src="app.js?v=20261126c"></script>
 </body>
 </html>

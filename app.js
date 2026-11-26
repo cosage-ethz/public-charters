@@ -1,7 +1,7 @@
-// Participation layer for Public Charters: accounts, invitations and proposals.
-// Loaded on every page after sample-data.js; the proposal form uses the charter data (ARTS, HOTS).
-// With Supabase configured in config.js it reads and writes the database;
-// without it, it runs in demo mode and keeps proposals in this browser only.
+// Accounts and the suggestion form, shared by every page.
+// Loaded after sample-data.js (the charter text: ARTS, HOTS) and i18n.js (T()).
+// With Supabase configured in config.js it reads and writes the database; without it, it runs
+// the sample round and keeps suggestions in this browser only.
 (() => {
 'use strict';
 
@@ -14,14 +14,14 @@ const A = {
   user: null,          // signed-in user
   space: null,         // space row
   roles: new Set(),    // this user's roles in the space
-  clauses: {},         // clause number -> clause row of the current charter version
-  slug: params.get('space') || CFG.space || 'apertus-demo',
+  clauses: {},         // clause number -> clause row of the current charter version (English)
+  slug: params.get('space') || CFG.space || 'apertus',
   invite: params.get('invite')
 };
 const $ = id => document.getElementById(id);
-const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
 
-// ---------- charter helpers (from the viewer's data) ----------
+// ---------- charter helpers (from the sample data, in the current language) ----------
 const clauseText = c => c[1].map(p => typeof p === 'string' ? p : HOTS[p.h].base).join('');
 function clauseOfHot(k) {
   for (const a of ARTS) for (const c of a.cl) if (c[1].some(p => p.h === k)) return { art: a, cl: c };
@@ -80,55 +80,92 @@ function renderAcct() {
   const el = $('acct'); if (!el) return;
   if (!LIVE) {
     const n = loadDemo().length;
-    el.innerHTML = `<span class="chip" title="No database configured. Proposals stay in this browser.">Demo mode</span>
-      <button class="link" data-act="list">Proposals${n ? ` (${n})` : ''}</button>`;
+    el.innerHTML = `<span class="chip" title="${esc(T('acct.sampleTip'))}">${esc(T('acct.sample'))}</span>
+      ${n ? `<button class="link" data-act="list">${esc(T('acct.proposals'))} (${n})</button>` : ''}`;
     return;
   }
   if (!A.user) {
-    el.innerHTML = `<button class="link" data-act="list">Proposals</button><button class="btn" data-act="signin">Sign in</button>`;
+    el.innerHTML = `<button class="btn" data-act="signin">${esc(T('acct.signin'))}</button>`;
     return;
   }
   const admin = A.roles.has('admin'), member = A.roles.has('member');
-  el.innerHTML = `<span class="who-am-i" title="${esc(A.user.email || '')}">${esc(A.user.email || 'Signed in')}${A.roles.has('panel') ? ' · panel' : ''}</span>
-    <button class="link" data-act="list">Proposals</button>
-    ${admin ? '<button class="link" data-act="invite">Invite people</button>' : ''}
-    ${!member && A.space && A.space.access === 'open' ? '<button class="btn primary" data-act="join">Join this space</button>' : ''}
-    <button class="link" data-act="signout">Sign out</button>`;
+  el.innerHTML = `<span class="who-am-i" title="${esc(A.user.email || '')}">${esc(A.user.email || '')}</span>
+    ${admin ? `<button class="link" data-act="list">${esc(T('acct.proposals'))}</button><a class="link" href="organise.html">${esc(T('acct.organise'))}</a>` : ''}
+    ${!member && A.space && A.space.access === 'open' ? `<button class="btn primary" data-act="join">${esc(T('acct.join'))}</button>` : ''}
+    <button class="link" data-act="signout">${esc(T('acct.signout'))}</button>`;
 }
 
 function signInDialog(reason) {
   dialog(`<form>
-    <h2>Sign in</h2>
-    <p class="hint">${esc(reason || 'We email you a sign-in link. No password needed.')}</p>
-    <label>Email<input type="email" name="email" required autocomplete="email"></label>
+    <h2>${esc(T('acct.signinH'))}</h2>
+    <p class="hint">${esc(reason || T('acct.signinP'))}</p>
+    <label>${esc(T('acct.email'))}<input type="email" name="email" required autocomplete="email"></label>
     <p class="err" role="alert"></p>
-    <div class="actions"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn primary">Send link</button></div>
+    <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.cancel'))}</button><button type="submit" class="btn primary">${esc(T('acct.send'))}</button></div>
   </form>`, async (fd, d) => {
-    const { error } = await A.db.auth.signInWithOtp({ email: fd.get('email'), options: { emailRedirectTo: location.href } });
+    // Step 2: the visitor typed the code from the email.
+    if (d.dataset.email) {
+      const token = String(fd.get('code') || '').replace(/\D/g, '');
+      if (token.length < 6) throw new Error(T('acct.codeBad'));
+      const { error } = await A.db.auth.verifyOtp({ email: d.dataset.email, token, type: 'email' });
+      if (error) throw new Error(T('acct.codeBad'));
+      d.close();
+      return;
+    }
+    // Step 1: send the email. People come back to this page without any "#section" marker:
+    // Supabase adds the login data after a "#", and a second "#" would make it unreadable.
+    const email = String(fd.get('email') || '').trim();
+    const back = location.origin + location.pathname + location.search;
+    const { error } = await A.db.auth.signInWithOtp({ email, options: { emailRedirectTo: back } });
     if (error) throw error;
-    d.querySelector('form').innerHTML = `<h2>Check your email</h2><p class="hint">We sent a sign-in link to ${esc(fd.get('email'))}. Open it on this device.</p>
-      <div class="actions"><button type="button" class="btn" data-close>Close</button></div>`;
+    // The email has a link and a code. The code also works when a mail scanner already opened
+    // the link, or when the email is read on another device.
+    if (!CFG.emailCode) {
+      d.querySelector('form').innerHTML = `<h2>${esc(T('acct.checkH'))}</h2><p class="hint">${esc(T('acct.checkLink', { email }))}</p>
+        <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.close'))}</button></div>`;
+      return;
+    }
+    d.dataset.email = email;
+    d.querySelector('form').innerHTML = `<h2>${esc(T('acct.checkH'))}</h2><p class="hint">${esc(T('acct.checkP', { email }))}</p>
+      <label>${esc(T('acct.code'))}<input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></label>
+      <p class="err" role="alert"></p>
+      <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.close'))}</button><button type="submit" class="btn primary">${esc(T('acct.codeBtn'))}</button></div>`;
+    d.querySelector('[name=code]').focus();
   });
 }
 
+// If a sign-in link failed (expired, already used), Supabase sends people back with an error in
+// the address. Say so clearly instead of failing silently, and clean the address.
+function authErrorFromUrl() {
+  const h = new URLSearchParams(location.hash.slice(1)), q = new URLSearchParams(location.search);
+  const code = h.get('error_code') || q.get('error_code') || h.get('error') || q.get('error');
+  if (!code) return;
+  toast(T('acct.linkFailed'));
+  const url = new URL(location.href); url.hash = '';
+  ['error', 'error_code', 'error_description'].forEach(k => url.searchParams.delete(k));
+  history.replaceState(null, '', url);
+  setTimeout(() => signInDialog(T('acct.linkFailed')), 600);
+}
+
+// Admins only (Organise page); kept in English.
 function inviteDialog() {
   dialog(`<form>
-    <h2>Invite people</h2>
+    <h2>${esc(T('acct.invite'))}</h2>
     <p class="hint">Create a link for ${esc(A.space.name)}. Anyone with the link can join until it expires or runs out of uses.</p>
     <div class="two">
       <label>Uses<input type="number" name="uses" min="1" max="500" value="1" required></label>
       <label>Valid for (days)<input type="number" name="days" min="1" max="90" value="14" required></label>
     </div>
-    <label>Note (optional)<input type="text" name="note" placeholder="For example: ward 3 nurses"></label>
+    <label>Note (optional)<input type="text" name="note"></label>
     <div class="linkbox" hidden><input type="text" readonly aria-label="Invitation link"><button type="button" class="btn" data-copy>Copy</button></div>
     <p class="err" role="alert"></p>
-    <div class="actions"><button type="button" class="btn" data-close>Close</button><button type="submit" class="btn primary">Create link</button></div>
+    <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.close'))}</button><button type="submit" class="btn primary">Create link</button></div>
   </form>`, async (fd, d) => {
     const { data, error } = await A.db.rpc('create_invitation', {
       sp: A.space.id, n_uses: +fd.get('uses'), days: +fd.get('days'), invite_role: 'member', invite_note: fd.get('note') || null });
     if (error) throw error;
     const url = new URL(location.href);
-    url.search = ''; url.hash = '';
+    url.search = ''; url.hash = ''; url.pathname = url.pathname.replace(/[^/]*$/, 'participate.html');
     url.searchParams.set('space', A.space.slug); url.searchParams.set('invite', data);
     const box = d.querySelector('.linkbox'); box.hidden = false;
     const inp = box.querySelector('input'); inp.value = url.toString(); inp.select();
@@ -136,7 +173,7 @@ function inviteDialog() {
   });
 }
 
-// ---------- proposals ----------
+// ---------- suggesting a change ----------
 // target: {number, quote, start, end, insert}
 function proposeDialog(t) {
   const found = clauseByNumber(t.number); if (!found) return;
@@ -144,71 +181,45 @@ function proposeDialog(t) {
   const before = full.slice(0, t.start), q = full.slice(t.start, t.end), after = full.slice(t.end);
   const shown = t.insert ? `${esc(before)}<mark>[+]</mark>${esc(after)}` : `${esc(before)}<mark>${esc(q)}</mark>${esc(after)}`;
   const ops = t.insert
-    ? `<label><input type="radio" name="op" value="insert" checked> Add text here</label>`
-    : `<label><input type="radio" name="op" value="replace" checked> Reword</label>
-       <label><input type="radio" name="op" value="delete"> Remove</label>
-       <label><input type="radio" name="op" value="insert"> Add text after</label>`;
-  // Starting points for test cases: situations other members already wrote for this clause.
-  // No AI involved; an organiser can switch on an AI drafter in kit.config.json instead.
-  const drafts = [];
-  for (const p of found.cl[1]) if (typeof p !== 'string') for (const e of HOTS[p.h].edits) {
-    if (e.q && drafts.length < 2 && !drafts.some(x => x.prompt === e.q)) drafts.push({ prompt: e.q, today: e.now, with_edit: '', draft: true });
-  }
-  const bridge = t.bridge ? `<div class="bridge-ctx"><p><b>Write a bridge.</b> This clause splits the groups. Try a wording that both sides could accept.</p>
-    <p class="hint">${t.bridge.map(b => `<b>${esc(b.who)}:</b> “${esc(b.text)}”`).join('<br>')}</p></div>` : '';
+    ? `<label><input type="radio" name="op" value="insert" checked> ${esc(T('form.addHere'))}</label>`
+    : `<label><input type="radio" name="op" value="replace" checked> ${esc(T('form.replace'))}</label>
+       <label><input type="radio" name="op" value="delete"> ${esc(T('form.remove'))}</label>
+       <label><input type="radio" name="op" value="insert"> ${esc(T('form.add'))}</label>`;
   const d = dialog(`<form>
-    <p class="eyebrow">Clause ${esc(t.number)} · ${esc(found.art.t)}</p>
-    <h2>${t.bridge ? 'Write a bridge' : 'Propose a change'}</h2>${bridge}
+    <p class="eyebrow">${esc(T('common.clause', { n: t.number }))} · ${esc(found.art.t)}</p>
+    <h2>${esc(T('form.h'))}</h2>
+    ${t.bridge ? `<p class="hint">${esc(T('form.bridge'))}</p>` : ''}
     <p class="clause-quote">${shown}</p>
-    <fieldset><legend>Change</legend>${ops}</fieldset>
-    <label data-newtext>New text<textarea name="new_text" placeholder="The words you would use instead"></textarea></label>
-    <label>Why<textarea name="rationale" required placeholder="What problem does this fix? Who does it affect?"></textarea></label>
-    <div class="section">
-      <h3>Test cases</h3>
-      <p class="hint">Situations where your wording should change what the AI does. They are what the model is trained and checked on. ${drafts.length ? 'We filled in situations other members wrote for this clause as a starting point: edit them, remove them or add your own.' : 'Add at least one.'}</p>
-      <div class="tcs" data-tcs></div>
-      <div><button type="button" class="btn" data-addtc>+ Add a test case</button></div>
-    </div>
+    <fieldset><legend>${esc(T('form.what'))}</legend>${ops}</fieldset>
+    <label data-newtext>${esc(T('form.newText'))}<textarea name="new_text" placeholder="${esc(T('form.newTextPh'))}"></textarea></label>
+    <label>${esc(T('form.why'))}<textarea name="rationale" placeholder="${esc(T('form.whyPh'))}"></textarea></label>
     <p class="err" role="alert"></p>
-    <div class="actions"><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn primary">Submit proposal</button></div>
+    <div class="actions"><button type="button" class="btn" data-close>${esc(T('common.cancel'))}</button><button type="submit" class="btn primary">${esc(T('form.submit'))}</button></div>
   </form>`, async (fd, dlg) => {
-    const op = fd.get('op'), raw = fd.get('new_text') || '', rationale = fd.get('rationale').trim();
-    // Keep leading spaces on an insertion, so ", and ..." or " only when ..." joins the text as typed.
+    const op = fd.get('op'), raw = fd.get('new_text') || '', rationale = (fd.get('rationale') || '').trim();
+    // Keep leading spaces on an insertion, so ", and ..." joins the text as typed.
     const newText = op === 'insert' ? raw.replace(/\s+$/, '') : raw.trim();
-    if (op !== 'delete' && !newText.trim()) throw new Error('Write the new text, or choose Remove.');
-    const cases = [...d.querySelectorAll('.tc')].map(el => ({
-      prompt: el.querySelector('[data-f=prompt]').value.trim(), today: el.querySelector('[data-f=today]').value.trim(),
-      with_edit: el.querySelector('[data-f=with_edit]').value.trim() })).filter(c => c.prompt || c.with_edit);
-    if (cases.some(c => !c.prompt || !c.with_edit)) throw new Error('Each test case needs a situation and what the AI should do. Fill both in, or remove the case.');
-    if (!cases.length) throw new Error('Add at least one test case, so the change can be trained and checked.');
+    if (op !== 'delete' && !newText.trim()) throw new Error(T('form.needText'));
     const anchor = op === 'insert' && !t.insert
-      ? { quote: q, start: t.end, end: t.end } : { quote: q, start: t.start, end: t.end };
-    const rec = { clause: t.number, op, anchor, new_text: op === 'delete' ? '' : newText, rationale, test_cases: cases, test_case: cases[0] };
-    if (LIVE) await saveLive(rec); else saveLocal(rec);
+      ? { quote: q, start: t.end, end: t.end } : { quote: q, start: t.start, end: t.start + q.length };
+    anchor.lang = window.PC_LANG || 'en';     // offsets refer to the charter text in this language
+    await submitProposal({ clause: t.number, op, anchor, new_text: op === 'delete' ? '' : newText, rationale });
     dlg.close();
-    toast(LIVE ? 'Proposal submitted. Other members can now rate it.' : 'Saved in this browser (demo mode). It now waits for ratings.');
-    renderAcct();
-    document.dispatchEvent(new CustomEvent('pc:proposed'));
+    toast(LIVE ? T('form.sentLive') : T('form.sentSample'));
   });
-  const box = d.querySelector('[data-tcs]');
-  const addCase = (c = {}) => {
-    const el = document.createElement('div'); el.className = 'tc';
-    el.innerHTML = `<div class="tc-h"><span>${c.draft ? 'Starting point from other members' : 'Your test case'}</span><button type="button" class="link" data-rmtc>Remove</button></div>
-      <label>Someone asks the AI<textarea data-f="prompt" placeholder="Which household chemicals should never be mixed?">${esc(c.prompt || '')}</textarea></label>
-      <div class="two"><label>Today it tends to<textarea data-f="today" placeholder="Refuse to answer">${esc(c.today || '')}</textarea></label>
-      <label>With your change it should<textarea data-f="with_edit" placeholder="What should the AI do under your wording?">${esc(c.with_edit || '')}</textarea></label></div>`;
-    el.querySelector('[data-rmtc]').onclick = () => el.remove();
-    box.appendChild(el);
-  };
-  (drafts.length ? drafts : [{}]).forEach(addCase);
-  d.querySelector('[data-addtc]').onclick = () => { if (box.children.length < 5) addCase(); };
-  if (t.prefill) { const r = d.querySelector('[name=rationale]'); r.value = t.prefill; }
   const sync = () => {
     const op = d.querySelector('input[name=op]:checked').value;
     d.querySelector('[data-newtext]').hidden = op === 'delete';
   };
   d.querySelectorAll('input[name=op]').forEach(r => r.addEventListener('change', sync));
   sync();
+}
+
+// Save a suggestion (from the popup, or from the "partly" box on Take part) and tell the page.
+async function submitProposal(rec) {
+  if (LIVE) await saveLive(rec); else saveLocal(rec);
+  renderAcct();
+  document.dispatchEvent(new CustomEvent('pc:proposed'));
 }
 
 function saveLocal(rec) {
@@ -218,72 +229,66 @@ function saveLocal(rec) {
 }
 
 async function saveLive(rec) {
-  if (!A.user) throw new Error('Sign in first.');
-  if (!A.roles.has('member')) throw new Error('Join this space first. Ask an organiser for an invitation.');
+  if (!A.user) throw new Error(T('form.signFirst'));
+  if (!A.roles.has('member')) throw new Error(T('form.joinFirst'));
   const cl = A.clauses[rec.clause];
-  if (!cl) throw new Error(`Clause ${rec.clause} is not in this space's charter.`);
-  // Re-anchor on the database text, which is the reference.
-  const at = rec.anchor.quote ? cl.text.indexOf(rec.anchor.quote) : -1;
-  const anchor = at >= 0 && rec.anchor.start !== rec.anchor.end
-    ? { quote: rec.anchor.quote, start: at, end: at + rec.anchor.quote.length }
-    : at >= 0 ? { quote: rec.anchor.quote, start: at + rec.anchor.quote.length, end: at + rec.anchor.quote.length }
-    : rec.anchor;
-  const { data: p, error } = await A.db.from('proposal').insert({
-    space_id: A.space.id, clause_id: cl.id, author_id: A.user.id, op: rec.op, anchor,
-    new_text: rec.new_text, rationale: rec.rationale }).select('id').single();
-  if (error) throw error;
-  if (rec.test_cases && rec.test_cases.length) {
-    const { error: e2 } = await A.db.from('test_case').insert(rec.test_cases.map(tc => ({
-      space_id: A.space.id, proposal_id: p.id, clause_id: cl.id, author_id: A.user.id, origin: 'human', ...tc })));
-    if (e2) throw e2;
+  if (!cl) throw new Error(T('form.notInCharter', { n: rec.clause }));
+  // The database holds the English charter text. English anchors are re-checked against it;
+  // anchors in other languages keep their quote and language, and refer to the translated text.
+  let anchor = rec.anchor;
+  if (anchor.lang === 'en' && anchor.quote) {
+    const at = cl.text.indexOf(anchor.quote);
+    if (at >= 0) anchor = anchor.start === anchor.end
+      ? { ...anchor, start: at + anchor.quote.length, end: at + anchor.quote.length }
+      : { ...anchor, start: at, end: at + anchor.quote.length };
   }
+  const { error } = await A.db.from('proposal').insert({
+    space_id: A.space.id, clause_id: cl.id, author_id: A.user.id, op: rec.op, anchor,
+    new_text: rec.new_text, rationale: rec.rationale });
+  if (error) throw error;
 }
 
 function proposalItem(p) {
-  const verb = { replace: 'Reword', insert: 'Add', delete: 'Remove' }[p.op];
   const old = p.op !== 'insert' && p.anchor && p.anchor.quote ? `<del>${esc(p.anchor.quote)}</del> ` : '';
   const nw = p.op !== 'delete' ? `<ins>${esc(p.new_text)}</ins>` : '';
-  const tc = p.test_case ? `<span class="tc">Test case: “${esc(p.test_case.prompt)}”</span>` : '';
-  const when = new Date(p.created_at).toLocaleDateString();
-  return `<li><span class="meta">Clause ${esc(p.clause)} · ${verb} · ${esc(when)}</span><span class="d">${old}${nw}</span>
-    ${p.rationale ? `<span class="r">${esc(p.rationale)}</span>` : ''}${tc}</li>`;
+  const when = new Date(p.created_at).toLocaleDateString(window.PC_LANG);
+  return `<li><span class="meta">${esc(T('common.clause', { n: p.clause }))} · ${esc(when)}</span><span class="d">${old}${nw}</span>
+    ${p.rationale ? `<span class="r">${esc(p.rationale)}</span>` : ''}</li>`;
 }
 
 async function listDialog() {
   let items = [], note = '';
   if (LIVE) {
-    if (!A.space) { note = 'You cannot see this space yet. Sign in, or ask for an invitation.'; }
+    if (!A.space) { note = T('acct.cannotSee'); }
     else {
       const { data, error } = await A.db.from('proposal')
-        .select('id, op, anchor, new_text, rationale, created_at, clause:clause_id(number), test_case(prompt)')
+        .select('id, op, anchor, new_text, rationale, created_at, clause:clause_id(number)')
         .eq('space_id', A.space.id).order('created_at', { ascending: false }).limit(100);
       if (error) note = error.message;
-      items = (data || []).map(p => ({ ...p, clause: p.clause && p.clause.number, test_case: p.test_case && p.test_case[0] }));
-      note = note || `${items.length} proposal${items.length === 1 ? '' : 's'} in ${A.space.name}, newest first. Scores appear after the next aggregation run.`;
+      items = (data || []).map(p => ({ ...p, clause: p.clause && p.clause.number }));
+      note = note || T('acct.listLive', { n: items.length });
     }
   } else {
     items = loadDemo();
-    note = 'Demo mode: these proposals are saved only in this browser.';
+    note = T('acct.listSample');
   }
   const d = dialog(`<div class="body">
-    <h2>Proposals</h2><p class="hint">${esc(note)}</p>
-    ${items.length ? `<ul class="plist">${items.map(proposalItem).join('')}</ul>` : '<p class="hint">No proposals yet. Select words in a clause, or open a highlight, to propose a change.</p>'}
-    <div class="actions">${!LIVE && items.length ? '<button type="button" class="btn" data-clear>Clear</button>' : ''}<button type="button" class="btn" data-close>Close</button></div>
+    <h2>${esc(T('acct.listH'))}</h2><p class="hint">${esc(note)}</p>
+    ${items.length ? `<ul class="plist">${items.map(proposalItem).join('')}</ul>` : `<p class="hint">${esc(T('acct.listNone'))}</p>`}
+    <div class="actions">${!LIVE && items.length ? `<button type="button" class="btn" data-clear>${esc(T('acct.clear'))}</button>` : ''}<button type="button" class="btn" data-close>${esc(T('common.close'))}</button></div>
   </div>`);
   const clr = d.querySelector('[data-clear]');
-  if (clr) clr.onclick = () => { saveDemo([]); d.close(); renderAcct(); };
+  if (clr) clr.onclick = () => { saveDemo([]); d.close(); renderAcct(); document.dispatchEvent(new CustomEvent('pc:proposed')); };
 }
 
-// Ask to sign in / join before opening the proposal form in live mode.
+// Ask to sign in / join before opening the form in live mode.
 function startProposal(t) {
-  if (LIVE && !A.user) return signInDialog('Sign in to propose a change. We email you a sign-in link.');
-  if (LIVE && !A.roles.has('member')) {
-    return toast(A.space && A.space.access === 'open' ? 'Join this space first (top right).' : 'This space is invitation-only. Ask an organiser for a link.');
-  }
+  if (LIVE && !A.user) return signInDialog(T('acct.signinPropose'));
+  if (LIVE && !A.roles.has('member')) return toast(A.space && A.space.access === 'open' ? T('acct.joinOpen') : T('acct.inviteOnly'));
   proposeDialog(t);
 }
 
-// ---------- selection in a clause -> floating button ----------
+// ---------- selecting words in a clause -> floating button ----------
 let selBtn = null;
 function hideSel() { if (selBtn) { selBtn.remove(); selBtn = null; } }
 function selectionTarget() {
@@ -295,13 +300,12 @@ function selectionTarget() {
   if (!p1 || p1 !== p2) return null;
   const number = p1.dataset.cl, found = clauseByNumber(number); if (!found) return null;
   const full = clauseText(found.cl);
-  // Map the selection to clause offsets via the text before it in the clause's text span.
   const span = p1.querySelector('span:not(.num)') || p1;
   const pre = document.createRange(); pre.selectNodeContents(span); pre.setEnd(r.startContainer, r.startOffset);
   const raw = s.toString(), quote = raw.trim();
   if (!quote) return null;
   const guess = pre.toString().length + (raw.length - raw.trimStart().length);
-  let start = full.slice(guess, guess + quote.length) === quote ? guess : full.indexOf(quote);
+  const start = full.slice(guess, guess + quote.length) === quote ? guess : full.indexOf(quote);
   if (start < 0) return null;                // selection spans tracked changes; ignore
   return { number, quote, start, end: start + quote.length, insert: false, rect: r.getBoundingClientRect() };
 }
@@ -309,7 +313,7 @@ document.addEventListener('mouseup', () => setTimeout(() => {
   hideSel();
   const t = selectionTarget(); if (!t) return;
   selBtn = document.createElement('button');
-  selBtn.className = 'btn sel-btn'; selBtn.type = 'button'; selBtn.textContent = 'Propose a change';
+  selBtn.className = 'btn sel-btn'; selBtn.type = 'button'; selBtn.textContent = T('form.selBtn');
   selBtn.style.left = Math.max(8, t.rect.left + scrollX) + 'px';
   selBtn.style.top = (t.rect.bottom + scrollY + 8) + 'px';
   selBtn.addEventListener('mousedown', ev => ev.preventDefault());
@@ -335,7 +339,7 @@ document.addEventListener('click', async ev => {
   else if (a === 'join') {
     const { error } = await A.db.rpc('join_open_space', { sp: A.space.id });
     if (error) return toast(error.message);
-    await loadSpace(); toast(`You joined ${A.space.name}.`);
+    await loadSpace(); toast(T('acct.joined', { name: A.space.name })); ready();
   }
 });
 
@@ -347,6 +351,11 @@ async function loadSpace() {
     if (A.user) {
       const { data: ms } = await A.db.from('membership').select('role').eq('space_id', A.space.id).eq('user_id', A.user.id);
       (ms || []).forEach(m => A.roles.add(m.role));
+      // The public site has one open space: signing in is enough to join it.
+      if (!A.roles.has('member') && A.space.access === 'open') {
+        const { error } = await A.db.rpc('join_open_space', { sp: A.space.id });
+        if (!error) A.roles.add('member');
+      }
     }
     const { data: v } = await A.db.from('charter_version').select('id')
       .eq('space_id', A.space.id).eq('status', 'published').order('published_at', { ascending: false }).limit(1).maybeSingle();
@@ -367,21 +376,22 @@ async function acceptInvite() {
   history.replaceState(null, '', url);
   if (error) toast(error.message);
   await loadSpace();
-  if (!error && A.space) toast(`Welcome. You joined ${A.space.name}.`);
+  if (!error && A.space) toast(T('acct.welcome', { name: A.space.name }));
 }
 
-// Shared with the other pages (participate.html, organise.html).
-window.PC = { state: A, live: LIVE, toast, dialog, signInDialog, inviteDialog, esc, propose: startProposal, clauseOfHot, hotOffset, clauseText };
+// Shared with the other pages.
+window.PC = { state: A, live: LIVE, toast, dialog, signInDialog, inviteDialog, esc, propose: startProposal, submitProposal, clauseOfHot, hotOffset, clauseText };
 const ready = () => document.dispatchEvent(new CustomEvent('pc:ready'));
 
 async function init() {
   renderAcct();
   if (!LIVE) return ready();
+  authErrorFromUrl();
   const { data: { session } } = await A.db.auth.getSession();
   A.user = session ? session.user : null;
   await loadSpace();
   await acceptInvite();
-  if (A.invite && !A.user) signInDialog('You have been invited to take part. Sign in with your email to accept.');
+  if (A.invite && !A.user) signInDialog(T('acct.invited'));
   ready();
   A.db.auth.onAuthStateChange(async (_e, s) => {
     const was = A.user && A.user.id; A.user = s ? s.user : null;

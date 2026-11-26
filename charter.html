@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="i18n-title" content="viewer.title">
+<title>The Apertus Charter</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='12' fill='%23b0302e'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
+<link rel="stylesheet" href="site.css?v=20261126c">
+<link rel="stylesheet" href="app.css?v=20261126c">
+<script src="lang/en.js?v=20261126c"></script><script src="lang/de.js?v=20261126c"></script><script src="lang/fr.js?v=20261126c"></script><script src="i18n.js?v=20261126c"></script>
+<script src="motion.js?v=20261126c"></script>
+<style>
+/* An annotated document: the charter on the left, the ideas for the chosen phrase on the right. */
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:16px 0 0;font-size:14.5px}
+.legend .t{color:var(--muted)}
+.legend span.c{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+.legend span.c i{width:22px;height:12px;border-radius:3px;background:color-mix(in srgb,var(--c) 22%,transparent);box-shadow:inset 0 -3px 0 var(--c)}
+.notice{margin:12px 0 0;font-size:13.5px;color:var(--muted);max-width:60em}
+.notice a{color:inherit}
+
+.reader{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start;padding-block:6px 70px}
+.doc{background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:clamp(18px,3.5vw,40px);min-width:0;box-shadow:0 10px 30px rgba(20,20,20,.04)}
+.doc .art+.art{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.doc h2{display:flex;align-items:center;gap:12px;font:600 clamp(22px,2.4vw,28px)/1.2 var(--display);letter-spacing:-.02em;margin:0 0 14px}
+.doc h2 .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--pale);color:var(--accent);font-size:16px;flex:none}
+.cl{display:grid;grid-template-columns:44px minmax(0,1fr);margin:0 0 14px;font:400 clamp(18px,1.6vw,20px)/1.75 var(--ui)}
+.cl .num{font:700 13px/2.7 var(--ui);color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Highlighted phrases */
+.hl{all:unset;cursor:pointer;padding:1px 3px 2px;border-radius:4px;background:color-mix(in srgb,var(--c) 18%,transparent);box-shadow:inset 0 -3px 0 var(--c);-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .2s ease,box-shadow .2s ease;animation:hlin .7s ease both}
+.hl:hover{background:color-mix(in srgb,var(--c) 32%,transparent)}
+.hl:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.hl.on{background:var(--c);color:#fff;box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
+.hl.plus{font:700 13px var(--ui);padding:0 6px;margin:0 2px;vertical-align:1px}
+.hl[data-n]::after{content:attr(data-n);display:inline-block;margin-left:4px;font:700 10.5px/16px var(--ui);min-width:16px;text-align:center;border-radius:8px;background:var(--c);color:#fff;vertical-align:2px}
+.hl.on[data-n]::after{background:#fff;color:var(--c)}
+@keyframes hlin{from{background-color:transparent;box-shadow:inset 0 0 0 var(--c)}}
+
+/* Side panel */
+.panel{position:sticky;top:16px;background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;min-width:0;max-height:calc(100vh - 32px);overflow:auto}
+.panel .empty h3{margin:6px 0 6px}
+.panel .empty p{margin:0 0 10px;color:#333;font-size:15.5px}
+.panel .empty .big{font:600 44px/1 var(--display);color:var(--accent);margin:8px 0 2px}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.ph .q{font:600 20px/1.3 var(--display);margin:2px 0 0;overflow-wrap:anywhere}
+.ph .q del{color:var(--muted)}
+.ph .lbl{margin:0}
+.close{border:1px solid var(--line);background:var(--sheet);border-radius:999px;width:30px;height:30px;cursor:pointer;flex:none;font-size:16px;line-height:1;color:var(--slate)}
+.ideas{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.idea{border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:10px 12px;animation:fadein .35s ease both}
+.idea .w{font:600 16.5px/1.35 var(--display);margin:0 0 4px;color:var(--ink)}
+.idea .w ins{text-decoration:none;color:var(--accent)}
+.idea .st{font:700 11.5px/1.3 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin:0 0 6px}
+.idea .st .bb{color:var(--good)}
+.idea .st .pk{color:var(--ink)}
+.idea .st .rn{color:var(--muted)}
+.idea .why{margin:6px 0 0;font-size:14px;color:#555;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mini{display:grid;grid-template-columns:1fr 1fr;height:8px;position:relative}
+.mini::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1.5px;background:var(--ink);opacity:.45}
+.mini .no{justify-self:end;height:100%;background:var(--contested);opacity:.75;border-radius:3px 0 0 3px;transform-origin:right;animation:grow .8s cubic-bezier(.2,.7,.2,1) both}
+.mini .yes{justify-self:start;height:100%;background:var(--endorsed);border-radius:0 3px 3px 0;transform-origin:left;animation:grow .8s cubic-bezier(.2,.7,.2,1) both}
+.pc{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+.pc b{color:var(--endorsed)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+@media (max-width:960px){
+  .reader{grid-template-columns:minmax(0,1fr)}
+  .panel{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:30;border-radius:18px 18px 0 0;max-height:70vh;box-shadow:0 -10px 30px rgba(0,0,0,.12);transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.7,.2,1);padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .panel.open{transform:none}
+  .cl{grid-template-columns:36px minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){.hl,.idea,.mini .no,.mini .yes{animation:none}.panel{transition:none}}
+</style>
+</head>
+<body class="tp">
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+<header class="top wrap"><div class="in">
+  <a class="brand" href="./"><p data-i18n="brand.kicker">Constitutional AI Project</p><span class="bn">public<i></i>charters</span></a>
+  <nav class="sn" aria-label="Site"><a href="participate.html" data-i18n="nav.take">Take part</a><a href="results.html" data-i18n="nav.results">Results</a><a href="charter.html" aria-current="page" data-i18n="nav.charter">The charter</a><a href="about.html" data-i18n="nav.about">About</a></nav>
+  <span data-langs></span>
+  <div class="acct" id="acct"></div>
+</div></header>
+
+<main id="main" tabindex="-1">
+<section class="hero wrap"><div class="in">
+  <h1 data-i18n-html="viewer.h">The Apertus <em>Charter.</em></h1>
+  <p class="lede" data-i18n="viewer.lede">Coloured phrases show where people suggest changes. To see the proposed changes, click on the highlighted text, which will also show how people rated them.</p>
+  <div class="legend" id="legend"></div>
+  <p class="notice" data-i18n-html="viewer.notice"><b>Sample data.</b> Sentences shortened from Version 1.0 of the <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">Apertus Charter</a>; 3 of its 11 articles are shown. Suggested changes and ratings are made up for now.</p>
+  <noscript><p class="noscript">This page needs JavaScript to show its content. · Diese Seite braucht JavaScript, um ihren Inhalt zu zeigen. · Cette page a besoin de JavaScript pour afficher son contenu.</p></noscript>
+</div></section>
+
+<div class="wrap"><div class="in reader">
+  <article class="doc" id="doc"></article>
+  <aside class="panel" id="panel" aria-live="polite"></aside>
+</div></div>
+</main>
+
+<footer class="foot wrap"><div class="in" data-i18n-html="common.footer">Public Charters · AI and Human Values, ETH Zurich, 2026. Not affiliated with the Swiss AI Initiative. Charter source: <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">apertus-ai.org</a> · Code: <a href="https://github.com/cosage-ethz/public-charters" target="_blank" rel="noopener">GitHub</a></div></footer>
+
+<script src="sample-data.js?v=20261126c"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=20261126c"></script>
+<script src="app.js?v=20261126c"></script>
+<script src="bridge.js?v=20261126c"></script>
+<script src="community.js?v=20261126c"></script>
+<script>
+(() => {
+const C = window.Community;
+const $ = id => document.getElementById(id);
+const { esc, pct } = C;
+const RANK = { endorsed: 0, contested: 1, weak: 2, needs: 3 };
+const color = k => `var(--${k})`;
+let CUR = null;
+
+// Ideas for each phrase, best first, and the colour of the phrase (its best-rated idea).
+function byHot() {
+  const out = {};
+  C.suggestions().filter(s => !s.own && s.hot).forEach(s => (out[s.hot] = out[s.hot] || []).push(s));
+  Object.values(out).forEach(list => list.sort((a, b) => (a.s.status === 'needs') - (b.s.status === 'needs') || b.s.net - a.s.net));
+  return out;
+}
+const tone = list => list.reduce((best, s) => RANK[s.s.status] < RANK[best] ? s.s.status : best, 'needs');
+
+function renderLegend() {
+  $('legend').innerHTML = `<span class="t">${esc(T('viewer.legend'))}</span>` +
+    ['endorsed', 'contested', 'weak', 'needs'].map(k => `<span class="c" style="--c:${color(k)}"><i></i>${esc(T('status.' + k))}</span>`).join('');
+}
+
+function renderDoc() {
+  const H = byHot();
+  let i = 0;
+  $('doc').innerHTML = ARTS.map(a => `<section class="art" id="${a.id}"><h2><span class="n">${a.n}</span>${esc(a.t)}</h2>
+    ${a.cl.map(c => `<p class="cl" data-cl="${c[0]}"><span class="num">${c[0]}</span><span>${c[1].map(p => {
+      if (typeof p === 'string') return esc(p);
+      const list = H[p.h], base = HOTS[p.h].base;
+      if (!list) return esc(base);
+      const k = tone(list);
+      return `<button class="hl ${base ? '' : 'plus'} ${CUR === p.h ? 'on' : ''}" data-k="${p.h}" data-n="${list.length}" style="--c:${color(k)};animation-delay:${(i++) * 70}ms"
+        aria-label="${esc((base || T('viewer.added')) + ': ' + T('viewer.ideas', { n: list.length }) + ', ' + T('status.' + k))}">${base ? esc(base) : '+'}</button>`;
+    }).join('')}</span></p>`).join('')}</section>`).join('');
+}
+
+function renderPanel() {
+  const H = byHot(), P = $('panel');
+  if (!CUR || !H[CUR]) {
+    const ideas = Object.values(H).reduce((n, l) => n + l.length, 0);
+    P.classList.remove('open');
+    P.innerHTML = `<div class="empty"><p class="lbl">${esc(T('viewer.title'))}</p><p class="big">${ideas}</p>
+      <p class="small muted">${esc(T('viewer.summary', { p: Object.keys(H).length, c: ideas }))}</p>
+      <h3>${esc(T('viewer.emptyH'))}</h3><p>${esc(T('viewer.empty'))}</p></div>`;
+    return;
+  }
+  const list = H[CUR], base = HOTS[CUR].base;
+  P.classList.add('open');
+  P.innerHTML = `<div class="ph"><div><p class="lbl">${esc(T('viewer.today'))} · ${esc(T('viewer.ideas', { n: list.length }))}</p>
+      <p class="q">${base ? '“' + esc(base) + '”' : esc(T('viewer.added'))}</p></div>
+      <button class="close" data-close aria-label="${esc(T('common.close'))}">×</button></div>
+    <ul class="ideas">${list.map((s, j) => {
+      const t = s.s, k = t.status;
+      return `<li class="idea" style="--c:${color(k)};animation-delay:${j * 60}ms">
+        <p class="st">${esc(T('status.' + k))}${s.s.status === 'endorsed' && s.bridge && s.bridge.ok ? ` · <span class="bb" title="${esc(T('results.bridgeTip'))}">⬡ ${esc(T('results.bridgeBadge'))}</span>` : ''}${s.pick === 'chosen' ? ` · <span class="pk">✓ ${esc(T('results.chosen'))}</span>` : s.pick === 'runner' ? ` · <span class="rn" title="${esc(T('results.runnerTip'))}">${esc(T('results.runner'))}</span>` : ''}</p>
+        <p class="w">${s.op === 'delete' ? esc(T('viewer.remove')) : `<ins>${esc(C.changeLabel(s))}</ins>`}</p>
+        ${t.n ? `<div class="mini"><span class="no" style="width:${(t.notShare * 100).toFixed(1)}%"></span><span class="yes" style="width:${(t.helpShare * 100).toFixed(1)}%"></span></div>
+        <div class="pc"><span>${pct(t.notShare)} ${esc(T('results.axisNo'))}</span><b>${pct(t.helpShare)} ${esc(T('results.axisYes'))}</b></div>` : ''}
+        ${s.why ? `<p class="why">${esc(s.why)}</p>` : ''}</li>`;
+    }).join('')}</ul>
+    <div class="acts"><a class="btn primary" href="participate.html#rate">${esc(T('viewer.rateThese'))} →</a>
+      <button class="btn" data-propose="${CUR}">${esc(T('viewer.suggest'))}</button></div>`;
+}
+
+function render() { renderDoc(); renderPanel(); }
+// Choosing a phrase only updates the highlight and the panel, so the page doesn't re-animate.
+function pick(k) {
+  CUR = k && CUR !== k ? k : null;
+  document.querySelectorAll('.hl[data-k]').forEach(el => el.classList.toggle('on', el.dataset.k === CUR));
+  renderPanel();
+  $('panel').scrollTop = 0;
+}
+
+document.addEventListener('click', ev => {
+  const h = ev.target.closest('.hl[data-k]'); if (h) return pick(h.dataset.k);
+  if (ev.target.closest('[data-close]')) pick(null);
+});
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && CUR) pick(null); });
+document.addEventListener('pc:proposed', render);
+renderLegend();
+render();
+})();
+</script>
+</body>
+</html>

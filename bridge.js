@@ -1,125 +1,139 @@
-// Scoring for Public Charters: support in every group, with weights, as described in
-// "Opinion aggregation for the Charter Kit, version 2".
+// Scoring for the public Apertus Charter site.
 //
-//  - Groups are the roles an organiser sets for the space (for example doctors, nurses,
-//    patients, administration). Larger spaces may switch to opinion groups found from the
-//    votes, Polis style; the rule below stays the same.
-//  - A suggestion is ENDORSED when it is rated helpful in every group, CONTESTED when some
-//    groups find it helpful and others do not, WEAK otherwise, and NEEDS RATINGS until every
-//    group has the minimum number of ratings.
-//  - Weights (simplified DemPO): each group counts at its target share of the community,
-//    not at its share of the people who happened to rate. weight = target share / share of
-//    active raters, capped between 0.3 and 3. The full kit can use LEXIMIN selection
-//    probabilities instead. Weights set the overall support figure and the pair results; they
-//    never let one group outvote another, because endorsement needs every group.
+//  - Everyone who rates is in one pool. There are no group vetoes.
+//  - Each rating counts +1 (helpful), 0 (somewhat) or -1 (not helpful). The net score is the
+//    average, from -1 to +1.
+//  - A suggestion is ENDORSED when its net score reaches RULES.endorse, CONTESTED when it is
+//    not endorsed but sizeable shares find it helpful and not helpful, WEAK otherwise, and
+//    NEEDS RATINGS until it has RULES.minRatings ratings.
+//  - Optional demographic answers (age, language, ...) only produce BREAKDOWNS: how each
+//    group rated a suggestion. They never change its status. A group is shown only once it
+//    has RULES.minGroup ratings, so small groups are neither noisy nor identifiable.
 //
+// The thresholds are placeholders, to be tuned once real ratings come in.
 // The file runs in the browser (window.Bridge) and in Node (require('./bridge.js')), so the
-// same code can score a real space from a database export.
+// same code can score the real space from a database export.
 (function (root) {
 'use strict';
 
 const RULES = {
-  minPerGroup: 3,       // ratings needed in every group before a status is given
-  endorse: 0.6,         // helpful share every group must reach
-  oppose: 0.4,          // a group at or below this counts as against
-  weightCap: [0.3, 3],  // weights are clipped to this range
+  minRatings: 10,       // ratings needed before a suggestion gets a status
+  endorse: 0.3,         // net score needed to be endorsed
+  contested: 0.3,       // share helpful AND share not helpful both at least this: contested
+  minGroup: 5,          // ratings needed before a demographic group is shown in a breakdown
+  pairDecide: 0.6,      // share preferring one side in Compare answers for a verdict
+  closeCall: 0.1,       // rival wordings closer than this (net score) are flagged as a close call
   ratingValue: { helpful: 1, somewhat: 0.5, not: 0 }
 };
 
-// ---------- weights ----------
-// groups: [{ id, target }] with targets summing to 1; active: { groupId: number of active raters }
-function weights(groups, active) {
-  const total = groups.reduce((n, g) => n + (active[g.id] || 0), 0) || 1;
-  const out = {};
-  for (const g of groups) {
-    const share = (active[g.id] || 0) / total;
-    const w = share ? g.target / share : RULES.weightCap[1];
-    out[g.id] = { target: g.target, share, weight: Math.min(RULES.weightCap[1], Math.max(RULES.weightCap[0], w)) };
-  }
-  return out;
-}
-
 // ---------- one suggestion ----------
-// ratings: [{ group, value (0..1), reasons: [] }]
-function score(groups, ratings, W) {
-  const per = {};
-  for (const g of groups) per[g.id] = { n: 0, sum: 0, against: {}, for: {} };
+// ratings: [{ value (1 | 0.5 | 0), reasons: [], profile: { age, lang, ... } }]
+function tally(ratings) {
+  const t = { n: 0, help: 0, some: 0, not: 0, for: {}, against: {} };
   for (const r of ratings) {
-    const p = per[r.group]; if (!p) continue;
-    p.n++; p.sum += r.value;
-    const bag = r.value >= 0.5 ? p.for : p.against;
+    t.n++;
+    if (r.value >= 1) t.help++; else if (r.value > 0) t.some++; else t.not++;
+    const bag = r.value >= 0.5 ? t.for : t.against;
     (r.reasons || []).forEach(x => { bag[x] = (bag[x] || 0) + 1; });
   }
-  // Smoothed helpful share: one imaginary helpful and one unhelpful rating, so 2 of 2 is not 100%.
-  for (const g of groups) { const p = per[g.id]; p.h = (p.sum + 1) / (p.n + 2); }
-  const ids = groups.map(g => g.id);
-  const missing = ids.filter(id => per[id].n < RULES.minPerGroup);
-  const hs = ids.map(id => per[id].h);
-  const lo = Math.min(...hs), hi = Math.max(...hs);
-  const loG = groups[hs.indexOf(lo)], hiG = groups[hs.indexOf(hi)];
+  const n = t.n || 1;
+  t.helpShare = t.help / n; t.someShare = t.some / n; t.notShare = t.not / n;
+  t.net = t.n ? (t.help - t.not) / t.n : 0;
+  return t;
+}
+
+function score(ratings) {
+  const t = tally(ratings);
   let status;
-  if (missing.length) status = 'needs';
-  else if (lo >= RULES.endorse) status = 'endorsed';
-  else if (hi >= RULES.endorse && lo <= RULES.oppose) status = 'contested';
+  if (t.n < RULES.minRatings) status = 'needs';
+  else if (t.net >= RULES.endorse) status = 'endorsed';
+  else if (t.helpShare >= RULES.contested && t.notShare >= RULES.contested) status = 'contested';
   else status = 'weak';
-  const overall = W ? ids.reduce((s, id) => s + W[id].target * per[id].h, 0) : hs.reduce((a, b) => a + b, 0) / hs.length;
-  const n = ids.reduce((s, id) => s + per[id].n, 0);
-  return { status, per, lo, hi, loG, hiG, missing, overall, n };
+  return Object.assign(t, { status });
 }
 
-// A plain sentence on why a suggestion has its status.
-function explain(groups, s) {
-  const pct = x => Math.round(x * 100) + '%';
-  const name = id => (groups.find(g => g.id === id) || {}).name || id;
-  if (s.status === 'needs') {
-    const need = s.missing.map(id => `${name(id)} (${s.per[id].n} of ${RULES.minPerGroup})`);
-    return `Needs more ratings from ${list(need)}.`;
-  }
-  if (s.status === 'endorsed') return `Helpful in all ${groups.length} groups. Lowest: ${s.loG.name}, ${pct(s.lo)}.`;
-  if (s.status === 'contested') return `${s.hiG.name} find it helpful (${pct(s.hi)}), ${s.loG.name} do not (${pct(s.lo)}).`;
-  if (s.hi >= RULES.endorse) return `Helpful for some groups, but not yet for all. Lowest: ${s.loG.name}, ${pct(s.lo)}.`;
-  return `No group finds it clearly helpful. Highest: ${s.hiG.name}, ${pct(s.hi)}.`;
-}
-function list(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
-
-// Dissent record: who was against an endorsed change, and why, in their own reason words.
-function dissent(groups, s) {
-  return groups.map(g => {
-    const p = s.per[g.id], against = Math.round((1 - p.h) * 100);
-    const why = Object.entries(p.against).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => x[0]);
-    return { group: g, against, why };
-  }).filter(d => d.against >= 25).sort((a, b) => b.against - a.against);
-}
-
-// ---------- pairs (Compare answers) ----------
-// choices: [{ group, choice: 'cur' | 'alt' | 'both' | 'neither' }]
-// Returns, per group, the share preferring the alternative among those who chose a side.
-function pairResult(groups, choices, W) {
-  const per = {};
-  for (const g of groups) per[g.id] = { cur: 0, alt: 0, both: 0, neither: 0 };
-  for (const c of choices) if (per[c.group]) per[c.group][c.choice]++;
-  for (const g of groups) { const p = per[g.id], n = p.cur + p.alt; p.n = n; p.alt_share = (p.alt + 1) / (n + 2); }
-  const ids = groups.map(g => g.id);
-  const enough = ids.every(id => per[id].n >= RULES.minPerGroup);
-  const lo = Math.min(...ids.map(id => per[id].alt_share)), hi = Math.max(...ids.map(id => per[id].alt_share));
-  const overall = W ? ids.reduce((s, id) => s + W[id].target * per[id].alt_share, 0) : 0.5;
-  // The charter check: the current clause loses in every group, so the charter may be lacking here.
-  const verdict = !enough ? 'needs' : lo >= RULES.endorse ? 'charter-lacking' : hi <= RULES.oppose ? 'charter-holds' : 'split';
-  return { per, overall, verdict, lo, hi };
-}
-
-// ---------- serving: fewest ratings first ----------
-// items: [{ id, s: score result }], group: the rater's group. Items still missing ratings from the
-// rater's group come first, then by fewest ratings overall.
-function serveOrder(items, group) {
-  return items.slice().sort((a, b) => {
-    const na = a.s.per[group] ? a.s.per[group].n : 0, nb = b.s.per[group] ? b.s.per[group].n : 0;
-    const ma = na < RULES.minPerGroup ? 0 : 1, mb = nb < RULES.minPerGroup ? 0 : 1;
-    return ma - mb || na - nb || a.s.n - b.s.n;
+// Breakdown by optional profile answers.
+// questions: [{ id, q, options: [] }]. Returns [{ q, rows: [{ option, n, ...tally }], hidden }].
+function breakdown(questions, ratings, fn) {
+  const f = fn || tally;
+  return questions.map(q => {
+    const rows = [];
+    let hidden = 0;
+    for (const o of q.options) {
+      const sub = ratings.filter(r => r.profile && r.profile[q.id] === o);
+      if (sub.length >= RULES.minGroup) rows.push(Object.assign({ option: o }, f(sub)));
+      else hidden += sub.length;
+    }
+    return { q, rows, hidden };
   });
 }
 
-// ---------- deterministic randomness for the demo community ----------
+// ---------- bridging: support across groups that often disagree ----------
+// A change "bridges" when, in every profile question that has at least two groups with enough
+// answers, every such group has more yes than no. At least one question must qualify. This is a
+// badge shown next to the result, never a rule that decides (no group can block a change).
+function bridges(questions, ratings) {
+  const perQ = breakdown(questions, ratings).map(({ q, rows }) => ({ q, rows, ok: rows.length >= 2 && rows.every(r => r.net > 0), counted: rows.length >= 2 }));
+  const counted = perQ.filter(x => x.counted);
+  return { ok: counted.length > 0 && counted.every(x => x.ok), perQ };
+}
+
+// ---------- choosing among rival wordings ----------
+// items: [{ id, key, s: score }], where key identifies the words being changed. Among endorsed
+// rivals with the same key, the one with the highest net score is chosen and the others become
+// runners-up. A gap smaller than RULES.closeCall is flagged for a head-to-head vote later.
+function pickWinners(items) {
+  const out = {}, groups = {};
+  items.forEach(x => { (groups[x.key] = groups[x.key] || []).push(x); });
+  Object.values(groups).forEach(list => {
+    const passed = list.filter(x => x.s.status === 'endorsed').sort((a, b) => b.s.net - a.s.net);
+    if (!passed.length || list.length < 2) return;
+    const close = passed.length > 1 && passed[0].s.net - passed[1].s.net < RULES.closeCall;
+    passed.forEach((x, i) => { out[x.id] = { pick: i === 0 ? 'chosen' : 'runner', close: close && i < 2 }; });
+  });
+  return out;
+}
+
+// A plain sentence on why a suggestion has its status.
+function explain(s) {
+  const pct = x => Math.round(x * 100) + '%';
+  if (s.status === 'needs') return `Needs more ratings (${s.n} of ${RULES.minRatings}).`;
+  const split = `${pct(s.helpShare)} helpful, ${pct(s.notShare)} not helpful`;
+  if (s.status === 'endorsed') return `Broad support: ${split}.`;
+  if (s.status === 'contested') return `People are split: ${split}.`;
+  return `Not enough support yet: ${split}.`;
+}
+
+// Dissent record: how many found an endorsed change unhelpful, and their most common reasons.
+function dissent(s) {
+  const why = Object.entries(s.against).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => x[0]);
+  return { share: s.notShare, why };
+}
+
+// ---------- pairs (Compare answers) ----------
+// choices: [{ choice: 'cur' | 'alt' | 'both' | 'neither', profile }]
+function pairTally(choices) {
+  const p = { cur: 0, alt: 0, both: 0, neither: 0 };
+  for (const c of choices) if (p[c.choice] != null) p[c.choice]++;
+  p.n = p.cur + p.alt;
+  p.alt_share = p.n ? p.alt / p.n : 0.5;
+  return p;
+}
+function pairResult(choices) {
+  const p = pairTally(choices);
+  // The charter check: most people prefer the change, so the charter may be lacking here.
+  p.verdict = p.n < RULES.minRatings ? 'needs'
+    : p.alt_share >= RULES.pairDecide ? 'charter-lacking'
+    : p.alt_share <= 1 - RULES.pairDecide ? 'charter-holds' : 'split';
+  return p;
+}
+
+// ---------- serving: fewest ratings first ----------
+function serveOrder(items) {
+  return items.slice().sort((a, b) => a.s.n - b.s.n);
+}
+
+// ---------- deterministic randomness for the sample round ----------
 function seeded(str) {
   let h = 1779033703 ^ str.length;
   for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; }
@@ -129,6 +143,6 @@ function seeded(str) {
   };
 }
 
-root.Bridge = { RULES, weights, score, explain, dissent, pairResult, serveOrder, seeded, list };
+root.Bridge = { RULES, tally, score, breakdown, bridges, pickWinners, explain, dissent, pairTally, pairResult, serveOrder, seeded };
 if (typeof module !== 'undefined' && module.exports) module.exports = root.Bridge;
 })(typeof window !== 'undefined' ? window : globalThis);
