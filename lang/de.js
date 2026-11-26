@@ -3,7 +3,7 @@
 window.I18N = window.I18N || {};
 window.I18N.de = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Mitmachen', results: 'Ergebnisse', charter: 'Die Charta', about: 'Über uns', language: 'Sprache', skip: 'Zum Inhalt springen' },
+  nav: { take: 'Mitmachen', results: 'Bisherige Ergebnisse', charter: 'Charta lesen', about: 'Über uns', language: 'Sprache', skip: 'Zum Inhalt springen' },
   common: {
     student: 'Ein Studierendenprojekt an der ETH Zürich. Wir sind nicht mit der Swiss AI Initiative verbunden.',
     sample: 'Beispielrunde',
@@ -24,7 +24,6 @@ window.I18N.de = {
     lede: 'Apertus, das KI-Modell der Schweiz, folgt Regeln, die in der Apertus-Charta stehen. Sagen Sie uns, wie sie sich ändern sollen.',
     cta: 'Mitmachen · etwa 10 Minuten',
     ctaRead: 'Die Charta lesen',
-    ctaNote: 'Kein Passwort nötig.',
     demoToday: 'Heutiger Wortlaut',
     demoSuggested: 'Änderungsvorschlag aus der Community',
     demoCap: 'Ein Satz, viele Auslegungen. Welche würden Sie wählen?',
@@ -67,9 +66,10 @@ window.I18N.de = {
     openaiDoc: 'Model Spec', openaiBy: 'OpenAI · ChatGPT', openaiD: 'Eine Beschreibung, wie sich OpenAI das Verhalten seines Modells wünscht und welche Grundsätze es einhalten soll.',
     read: 'Lesen (Englisch)',
     whoNote: 'Diese Texte schreiben die Firmen selbst. Wir von Public Charters fragen: Was wäre, wenn die Menschen, die KI nutzen, mitreden könnten? Wir möchten Ihnen eine Stimme geben.',
+    kitTag: 'Für technische Teams',
     kitH: 'Für die eigene KI und Gemeinschaft durchführen',
-    kit: 'Ein Spital, eine Schule oder eine Gemeinde kann denselben Ablauf für die eigene KI und die eigenen Regeln durchführen, auf der eigenen Website.',
-    kitLink: 'Das kostenlose Charter Kit'
+    kit: 'Ein Spital, eine Schule oder eine Gemeinde kann denselben Ablauf für die eigene KI und die eigenen Regeln durchführen. Das Charter Kit ist kostenloser Open-Source-Code auf GitHub. Für die Einrichtung braucht es etwas technisches Know-how: Sie betreiben die Website selbst und verbinden eine kostenlose Datenbank.',
+    kitLink: 'Code auf GitHub ansehen'
   },
 
   take: {
@@ -85,7 +85,7 @@ window.I18N.de = {
     p2: '<b>Selbst etwas vorschlagen,</b> wenn Sie möchten.',
     p3: '<b>Ihre Antworten sind vollständig anonym.</b> Wir zeigen nur Gesamtzahlen und Aufschlüsselungen nach Gruppen, nie, wer was gesagt hat.',
     p4: '<b>Dies ist ein Studierendenprojekt.</b> Es verändert (leider) nicht das offizielle Apertus. Wir planen aber, die meistunterstützten Änderungen an einer kleinen Version von Apertus zu testen und die Ergebnisse zu veröffentlichen.',
-    signin: 'Damit Ihre Antworten gespeichert werden und zählen, melden Sie sich mit Ihrer E-Mail-Adresse an. Wir schicken Ihnen einen Link, kein Passwort nötig.',
+    signin: 'Damit Ihre Antworten gespeichert werden und zählen, melden Sie sich mit Ihrer E-Mail-Adresse an. Wir schicken Ihnen einen Link.',
     signinBtn: 'Anmelden',
     joinBtn: 'Teilnehmen',
     notMember: 'Sie sind angemeldet als {email}.',
@@ -199,7 +199,7 @@ window.I18N.de = {
   acct: {
     sample: 'Beispielrunde', sampleTip: 'Keine Datenbank verbunden. Ihre Antworten bleiben in diesem Browser.',
     proposals: 'Änderungsvorschläge', signin: 'Anmelden', signout: 'Abmelden', join: 'Teilnehmen', organise: 'Organisieren', invite: 'Personen einladen',
-    signinH: 'Anmelden', signinP: 'Wir schicken Ihnen einen Link per E-Mail. Kein Passwort nötig.', email: 'E-Mail', send: 'Link senden',
+    signinH: 'Anmelden', signinP: 'Wir schicken Ihnen einen Anmeldelink per E-Mail.', email: 'E-Mail', send: 'Link senden',
     checkH: 'Schauen Sie in Ihre E-Mails', checkP: 'Wir haben eine E-Mail an {email} geschickt. Klicken Sie auf den Link darin, oder geben Sie den Code aus der E-Mail hier ein.',
     checkLink: 'Wir haben einen Link an {email} geschickt. Öffnen Sie ihn in diesem Browser.',
     code: 'Code aus der E-Mail', codeBtn: 'Anmelden',
@@ -217,7 +217,7 @@ window.I18N.de = {
   },
 
   results: {
-    title: 'Ergebnisse',
+    title: 'Bisherige Ergebnisse',
     h: 'Was die Leute <em>bisher denken.</em>',
     lede: 'Hier sehen Sie, wie die Leute jeden Änderungsvorschlag bewertet haben. Hier entscheiden echte Menschen, nicht eine KI!',
     howH: 'Wie wir die Meinungen zusammenfassen',

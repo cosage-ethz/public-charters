@@ -3,7 +3,7 @@
 window.I18N = window.I18N || {};
 window.I18N.fr = {
   brand: { kicker: 'Constitutional AI Project', name: 'public charters' },
-  nav: { take: 'Participer', results: 'Résultats', charter: 'La charte', about: 'À propos', language: 'Langue', skip: 'Aller au contenu' },
+  nav: { take: 'Participer', results: 'Résultats à ce jour', charter: 'Lire la charte', about: 'À propos', language: 'Langue', skip: 'Aller au contenu' },
   common: {
     student: 'Un projet d’étudiant·es de l’ETH Zurich. Nous ne sommes pas liés à la Swiss AI Initiative.',
     sample: 'Tour d’exemple',
@@ -24,7 +24,6 @@ window.I18N.fr = {
     lede: 'Apertus, le modèle d’IA de la Suisse, suit un ensemble de règles appelé la Charte Apertus. Dites-nous comment elles devraient changer.',
     cta: 'Participer · environ 10 minutes',
     ctaRead: 'Lire la charte',
-    ctaNote: 'Pas besoin de mot de passe.',
     demoToday: 'Formulation actuelle',
     demoSuggested: 'Proposé par la communauté',
     demoCap: 'Une phrase, bien des interprétations. Laquelle choisiriez-vous ?',
@@ -67,9 +66,10 @@ window.I18N.fr = {
     openaiDoc: 'Model Spec', openaiBy: 'OpenAI · ChatGPT', openaiD: 'Une description de la façon dont OpenAI veut que son modèle se comporte et des principes qu’il doit respecter.',
     read: 'Lire (en anglais)',
     whoNote: 'Ces textes sont écrits par les entreprises elles-mêmes. Chez Public Charters, nous posons la question : et si les personnes qui utilisent l’IA avaient leur mot à dire ? Nous voulons vous donner une voix.',
+    kitTag: 'Pour les équipes techniques',
     kitH: 'Le faire pour votre propre IA et communauté',
-    kit: 'Un hôpital, une école ou une commune peut mener la même démarche pour sa propre IA et ses propres règles, sur son propre site.',
-    kitLink: 'Le Charter Kit gratuit'
+    kit: 'Un hôpital, une école ou une commune peut mener la même démarche pour sa propre IA et ses propres règles. Le Charter Kit est un code open source gratuit, disponible sur GitHub. Son installation demande quelques compétences techniques : vous hébergez vous-même le site et y connectez une base de données gratuite.',
+    kitLink: 'Voir le code sur GitHub'
   },
 
   take: {
@@ -85,7 +85,7 @@ window.I18N.fr = {
     p2: '<b>Proposer le vôtre,</b> si vous le souhaitez.',
     p3: '<b>Vos réponses sont entièrement anonymes.</b> Nous ne montrons que des totaux et des répartitions par groupe, jamais qui a dit quoi.',
     p4: '<b>Ceci est un projet d’étudiant·es.</b> Il ne modifie (malheureusement) pas l’Apertus officiel. Nous prévoyons toutefois de tester les changements les plus soutenus sur une petite version d’Apertus et d’en publier les résultats.',
-    signin: 'Pour que vos réponses soient enregistrées et comptent, connectez-vous avec votre e-mail. Nous vous envoyons un lien, pas besoin de mot de passe.',
+    signin: 'Pour que vos réponses soient enregistrées et comptent, connectez-vous avec votre e-mail. Nous vous envoyons un lien.',
     signinBtn: 'Se connecter',
     joinBtn: 'Participer',
     notMember: 'Vous êtes connecté·e en tant que {email}.',
@@ -199,7 +199,7 @@ window.I18N.fr = {
   acct: {
     sample: 'Tour d’exemple', sampleTip: 'Aucune base de données connectée. Vos réponses restent dans ce navigateur.',
     proposals: 'Propositions de changement', signin: 'Se connecter', signout: 'Se déconnecter', join: 'Participer', organise: 'Organiser', invite: 'Inviter des personnes',
-    signinH: 'Se connecter', signinP: 'Nous vous envoyons un lien par e-mail. Pas besoin de mot de passe.', email: 'E-mail', send: 'Envoyer le lien',
+    signinH: 'Se connecter', signinP: 'Nous vous envoyons un lien de connexion par e-mail.', email: 'E-mail', send: 'Envoyer le lien',
     checkH: 'Consultez vos e-mails', checkP: 'Nous avons envoyé un e-mail à {email}. Cliquez sur le lien qu’il contient, ou saisissez ici le code de l’e-mail.',
     checkLink: 'Nous avons envoyé un lien à {email}. Ouvrez-le dans ce navigateur.',
     code: 'Code reçu par e-mail', codeBtn: 'Se connecter',
@@ -217,7 +217,7 @@ window.I18N.fr = {
   },
 
   results: {
-    title: 'Résultats',
+    title: 'Résultats à ce jour',
     h: 'Ce que les gens <em>pensent jusqu’ici.</em>',
     lede: 'Voici comment les gens ont évalué chaque proposition de changement. Ici, ce sont de vraies personnes qui décident, pas une IA !',
     howH: 'Comment nous agrégeons les avis',
