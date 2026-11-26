@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Schibsted+Grotesk:wght@400;600&display=swap">
-<link rel="stylesheet" href="site.css?v=20261126c">
-<link rel="stylesheet" href="app.css?v=20261126c">
-<script src="lang/en.js?v=20261126c"></script><script src="lang/de.js?v=20261126c"></script><script src="lang/fr.js?v=20261126c"></script><script src="i18n.js?v=20261126c"></script>
-<script src="motion.js?v=20261126c"></script>
+<link rel="stylesheet" href="site.css?v=20261126d">
+<link rel="stylesheet" href="app.css?v=20261126d">
+<script src="lang/en.js?v=20261126d"></script><script src="lang/de.js?v=20261126d"></script><script src="lang/fr.js?v=20261126d"></script><script src="i18n.js?v=20261126d"></script>
+<script src="motion.js?v=20261126d"></script>
 <style>
 /* One colour per result, used everywhere on the page. */
 .chip-sample{display:inline-flex;gap:6px;align-items:center;margin-top:14px;font-size:14px;color:var(--muted)}
@@ -145,7 +145,7 @@
 <section class="block">
   <details class="how reveal">
     <summary data-i18n="results.howH">How we aggregated opinions</summary>
-    <ul><li data-i18n-html="results.how2"><b>We classify a change as "Most people agree" if:</b> clearly more yes than no, from at least 10 answers.</li><li data-i18n-html="results.how3"><b>We classify a change as causing divided opinions if:</b> at least 30% yes and at least 30% no.</li><li data-i18n="results.how4">Age, language and AI use is only used to analyse how different groups rate and propose changes, and is never used to decide approvals.</li><li data-i18n-html="results.how5"><b>“Bridges groups”:</b> a badge for changes that most people support in every age, language and AI-use group. It never decides on its own.</li><li data-i18n-html="results.how6"><b>Rival wordings:</b> if several wordings for the same words pass, the one with the most support is chosen. Close calls may go to a head-to-head vote later.</li></ul>
+    <ul><li data-i18n-html="results.how1">Each answer counts as an approval: <b>yes</b> 1, <b>partly</b> ½, <b>no</b> 0. To stay cautious with few answers, every change starts with 3 pretend yes and 3 pretend no in each group.</li><li data-i18n-html="results.how2"><b>A change is accepted (“Most people agree”) if:</b> it has at least 10 answers, its score is at least 60%, and no language group with 5 or more answers is below 40%. The score is the average of the language groups, so each group counts the same however many of its members take part.</li><li data-i18n-html="results.how3"><b>Opinions are divided if:</b> the score is at least 60% but one language group is below 40%, or at least 30% say yes and at least 30% say no.</li><li data-i18n-html="results.how4">Language sets the groups for this rule; people who did not say form their own group. Age and AI use are only used to show how different groups rated a change.</li><li data-i18n-html="results.how5"><b>“Bridges groups”:</b> a badge for changes that most people support in every age, language and AI-use group. It never decides on its own.</li><li data-i18n-html="results.how6"><b>Rival wordings:</b> if several wordings for the same words pass, the one with the most support is chosen. Close calls may go to a head-to-head vote later.</li></ul>
     <p class="small muted" data-i18n="results.howNote">Note: this is a first version: we may adjust these classification limits once many real answers come in.</p>
   </details>
 </section>
@@ -165,21 +165,27 @@
 
 <footer class="foot wrap"><div class="in" data-i18n-html="common.footer">Public Charters · AI and Human Values, ETH Zurich, 2026. Not affiliated with the Swiss AI Initiative. Charter source: <a href="https://apertus-ai.org/pages/charter/" target="_blank" rel="noopener">apertus-ai.org</a> · Code: <a href="https://github.com/cosage-ethz/public-charters" target="_blank" rel="noopener">GitHub</a></div></footer>
 
-<script src="sample-data.js?v=20261126c"></script>
+<script src="sample-data.js?v=20261126d"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=20261126c"></script>
-<script src="app.js?v=20261126c"></script>
-<script src="bridge.js?v=20261126c"></script>
-<script src="community.js?v=20261126c"></script>
+<script src="config.js?v=20261126d"></script>
+<script src="app.js?v=20261126d"></script>
+<script src="bridge.js?v=20261126d"></script>
+<script src="community.js?v=20261126d"></script>
 <script>
 (() => {
-const C = window.Community;
+const C = window.Community, B = window.Bridge;
 const $ = id => document.getElementById(id);
 const { esc, pct } = C;
 const KINDS = ['endorsed', 'contested', 'needs', 'weak'];
 const color = k => `var(--${k})`;
 let FILTER = null, SHOW_ALL = false;
 const TOP = 8;   // cards shown before "Show all"
+
+// The group that sets the floor (language by default), with "not stated" for people who skipped it.
+function groupLabel(o) {
+  const q = C.DEMOGRAPHICS.find(x => x.id === B.RULES.grouping);
+  return o === 'none' || !q ? T('results.notStated') : C.qLabel(q) + ': ' + C.oLabel(q, o);
+}
 
 // Small badges next to the verdict: bridges groups, chosen wording / runner-up.
 function badges(s) {
@@ -205,7 +211,7 @@ function render() {
 
   // All changes as cards: own suggestions first, then most agreed first, "needs answers" last
   const list = sugs.filter(s => !FILTER || s.s.status === FILTER)
-    .sort((a, b) => (b.own ? 1 : 0) - (a.own ? 1 : 0) || (a.s.status === 'needs') - (b.s.status === 'needs') || b.s.net - a.s.net);
+    .sort((a, b) => (b.own ? 1 : 0) - (a.own ? 1 : 0) || (a.s.status === 'needs') - (b.s.status === 'needs') || b.s.support - a.s.support);
   const shown = SHOW_ALL ? list : list.slice(0, TOP);
   $('cards').innerHTML = shown.map(s => {
     const t = s.s, k = t.status;
@@ -215,7 +221,9 @@ function render() {
       ${s.why ? `<p class="why">${esc(s.why)}</p>` : ''}
       ${t.n ? `<div class="res"><div><div class="div"><span class="no" style="width:${(t.notShare * 100).toFixed(1)}%"></span><span class="yes" style="width:${(t.helpShare * 100).toFixed(1)}%"></span></div>
           <div class="pcts"><span>${pct(t.notShare)} ${esc(T('results.axisNo'))}</span><b>${pct(t.helpShare)} ${esc(T('results.axisYes'))}</b></div></div>
-        <p class="line">${esc(T('results.line', { yes: pct(t.helpShare), partly: pct(t.someShare), no: pct(t.notShare), n: t.n }))}</p></div>
+        <p class="line">${esc(T('results.line', { yes: pct(t.helpShare), partly: pct(t.someShare), no: pct(t.notShare), n: t.n }))}</p>
+        ${k !== 'needs' ? `<p class="line">${esc(T('results.scoreLine', { s: pct(t.support) }))}</p>` : ''}</div>
+        ${t.heldBack ? `<p class="closecall">${esc(T('results.heldBack', { g: groupLabel(t.below[0].option), s: pct(t.below[0].score), f: pct(B.RULES.floor) }))}</p>` : ''}
         ${s.close ? `<p class="closecall">⚖ ${esc(T('results.close'))}</p>` : ''}
         <details class="more"><summary>${esc(T('demo.by'))}</summary>${C.breakdownHTML(s.ratings)}</details>` : ''}
       ${k === 'needs' && !s.own ? `<p style="margin:10px 0 0"><a class="btn small" href="participate.html#rate">${esc(T('results.rateIt'))} →</a></p>` : ''}
@@ -225,7 +233,7 @@ function render() {
     ? `<button class="btn" data-more>${esc(SHOW_ALL ? T('results.showLess') : T('results.showAll', { n: list.length }))}</button>` : '';
 
   // Agreed across groups: passes overall and has a majority in every group we can show
-  const br = sugs.filter(s => s.s.status === 'endorsed' && s.bridge.ok).sort((a, b) => b.s.net - a.s.net);
+  const br = sugs.filter(s => s.s.status === 'endorsed' && s.bridge.ok).sort((a, b) => b.s.support - a.s.support);
   $('bridgeList').innerHTML = br.slice(0, 6).map(s => `<article class="bcard reveal">
       <p class="cl-text">${C.changedClause(s)}</p>
       <p class="qs">${s.bridge.perQ.filter(x => x.counted).map(x => `<span class="ok">✓ ${esc(T('demo.' + x.q.id + '.short'))}</span>`).join('')}<span class="pctb">${pct(s.s.helpShare)} ${esc(T('results.axisYes'))}</span></p>
@@ -233,7 +241,7 @@ function render() {
 
   // Ideas some groups back: not endorsed overall, but at least 60% yes in one group of 5 or more,
   // and at least 20 points above everyone. One card per change, its strongest group.
-  const B = window.Bridge, fr = [];
+  const fr = [];
   sugs.filter(s => s.s.n && s.s.status !== 'endorsed' && s.s.status !== 'needs').forEach(s => {
     let best = null;
     B.breakdown(C.DEMOGRAPHICS, s.ratings, B.tally).forEach(({ q, rows }) => rows.forEach(r => {

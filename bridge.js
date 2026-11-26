@@ -1,28 +1,36 @@
-// Scoring for the public Apertus Charter site.
+// Scoring for the public Apertus Charter site: approval voting with a floor across groups.
 //
-//  - Everyone who rates is in one pool. There are no group vetoes.
-//  - Each rating counts +1 (helpful), 0 (somewhat) or -1 (not helpful). The net score is the
-//    average, from -1 to +1.
-//  - A suggestion is ENDORSED when its net score reaches RULES.endorse, CONTESTED when it is
-//    not endorsed but sizeable shares find it helpful and not helpful, WEAK otherwise, and
-//    NEEDS RATINGS until it has RULES.minRatings ratings.
-//  - Optional demographic answers (age, language, ...) only produce BREAKDOWNS: how each
-//    group rated a suggestion. They never change its status. A group is shown only once it
-//    has RULES.minGroup ratings, so small groups are neither noisy nor identifiable.
+//  - Each rating is an approval: helpful = 1, somewhat = 0.5, not helpful = 0.
+//  - Cautious score: every group starts with RULES.prior pretend approvals and RULES.prior
+//    pretend rejections, so a handful of votes cannot push a change far either way:
+//        score(group) = (approvals + prior) / (votes + 2 * prior)
+//  - Groups come from one profile question (RULES.grouping, language by default). People who
+//    skip it form their own "not stated" group, so skipping is no way around the floor.
+//    A group counts once it has RULES.minGroup votes.
+//  - Overall score: the plain average of the counted groups, so each group weighs the same however
+//    many of its members turn up. With fewer than 2 counted groups, the pooled score of all votes
+//    is used and the floor is "not checked yet".
+//  - A change is ENDORSED (accepted) when it has RULES.minRatings votes, an overall score of at
+//    least RULES.pass, and no counted group below RULES.floor. It is CONTESTED when it passes
+//    overall but a group is below the floor, or when sizeable shares say yes and no. Otherwise it
+//    is WEAK, or NEEDS RATINGS below RULES.minRatings votes.
+//  - The other profile questions (age, AI use) only produce BREAKDOWNS and the "Bridges groups" badge.
 //
-// The thresholds are placeholders, to be tuned once real ratings come in.
 // The file runs in the browser (window.Bridge) and in Node (require('./bridge.js')), so the
-// same code can score the real space from a database export.
+// same code can score the real space from a database export (tools/score.js).
 (function (root) {
 'use strict';
 
 const RULES = {
   minRatings: 10,       // ratings needed before a suggestion gets a status
-  endorse: 0.3,         // net score needed to be endorsed
+  prior: 3,             // pretend approvals and pretend rejections added to every group
+  pass: 0.6,            // overall cautious score needed to be accepted
+  floor: 0.4,           // no counted group may score below this
+  grouping: 'lang',     // profile question that sets the groups for the floor
   contested: 0.3,       // share helpful AND share not helpful both at least this: contested
-  minGroup: 5,          // ratings needed before a demographic group is shown in a breakdown
+  minGroup: 5,          // ratings needed before a group counts for the floor or is shown in a breakdown
   pairDecide: 0.6,      // share preferring one side in Compare answers for a verdict
-  closeCall: 0.1,       // rival wordings closer than this (net score) are flagged as a close call
+  closeCall: 0.05,      // rival wordings closer than this (cautious score) are flagged as a close call
   ratingValue: { helpful: 1, somewhat: 0.5, not: 0 }
 };
 
@@ -42,14 +50,37 @@ function tally(ratings) {
   return t;
 }
 
-function score(ratings) {
+// Cautious approval score: (approvals + prior) / (votes + 2 * prior).
+function cautious(approvals, votes) {
+  return (approvals + RULES.prior) / (votes + 2 * RULES.prior);
+}
+
+// Groups for the floor: one per answer to RULES.grouping, plus 'none' for people who skipped it.
+function groupScores(ratings, grouping) {
+  const g = {};
+  for (const r of ratings) {
+    const k = (r.profile && r.profile[grouping]) || 'none';
+    const x = g[k] || (g[k] = { option: k, n: 0, approvals: 0 });
+    x.n++; x.approvals += Math.max(0, Math.min(1, r.value));
+  }
+  return Object.values(g).map(x => Object.assign(x, { score: cautious(x.approvals, x.n), counted: x.n >= RULES.minGroup }))
+    .sort((a, b) => b.n - a.n);
+}
+
+function score(ratings, grouping) {
   const t = tally(ratings);
+  const approvals = t.help + 0.5 * t.some;
+  const groups = groupScores(ratings, grouping || RULES.grouping);
+  const counted = groups.filter(x => x.counted);
+  const floorChecked = counted.length >= 2;
+  const support = floorChecked ? counted.reduce((a, x) => a + x.score, 0) / counted.length : cautious(approvals, t.n);
+  const below = floorChecked ? counted.filter(x => x.score < RULES.floor).sort((a, b) => a.score - b.score) : [];
   let status;
   if (t.n < RULES.minRatings) status = 'needs';
-  else if (t.net >= RULES.endorse) status = 'endorsed';
-  else if (t.helpShare >= RULES.contested && t.notShare >= RULES.contested) status = 'contested';
+  else if (support >= RULES.pass && !below.length) status = 'endorsed';
+  else if (support >= RULES.pass || (t.helpShare >= RULES.contested && t.notShare >= RULES.contested)) status = 'contested';
   else status = 'weak';
-  return Object.assign(t, { status });
+  return Object.assign(t, { status, support, groups, floorChecked, below, heldBack: status === 'contested' && support >= RULES.pass && below.length > 0 });
 }
 
 // Breakdown by optional profile answers.
@@ -80,15 +111,15 @@ function bridges(questions, ratings) {
 
 // ---------- choosing among rival wordings ----------
 // items: [{ id, key, s: score }], where key identifies the words being changed. Among endorsed
-// rivals with the same key, the one with the highest net score is chosen and the others become
-// runners-up. A gap smaller than RULES.closeCall is flagged for a head-to-head vote later.
+// rivals with the same key, the one with the highest cautious score is chosen and the others become
+// runners-up. A gap in cautious score smaller than RULES.closeCall is flagged for a head-to-head vote later.
 function pickWinners(items) {
   const out = {}, groups = {};
   items.forEach(x => { (groups[x.key] = groups[x.key] || []).push(x); });
   Object.values(groups).forEach(list => {
-    const passed = list.filter(x => x.s.status === 'endorsed').sort((a, b) => b.s.net - a.s.net);
+    const passed = list.filter(x => x.s.status === 'endorsed').sort((a, b) => b.s.support - a.s.support);
     if (!passed.length || list.length < 2) return;
-    const close = passed.length > 1 && passed[0].s.net - passed[1].s.net < RULES.closeCall;
+    const close = passed.length > 1 && passed[0].s.support - passed[1].s.support < RULES.closeCall;
     passed.forEach((x, i) => { out[x.id] = { pick: i === 0 ? 'chosen' : 'runner', close: close && i < 2 }; });
   });
   return out;
@@ -99,7 +130,8 @@ function explain(s) {
   const pct = x => Math.round(x * 100) + '%';
   if (s.status === 'needs') return `Needs more ratings (${s.n} of ${RULES.minRatings}).`;
   const split = `${pct(s.helpShare)} helpful, ${pct(s.notShare)} not helpful`;
-  if (s.status === 'endorsed') return `Broad support: ${split}.`;
+  if (s.status === 'endorsed') return `Accepted: ${pct(s.support)} overall and no group below ${pct(RULES.floor)} (${split}).`;
+  if (s.heldBack) return `Held back: ${pct(s.support)} overall, but group "${s.below[0].option}" is at ${pct(s.below[0].score)}, below ${pct(RULES.floor)}.`;
   if (s.status === 'contested') return `People are split: ${split}.`;
   return `Not enough support yet: ${split}.`;
 }
@@ -143,6 +175,6 @@ function seeded(str) {
   };
 }
 
-root.Bridge = { RULES, tally, score, breakdown, bridges, pickWinners, explain, dissent, pairTally, pairResult, serveOrder, seeded };
+root.Bridge = { RULES, tally, cautious, groupScores, score, breakdown, bridges, pickWinners, explain, dissent, pairTally, pairResult, serveOrder, seeded };
 if (typeof module !== 'undefined' && module.exports) module.exports = root.Bridge;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -33,7 +33,7 @@ This branch (`main`) is the public website for the Apertus Charter. The [`charte
 │   └── fr.js             # all French text, incl. translated charter excerpt (draft: needs native review)
 ├── i18n.js               # picks the language (?lang=, saved choice, browser) and fills in the text
 ├── sample-data.js        # sample charter excerpt, suggested changes and examples (English; translations in lang/)
-├── bridge.js             # the scoring rule: net support, breakdowns, dissent record (browser and Node)
+├── bridge.js             # the scoring rule: approval with a floor across language groups, breakdowns (browser and Node)
 ├── community.js          # the sample round (140 made-up participants), plus this browser's own input
 ├── journey.js            # logic of the Take part page
 ├── site.css              # shared navigation and page styles
@@ -87,11 +87,13 @@ Anyone can take part in one open round on the Apertus Charter. People sign in wi
 - **share concerns** in their own words and add *me too* to others'; no AI reads or summarises them;
 - **propose changes**, optionally with **test cases**: situations where the new wording should change what the AI does.
 
-**Scoring (`bridge.js`).** Everyone is in one pool. Each rating counts +1 (helpful), 0 (somewhat) or −1 (not helpful). A suggestion is *endorsed* with a net score of at least +0.3 from at least 10 ratings, *contested* when at least 30% find it helpful and at least 30% do not, and otherwise does not have enough support. The profile questions only produce **breakdowns** (how each group rated a change), never vetoes, and groups with fewer than 5 answers are not shown. The thresholds are placeholders until real ratings come in. Opinion groups (Polis-style) can be added later as another breakdown.
+**Scoring (`bridge.js`): approval voting with a floor across groups.** Each answer counts as an approval: yes 1, partly ½, no 0. To stay cautious with little data, every change starts with 3 pretend yes and 3 pretend no in each group, so a group's score is (approvals + 3) / (answers + 6). The groups come from the language question; people who skip it form their own "not stated" group. A group counts once it has 5 answers. The overall score is the plain average of the counted groups, so each group weighs the same however many of its members turn up, which limits the pull of a small, well-organised group. A change is **accepted** (*Most people agree*) with at least 10 answers, an overall score of at least 60%, and no counted group below 40%. It is *divided* when it passes overall but a group is below 40% (shown as "held back"), or when at least 30% say yes and 30% say no. With fewer than two counted groups, the score of all answers pooled is used and the floor is not checked yet. Age and AI use only produce **breakdowns** and the "Bridges groups" badge. All limits are in `RULES` at the top of `bridge.js`.
+
+**Counting the real ratings (`tools/score.js`).** Ratings are private, so the count runs on your own computer with the service-role key: `SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node tools/score.js`. It uses the same `bridge.js`, prints a table, and saves the result as one `aggregation_run` (method `approval_floor`) with its `cohort` and `score` rows. Add `--dry` to print without saving, or `--sample` to count the sample round without a database.
 
 **Test cases** are optional when proposing. Before training, admins review them: only admins (and the pipeline) can change a test case's status or tier.
 
-**What exists today:** until enough real input has come in, the pages show a sample round of 140 made-up participants, clearly labelled, and your own answers are added in your browser. With a database connected, sign-in, joining, consent, profile answers, ratings, comparisons, feedback and proposals are saved; the lists of suggestions, situations and concerns still come from the sample data. Next: reading those lists from the database, the scoring job, test-case review, and fine-tuning.
+**What exists today:** until enough real input has come in, the pages show a sample round of 140 made-up participants, clearly labelled, and your own answers are added in your browser. With a database connected, sign-in, joining, consent, profile answers, ratings, comparisons, feedback and proposals are saved; the lists of suggestions, situations and concerns still come from the sample data. Next: reading those lists from the database, showing the saved scores on the Results page, test-case review, and fine-tuning.
 
 ## Setting up the database
 
